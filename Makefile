@@ -6,7 +6,7 @@
 #    By: copireyr <copireyr@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/08/27 12:07:56 by copireyr          #+#    #+#              #
-#    Updated: 2024/08/27 12:30:13 by copireyr         ###   ########.fr        #
+#    Updated: 2024/08/27 12:40:34 by copireyr         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -39,5 +39,9 @@ fclean: clean
 
 .PHONY: re
 re: fclean all
+
+.PHONY: run
+run: $(NAME)
+	./$^
 
 -include $(obj:.o=.d)
