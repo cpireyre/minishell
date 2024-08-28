@@ -6,25 +6,29 @@
 #    By: copireyr <copireyr@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/08/27 12:07:56 by copireyr          #+#    #+#              #
-#    Updated: 2024/08/28 12:21:38 by copireyr         ###   ########.fr        #
+#    Updated: 2024/08/28 12:28:10 by copireyr         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 .DEFAULT_GOAL := all
 CC := cc
-CPPFLAGS := -I./include/
-LDFLAGS := -lreadline
+CPPFLAGS := -I./include/ -I./libft/include
+LDFLAGS := -lreadline -L./libft/ -lft
 CFLAGS := -Wall -Wextra -Werror -MMD -MP
 NAME := minishell
 
 src = ./src/main.c
 obj := $(src:./src/%.c=./obj/%.o)
+lib := ./libft/libft.a
 
 ./obj/%.o: ./src/%.c
 	@mkdir -p $(@D)
 	$(CC) $(CPPFLAGS) $(CFLAGS) -c $< -o $@
 
-$(NAME): $(obj)
+$(lib):
+	make -j4 -C ./libft/
+
+$(NAME): $(lib) $(obj)
 	$(CC) $^ -o $@ $(LDFLAGS)
 
 .PHONY: all
@@ -33,10 +37,12 @@ all: $(NAME)
 .PHONY: clean
 clean:
 	$(RM) -r $(obj)
+	make -C ./libft/ clean
 
 .PHONY: fclean
 fclean: clean
 	$(RM) $(NAME)
+	make -C ./libft/ fclean
 
 .PHONY: re
 re: fclean all

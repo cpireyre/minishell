@@ -1,31 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   ft_strtrim.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: copireyr <copireyr@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/08/27 12:08:02 by copireyr          #+#    #+#             */
-/*   Updated: 2024/08/28 12:27:47 by copireyr         ###   ########.fr       */
+/*   Created: 2024/04/15 12:41:06 by copireyr          #+#    #+#             */
+/*   Updated: 2024/05/20 10:15:53 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
-#include "minishell.h"
-#include "libft.h"
 
-int	main(void)
+size_t	ft_strlen(const char *s);
+char	*ft_strchr(const char *s, int c);
+char	*ft_strndup(const char *src, size_t n);
+
+char	*ft_strtrim(char const *s1, char const *set)
 {
-	char	*user_input_line;
-	int		should_exit_shell;
+	size_t	i;
+	size_t	j;
 
-	while (1)
-	{
-		user_input_line = readline("λ> ");
-		should_exit_shell = ft_streq(user_input_line, "exit");
-		free(user_input_line);
-		if (should_exit_shell)
-			break ;
-	}
-	return (0);
+	i = 0;
+	while (s1[i] && ft_strchr(set, s1[i]))
+		i++;
+	j = ft_strlen(s1);
+	while (j > i && ft_strchr(set, s1[j]))
+		j--;
+	return (ft_strndup(s1 + i, j - i + 1));
 }

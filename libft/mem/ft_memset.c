@@ -1,31 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   ft_memset.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: copireyr <copireyr@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/08/27 12:08:02 by copireyr          #+#    #+#             */
-/*   Updated: 2024/08/28 12:27:47 by copireyr         ###   ########.fr       */
+/*   Created: 2024/04/15 12:27:02 by copireyr          #+#    #+#             */
+/*   Updated: 2024/04/15 12:27:03 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdlib.h>
-#include "minishell.h"
-#include "libft.h"
+#include <stddef.h>
 
-int	main(void)
+void	*ft_memset(void *b, int c, size_t len)
 {
-	char	*user_input_line;
-	int		should_exit_shell;
+	unsigned char	*pb;
 
-	while (1)
-	{
-		user_input_line = readline("λ> ");
-		should_exit_shell = ft_streq(user_input_line, "exit");
-		free(user_input_line);
-		if (should_exit_shell)
-			break ;
-	}
-	return (0);
+	pb = (unsigned char *)b;
+	while (len--)
+		*pb++ = (unsigned char)c;
+	return (b);
 }

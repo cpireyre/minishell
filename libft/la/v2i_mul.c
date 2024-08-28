@@ -1,31 +1,34 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   v2i_mul.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: copireyr <copireyr@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/08/27 12:08:02 by copireyr          #+#    #+#             */
-/*   Updated: 2024/08/28 12:27:47 by copireyr         ###   ########.fr       */
+/*   Created: 2024/07/05 09:56:15 by copireyr          #+#    #+#             */
+/*   Updated: 2024/07/05 09:56:16 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdlib.h>
-#include "minishell.h"
-#include "libft.h"
+#include "ft_la.h"
 
-int	main(void)
+t_v2i	v2i_mul(t_v2i a, t_v2i b)
 {
-	char	*user_input_line;
-	int		should_exit_shell;
+	a.x *= b.x;
+	a.y *= b.y;
+	return (a);
+}
 
-	while (1)
-	{
-		user_input_line = readline("λ> ");
-		should_exit_shell = ft_streq(user_input_line, "exit");
-		free(user_input_line);
-		if (should_exit_shell)
-			break ;
-	}
-	return (0);
+t_v2i	v2i_div(t_v2i a, t_v2i b)
+{
+	a.x /= b.x;
+	a.y /= b.y;
+	return (a);
+}
+
+t_v2i	v2i_add(t_v2i a, t_v2i b)
+{
+	a.x += b.x;
+	a.y += b.y;
+	return (a);
 }

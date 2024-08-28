@@ -1,31 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   ft_min4.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: copireyr <copireyr@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/08/27 12:08:02 by copireyr          #+#    #+#             */
-/*   Updated: 2024/08/28 12:27:47 by copireyr         ###   ########.fr       */
+/*   Created: 2024/08/02 12:43:37 by copireyr          #+#    #+#             */
+/*   Updated: 2024/08/02 12:43:39 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdlib.h>
-#include "minishell.h"
-#include "libft.h"
-
-int	main(void)
+int	ft_min4(int a, int b, int c, int d)
 {
-	char	*user_input_line;
-	int		should_exit_shell;
+	int	min;
 
-	while (1)
-	{
-		user_input_line = readline("λ> ");
-		should_exit_shell = ft_streq(user_input_line, "exit");
-		free(user_input_line);
-		if (should_exit_shell)
-			break ;
-	}
-	return (0);
+	min = a;
+	if (b < min)
+		min = b;
+	if (c < min)
+		min = c;
+	if (d < min)
+		min = d;
+	return (min);
 }

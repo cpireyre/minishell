@@ -1,31 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   ft_calloc.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: copireyr <copireyr@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/08/27 12:08:02 by copireyr          #+#    #+#             */
-/*   Updated: 2024/08/28 12:27:47 by copireyr         ###   ########.fr       */
+/*   Created: 2024/07/18 10:12:40 by copireyr          #+#    #+#             */
+/*   Updated: 2024/07/18 10:14:47 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
-#include "minishell.h"
-#include "libft.h"
 
-int	main(void)
+void	ft_bzero(void *s, size_t n);
+
+void	*ft_calloc(size_t elems, size_t elem_size)
 {
-	char	*user_input_line;
-	int		should_exit_shell;
+	void	*ret;
 
-	while (1)
-	{
-		user_input_line = readline("λ> ");
-		should_exit_shell = ft_streq(user_input_line, "exit");
-		free(user_input_line);
-		if (should_exit_shell)
-			break ;
-	}
-	return (0);
+	ret = malloc(elems * elem_size);
+	if (ret)
+		ft_bzero(ret, elems * elem_size);
+	return (ret);
 }

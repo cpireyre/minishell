@@ -1,31 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   ft_memcmp.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: copireyr <copireyr@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/08/27 12:08:02 by copireyr          #+#    #+#             */
-/*   Updated: 2024/08/28 12:27:47 by copireyr         ###   ########.fr       */
+/*   Created: 2024/04/15 12:29:41 by copireyr          #+#    #+#             */
+/*   Updated: 2024/04/15 12:29:53 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdlib.h>
-#include "minishell.h"
-#include "libft.h"
+#include <stddef.h>
 
-int	main(void)
+int	ft_memcmp(const void *s1, const void *s2, size_t n)
 {
-	char	*user_input_line;
-	int		should_exit_shell;
+	unsigned char	*ps1;
+	unsigned char	*ps2;
 
-	while (1)
-	{
-		user_input_line = readline("λ> ");
-		should_exit_shell = ft_streq(user_input_line, "exit");
-		free(user_input_line);
-		if (should_exit_shell)
-			break ;
-	}
+	if (s1 == s2 || n == 0)
+		return (0);
+	ps1 = (unsigned char *)s1;
+	ps2 = (unsigned char *)s2;
+	while (n--)
+		if (*ps1++ != *ps2++)
+			return (*(ps1 - 1) - *(ps2 - 1));
 	return (0);
 }

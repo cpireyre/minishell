@@ -1,31 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   ft_memchr.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: copireyr <copireyr@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/08/27 12:08:02 by copireyr          #+#    #+#             */
-/*   Updated: 2024/08/28 12:27:47 by copireyr         ###   ########.fr       */
+/*   Created: 2024/04/15 12:29:00 by copireyr          #+#    #+#             */
+/*   Updated: 2024/04/15 12:47:13 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdlib.h>
-#include "minishell.h"
-#include "libft.h"
+#include <stddef.h>
 
-int	main(void)
+void	*ft_memchr(const void *s, int c, size_t n)
 {
-	char	*user_input_line;
-	int		should_exit_shell;
+	unsigned char	*ps;
+	size_t			i;
 
-	while (1)
+	i = 0;
+	ps = (unsigned char *)s;
+	while (i < n)
 	{
-		user_input_line = readline("λ> ");
-		should_exit_shell = ft_streq(user_input_line, "exit");
-		free(user_input_line);
-		if (should_exit_shell)
-			break ;
+		if (ps[i] == (unsigned char)c)
+			return (ps + i);
+		i++;
 	}
-	return (0);
+	return (NULL);
 }

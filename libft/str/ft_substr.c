@@ -1,31 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   ft_substr.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: copireyr <copireyr@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/08/27 12:08:02 by copireyr          #+#    #+#             */
-/*   Updated: 2024/08/28 12:27:47 by copireyr         ###   ########.fr       */
+/*   Created: 2024/04/15 12:40:00 by copireyr          #+#    #+#             */
+/*   Updated: 2024/05/20 10:16:07 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
-#include "minishell.h"
-#include "libft.h"
 
-int	main(void)
+size_t	ft_strlen(const char *s);
+char	*ft_strndup(const char *src, size_t n);
+
+char	*ft_substr(char const *s, unsigned int start, size_t len)
 {
-	char	*user_input_line;
-	int		should_exit_shell;
+	size_t	actual_start;
+	size_t	length_substr;
 
-	while (1)
-	{
-		user_input_line = readline("λ> ");
-		should_exit_shell = ft_streq(user_input_line, "exit");
-		free(user_input_line);
-		if (should_exit_shell)
-			break ;
-	}
-	return (0);
+	actual_start = 0;
+	while (s[actual_start] && actual_start < start)
+		actual_start++;
+	length_substr = ft_strlen(s + actual_start);
+	if (len > length_substr)
+		len = length_substr;
+	return (ft_strndup(s + actual_start, len));
 }

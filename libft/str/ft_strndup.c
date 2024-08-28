@@ -1,31 +1,35 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   ft_strndup.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: copireyr <copireyr@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/08/27 12:08:02 by copireyr          #+#    #+#             */
-/*   Updated: 2024/08/28 12:27:47 by copireyr         ###   ########.fr       */
+/*   Created: 2024/05/20 10:12:56 by copireyr          #+#    #+#             */
+/*   Updated: 2024/05/20 10:25:39 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
-#include "minishell.h"
-#include "libft.h"
 
-int	main(void)
+char	*ft_strndup(const char *src, size_t n)
 {
-	char	*user_input_line;
-	int		should_exit_shell;
+	size_t	i;
+	size_t	j;
+	char	*dup;
 
-	while (1)
+	i = 0;
+	while (src[i] && i < n)
+		i++;
+	dup = malloc(sizeof(char) * (i + 1));
+	if (!dup)
+		return (NULL);
+	j = 0;
+	while (j < i)
 	{
-		user_input_line = readline("λ> ");
-		should_exit_shell = ft_streq(user_input_line, "exit");
-		free(user_input_line);
-		if (should_exit_shell)
-			break ;
+		dup[j] = src[j];
+		j++;
 	}
-	return (0);
+	dup[j] = '\0';
+	return (dup);
 }

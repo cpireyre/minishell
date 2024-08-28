@@ -1,31 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   format_bonus.h                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: copireyr <copireyr@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/08/27 12:08:02 by copireyr          #+#    #+#             */
-/*   Updated: 2024/08/28 12:27:47 by copireyr         ###   ########.fr       */
+/*   Created: 2024/05/03 13:35:21 by copireyr          #+#    #+#             */
+/*   Updated: 2024/05/06 13:49:41 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdlib.h>
-#include "minishell.h"
-#include "libft.h"
+#ifndef FORMAT_BONUS_H
+# define FORMAT_BONUS_H
 
-int	main(void)
+typedef struct s_format_output
 {
-	char	*user_input_line;
-	int		should_exit_shell;
+	char	buf[32];
+	size_t	left_padding;
+	size_t	middle_padding;
+	size_t	right_padding;
+	size_t	buf_len;
+	size_t	total_len;
+	char	*str;
+	char	prefix[2];
+	char	pad_character;
+	char	sign;
+}	t_format_output;
 
-	while (1)
-	{
-		user_input_line = readline("λ> ");
-		should_exit_shell = ft_streq(user_input_line, "exit");
-		free(user_input_line);
-		if (should_exit_shell)
-			break ;
-	}
-	return (0);
-}
+#endif

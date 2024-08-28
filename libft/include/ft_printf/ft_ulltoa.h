@@ -1,31 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   ft_ulltoa.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: copireyr <copireyr@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/08/27 12:08:02 by copireyr          #+#    #+#             */
-/*   Updated: 2024/08/28 12:27:47 by copireyr         ###   ########.fr       */
+/*   Created: 2024/05/02 14:39:58 by copireyr          #+#    #+#             */
+/*   Updated: 2024/05/02 14:41:08 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdlib.h>
-#include "minishell.h"
-#include "libft.h"
+#ifndef FT_ULLTOA_H
+# define FT_ULLTOA_H
 
-int	main(void)
-{
-	char	*user_input_line;
-	int		should_exit_shell;
+# include <stdint.h>
 
-	while (1)
-	{
-		user_input_line = readline("λ> ");
-		should_exit_shell = ft_streq(user_input_line, "exit");
-		free(user_input_line);
-		if (should_exit_shell)
-			break ;
-	}
-	return (0);
-}
+size_t	ft_ulltoa(uintmax_t n, char *base, char *res);
+size_t	ft_lltoa(intmax_t n, char *base, char *res);
+
+#endif

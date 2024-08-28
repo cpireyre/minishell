@@ -1,31 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   ptrformat_bonus.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: copireyr <copireyr@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/08/27 12:08:02 by copireyr          #+#    #+#             */
-/*   Updated: 2024/08/28 12:27:47 by copireyr         ###   ########.fr       */
+/*   Created: 2024/05/06 15:20:00 by copireyr          #+#    #+#             */
+/*   Updated: 2024/05/08 11:39:08 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdlib.h>
-#include "minishell.h"
-#include "libft.h"
+#include "ft_printf.h"
 
-int	main(void)
+void	format_pointer(t_emitter *e, t_spec s, uintptr_t ptr)
 {
-	char	*user_input_line;
-	int		should_exit_shell;
+	t_format_output	o;
 
-	while (1)
-	{
-		user_input_line = readline("λ> ");
-		should_exit_shell = ft_streq(user_input_line, "exit");
-		free(user_input_line);
-		if (should_exit_shell)
-			break ;
-	}
-	return (0);
+	o = format_unsigned(s, ptr, "0123456789abcdef");
+	o.prefix[0] = '0';
+	o.prefix[1] = 'x';
+	emit_int(e, &o);
 }

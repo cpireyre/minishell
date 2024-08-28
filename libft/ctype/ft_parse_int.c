@@ -1,31 +1,36 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   ft_parse_int.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: copireyr <copireyr@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/08/27 12:08:02 by copireyr          #+#    #+#             */
-/*   Updated: 2024/08/28 12:27:47 by copireyr         ###   ########.fr       */
+/*   Created: 2024/08/02 12:43:53 by copireyr          #+#    #+#             */
+/*   Updated: 2024/08/02 12:43:54 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdlib.h>
-#include "minishell.h"
 #include "libft.h"
+#include <limits.h>
 
-int	main(void)
+int	ft_parse_int(char *str, long *n)
 {
-	char	*user_input_line;
-	int		should_exit_shell;
+	int	i;
+	int	sign;
+	int	digits;
 
-	while (1)
+	i = 0;
+	sign = -1;
+	digits = 0;
+	while (str[i])
 	{
-		user_input_line = readline("λ> ");
-		should_exit_shell = ft_streq(user_input_line, "exit");
-		free(user_input_line);
-		if (should_exit_shell)
-			break ;
+		if (str[i] == '+' || str[i] == '-')
+			sign = i;
+		digits += ft_isdigit(str[i]);
+		i++;
 	}
-	return (0);
+	if (!digits || digits != i - (sign == 0))
+		return (0);
+	*n = ft_atol(str);
+	return (INT_MIN <= *n && *n <= INT_MAX);
 }

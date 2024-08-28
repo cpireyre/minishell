@@ -1,31 +1,35 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   ft_memmove.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: copireyr <copireyr@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/08/27 12:08:02 by copireyr          #+#    #+#             */
-/*   Updated: 2024/08/28 12:27:47 by copireyr         ###   ########.fr       */
+/*   Created: 2024/04/15 12:29:56 by copireyr          #+#    #+#             */
+/*   Updated: 2024/04/15 12:47:33 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdlib.h>
-#include "minishell.h"
-#include "libft.h"
+#include <stddef.h>
 
-int	main(void)
+void	*ft_memmove(void *dst, const void *src, size_t len)
 {
-	char	*user_input_line;
-	int		should_exit_shell;
+	unsigned char	*from;
+	unsigned char	*to;
 
-	while (1)
+	from = (unsigned char *)src;
+	to = (unsigned char *)dst;
+	if (from == to || len == 0)
+		return (dst);
+	else if (to > from && to - from < (int)len)
 	{
-		user_input_line = readline("λ> ");
-		should_exit_shell = ft_streq(user_input_line, "exit");
-		free(user_input_line);
-		if (should_exit_shell)
-			break ;
+		to += len - 1;
+		from += len - 1;
+		while (len--)
+			*to-- = *from--;
 	}
-	return (0);
+	else
+		while (len--)
+			*to++ = *from++;
+	return (dst);
 }
