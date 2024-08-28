@@ -6,13 +6,14 @@
 #    By: copireyr <copireyr@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/08/27 12:07:56 by copireyr          #+#    #+#              #
-#    Updated: 2024/08/27 12:40:34 by copireyr         ###   ########.fr        #
+#    Updated: 2024/08/28 12:16:28 by copireyr         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 .DEFAULT_GOAL := all
 CC := cc
 CPPFLAGS := -I./include/
+LDFLAGS := -lreadline
 CFLAGS := -Wall -Wextra -Werror -MMD -MP
 NAME := minishell
 
@@ -24,7 +25,7 @@ obj := $(src:./src/%.c=./obj/%.o)
 	$(CC) $(CPPFLAGS) $(CFLAGS) -c $< -o $@
 
 $(NAME): $(obj)
-	$(CC) $(CFLAGS) $^ -o $@
+	$(CC) $^ -o $@ $(LDFLAGS)
 
 .PHONY: all
 all: $(NAME)
