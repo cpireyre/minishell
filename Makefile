@@ -6,7 +6,7 @@
 #    By: copireyr <copireyr@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/08/27 12:07:56 by copireyr          #+#    #+#              #
-#    Updated: 2024/08/28 12:28:10 by copireyr         ###   ########.fr        #
+#    Updated: 2024/08/28 15:20:20 by copireyr         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -53,6 +53,6 @@ run: $(NAME)
 
 .PHONY: val
 val: $(NAME)
-	valgrind --leak-check=full --show-leak-kinds=all --track-fds=yes ./$(NAME)
+	valgrind --leak-check=full --show-leak-kinds=all --track-fds=yes --suppressions=valgrind_readline_suppressions.supp ./$(NAME)
 
 -include $(obj:.o=.d)
