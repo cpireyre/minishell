@@ -31,7 +31,6 @@ typedef struct s_command
 	char	*outfile;
 	char	*hdoc_delim;
 	bool	*of_append;
-	bool	heredoc;
 	int		exit_code;
 }	t_command;
 
