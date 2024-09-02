@@ -14,7 +14,31 @@
 # define MINISHELL_H
 
 # include <stdio.h>
+# include <stdint.h>
 # include <readline/readline.h>
 # include <readline/history.h>
+
+# define true 1
+# define false 0
+
+typedef uint8_t t_bool;
+
+typedef struct s_command
+{
+	char	*path;
+	char	**args;
+	char	*infile;
+	char	*outfile;
+	char	*hdoc_delim;
+	bool	*of_append;
+	bool	heredoc;
+	int		exit_code;
+}	t_command;
+
+typedef struct s_pipeline
+{
+	t_command	*cmds;
+	size_t		n_cmds;
+}	t_pipeline;
 
 #endif /* MINISHELL_H */
