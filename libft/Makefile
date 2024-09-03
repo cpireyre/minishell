@@ -6,7 +6,7 @@
 #    By: copireyr <copireyr@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/05/23 15:14:47 by copireyr          #+#    #+#              #
-#    Updated: 2024/08/28 12:28:28 by copireyr         ###   ########.fr        #
+#    Updated: 2024/09/03 14:54:10 by pleander         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -42,7 +42,9 @@ src := ./ctype/ft_atoi.c    ./str/ft_split.c \
 	   ./math/ft_abs.c 	  ./math/ft_max.c ./math/ft_min.c ./math/ft_sign.c \
 	   ./math/ft_distance.c ./mem/ft_memset_32.c \
 		./str/ft_strtok.c ./la/v2i.c ./la/v3d.c \
-		./la/v2i_mul.c ./la/v3i.c ./io/get_next_line.c ./mem/ft_calloc.c ./math/ft_min4.c ./mem/ft_swap.c ./str/ft_streq.c ./ctype/ft_parse_int.c
+		./la/v2i_mul.c ./la/v3i.c ./io/get_next_line.c ./mem/ft_calloc.c ./math/ft_min4.c ./mem/ft_swap.c ./str/ft_streq.c ./ctype/ft_parse_int.c \
+		./lst/ft_lstadd_back.c ./lst/ft_lstadd_front.c ./lst/ft_lstclear.c ./lst/ft_lstdelone.c \
+		./lst/ft_lstiter.c ./lst/ft_lstlast.c ./lst/ft_lstmap.c ./lst/ft_lstnew.c ./lst/ft_lstsize.c
 
 obj_dir := ./obj
 $(obj_dir)/%.o: %.c
