@@ -12,7 +12,14 @@
 
 #include "minishell.h"
 
-int	pipeline(t_pipeline *pipeline)
+static int	exec_command(t_command *cmds)
 {
+
+}
+
+int	pipeline(t_pipeline *pipeline, char **envp)
+{
+	int retval;
 	
+
 }
