@@ -6,7 +6,7 @@
 #    By: copireyr <copireyr@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/08/27 12:07:56 by copireyr          #+#    #+#              #
-#    Updated: 2024/08/28 15:20:20 by copireyr         ###   ########.fr        #
+#    Updated: 2024/09/03 15:21:18 by pleander         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,7 +17,7 @@ LDFLAGS := -lreadline -L./libft/ -lft
 CFLAGS := -Wall -Wextra -Werror -MMD -MP
 NAME := minishell
 
-src = ./src/main.c
+src = ./src/main.c ./src/environment.c ./src/builtin_env.c
 obj := $(src:./src/%.c=./obj/%.o)
 lib := ./libft/libft.a
 

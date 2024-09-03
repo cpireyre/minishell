@@ -6,7 +6,7 @@
 /*   By: copireyr <copireyr@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/27 12:29:36 by copireyr          #+#    #+#             */
-/*   Updated: 2024/08/28 12:12:20 by copireyr         ###   ########.fr       */
+/*   Updated: 2024/09/03 15:39:30 by pleander         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 # include <stdint.h>
 # include <readline/readline.h>
 # include <readline/history.h>
+# include "libft.h"
 
 # define true 1
 # define false 0
@@ -30,7 +31,7 @@ typedef struct s_command
 	char	*infile;
 	char	*outfile;
 	char	*hdoc_delim;
-	bool	*of_append;
+	t_bool	*of_append;
 	int		exit_code;
 }	t_command;
 
@@ -39,5 +40,9 @@ typedef struct s_pipeline
 	t_command	*cmds;
 	size_t		n_cmds;
 }	t_pipeline;
+
+t_list	**init_env(char **envp);
+int		printenv(t_list **env);
+char	*get_env(char *var, t_list **env);
 
 #endif /* MINISHELL_H */
