@@ -6,7 +6,7 @@
 /*   By: pleander <pleander@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/03 13:10:23 by pleander          #+#    #+#             */
-/*   Updated: 2024/09/03 15:39:10 by pleander         ###   ########.fr       */
+/*   Updated: 2024/09/13 13:04:20 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
  *
  * @param var Environmental variable to get
  * @param env List of environment variables
- * @return Pointer to the loacation of the value in the list of NULL if
+ * @return Pointer to the location of the value in the list of NULL if
  * if does not exist
  */
 char	*get_env(char *var, t_list **env)
@@ -55,6 +55,7 @@ t_list	**init_env(char **envp)
 	if (!envp || !*envp)
 		return (NULL);
 	env = malloc(sizeof(t_list *));
+	ft_bzero(env, sizeof(*env));
 	if (!env)
 		return (NULL);
 	while (*envp)

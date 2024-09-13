@@ -6,7 +6,7 @@
 #    By: copireyr <copireyr@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/05/23 15:14:47 by copireyr          #+#    #+#              #
-#    Updated: 2024/09/03 14:54:10 by pleander         ###   ########.fr        #
+#    Updated: 2024/09/13 13:02:39 by copireyr         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,7 +15,7 @@
 .SUFFIXES:
 
 CC		 := cc
-CFLAGS	 += -Wall -Wextra -Werror -O2 -fno-builtin
+CFLAGS	 += -Wall -Wextra -Werror -O2 -fno-builtin -g3 -Og
 CPPFLAGS := -I./include
 
 libft := libft.a
