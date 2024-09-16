@@ -27,6 +27,7 @@ typedef uint8_t t_bool;
 
 typedef struct s_command
 {
+	size_t	i;
 	char	*path;
 	char	**args;
 	char	*infile;
@@ -60,5 +61,7 @@ int		printenv(t_list **env);
 char	*get_env(char *var, t_list **env);
 int		**create_pipes(size_t n_pipes);
 void	delete_pipes(int **pipes, size_t n_pipes);
+int		pipeline(t_pipeline *pipeline);
+int		spawn_child(t_command *cmd, int **pipes);
 
 #endif /* MINISHELL_H */
