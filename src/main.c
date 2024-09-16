@@ -6,7 +6,7 @@
 /*   By: copireyr <copireyr@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/27 12:08:02 by copireyr          #+#    #+#             */
-/*   Updated: 2024/09/13 13:01:25 by copireyr         ###   ########.fr       */
+/*   Updated: 2024/09/16 09:42:42 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,5 +43,10 @@ int	main(int argc, char **argv, char **envp)
 		if (should_exit_shell)
 			break ;
 	}
+	close(0);
+	close(1);
+	close(2);
+	ft_lstclear(env, &free);
+	free(env);
 	return (0);
 }
