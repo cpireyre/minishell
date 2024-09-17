@@ -4,7 +4,7 @@ int	main(int argc, char **argv, char **env)
 {
 	t_pipeline p;
 	t_command c[2];
-	char* args[] = {"-e", NULL};
+	char* args[] = {"/usr/bin/cat", "-e", NULL};
 
 	c[0].i = 0;
 	c[0].path = "/usr/bin/cat";
