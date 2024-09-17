@@ -13,7 +13,7 @@
 #include <sys/wait.h>
 #include "minishell.h"
 
-static int	run_pipeline(t_pipeline *pipeline, int	**pipes);
+static int	run_pipeline(t_pipeline *pipeline, int	**pipes, char **env);
 static int	wait_for_children(int *pid, size_t n_forks);
 
 /**
@@ -22,7 +22,7 @@ static int	wait_for_children(int *pid, size_t n_forks);
  * @param pipeline The pipeline
  * @return The exit code of the pipeline
  */
-int	pipeline(t_pipeline *pipeline)
+int	pipeline(t_pipeline *pipeline, char **env)
 {
 	int retval;
 	int	**pipes;
@@ -33,11 +33,11 @@ int	pipeline(t_pipeline *pipeline)
 		//clear and clean
 		return (1);
 	}
-	retval = run_pipeline(pipeline, pipes);
+	retval = run_pipeline(pipeline, pipes, env);
 	return (retval);
 }
 
-static int	run_pipeline(t_pipeline *pipeline, int	**pipes)
+static int	run_pipeline(t_pipeline *pipeline, int	**pipes, char **env)
 {
 	printf("Running pipeline..\n");
 	t_children	children;
@@ -51,12 +51,12 @@ static int	run_pipeline(t_pipeline *pipeline, int	**pipes)
 	{
 		children.child_pids[children.n_children] = fork();
 		if (children.child_pids[children.n_children] == 0)
-			return (spawn_child(&pipeline->cmds[children.n_children], pipes));
+			return (spawn_child(&pipeline->cmds[children.n_children], pipes, env));
 		if (children.child_pids[children.n_children] == -1)
-			continue ;
+			continue ; //exit?
 		children.n_children++;
 	}
-	//delete_pipes(fds->pipes, con->n_cmds - 1);
+	delete_pipes(pipes);
 	e_status = wait_for_children(children.child_pids, children.n_children);
 	//free(children.child_pids);
 	return (e_status);

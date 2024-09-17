@@ -10,12 +10,13 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <errno.h>
 #include <fcntl.h>
 #include <unistd.h>
 #include "minishell.h"
 #include "libft.h"
 
-int	spawn_child(t_command *cmd, int **pipes)
+int	spawn_child(t_command *cmd, int **pipes, char **env)
 {
 	int	fd;
 
@@ -47,9 +48,13 @@ int	spawn_child(t_command *cmd, int **pipes)
 			return (-1);
 			//return (child_error_return(fds->pipes, con, children));
 
-	//delete_pipes(fds->pipes, con->n_cmds - 1);
-	if (execve(cmd->path, cmd->args, NULL) == -1)
+	delete_pipes(pipes);
+	if (execve(cmd->path, cmd->args, env) == -1)
+	{
+		perror(strerror(errno));
+		ft_dprintf(2, "execve failed\n");
 		return (-1);
+	}
 		//return (execve_error_handler(cmds, children, con));
 	exit(EXIT_FAILURE);
 }

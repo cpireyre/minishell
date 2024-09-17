@@ -17,7 +17,7 @@ int	**create_pipes(size_t n_pipes)
 	size_t	i;
 	int		**pipes;
 
-	pipes = malloc(sizeof(int *) * n_pipes);
+	pipes = ft_calloc(n_pipes + 1, sizeof(int *));
 	if (!pipes)
 		return (NULL);
 	i = 0;
@@ -26,13 +26,13 @@ int	**create_pipes(size_t n_pipes)
 		pipes[i] = malloc(sizeof(int) * 2);
 		if (!pipes[i])
 		{
-			delete_pipes(pipes, i - 1);
+			delete_pipes(pipes);
 			return (NULL);
 		}
 		if (pipe(pipes[i]) == -1)
 		{
 			perror(NAME);
-			delete_pipes(pipes, i);
+			delete_pipes(pipes);
 			return (NULL);
 		}
 		i++;
@@ -40,12 +40,12 @@ int	**create_pipes(size_t n_pipes)
 	return (pipes);
 }
 
-void	delete_pipes(int **pipes, size_t n_pipes)
+void	delete_pipes(int **pipes)
 {
 	size_t	i;
 
 	i = 0;
-	while (i < n_pipes)
+	while (pipes[i])
 	{
 		close(pipes[i][0]);
 		close(pipes[i][1]);
