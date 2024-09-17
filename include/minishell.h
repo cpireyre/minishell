@@ -62,6 +62,6 @@ char	*get_env(char *var, t_list **env);
 int		**create_pipes(size_t n_pipes);
 void	delete_pipes(int **pipes);
 int		pipeline(t_pipeline *pipeline, char **env);
-int		spawn_child(t_command *cmd, int **pipes, char **env);
+void	spawn_child(t_command *cmd, int **pipes, char **env);
 
 #endif /* MINISHELL_H */

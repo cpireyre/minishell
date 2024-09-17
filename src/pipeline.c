@@ -10,6 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <stdlib.h>
 #include <sys/wait.h>
 #include "minishell.h"
 
@@ -29,36 +30,48 @@ int	pipeline(t_pipeline *pipeline, char **env)
 
 	pipes = create_pipes(pipeline->n_cmds - 1);
 	if (!pipes)
-	{
-		//clear and clean
-		return (1);
-	}
+		return (EXIT_FAILURE);
 	retval = run_pipeline(pipeline, pipes, env);
 	return (retval);
 }
 
+/**
+ * @brief Launces each part of the pipeline and waits for them to finish
+ * in the same order as they started
+ *
+ * @param pipeline The pipeline
+ * @param pipes The pipes
+ * @param env The environment
+ * @return 0 on success and greater than 0 on failure
+ */
 static int	run_pipeline(t_pipeline *pipeline, int	**pipes, char **env)
 {
-	printf("Running pipeline..\n");
 	t_children	children;
 	int			e_status;
 
 	children.child_pids = malloc(sizeof(pid_t) * pipeline->n_cmds);
 	if (!children.child_pids)
-		return (1);
+		return (EXIT_FAILURE);
 	children.n_children = 0;
 	while (children.n_children < pipeline->n_cmds)
 	{
 		children.child_pids[children.n_children] = fork();
 		if (children.child_pids[children.n_children] == 0)
-			return (spawn_child(&pipeline->cmds[children.n_children], pipes, env));
+		{
+			free(children.child_pids);
+			spawn_child(&pipeline->cmds[children.n_children], pipes, env);
+		}
 		if (children.child_pids[children.n_children] == -1)
-			continue ; //exit?
+		{
+			delete_pipes(pipes);
+			perror(NAME);
+			return (EXIT_FAILURE);
+		}
 		children.n_children++;
 	}
 	delete_pipes(pipes);
 	e_status = wait_for_children(children.child_pids, children.n_children);
-	//free(children.child_pids);
+	free(children.child_pids);
 	return (e_status);
 }
 
