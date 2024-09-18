@@ -22,6 +22,14 @@ static void	err_exit(void)
 	exit(EXIT_FAILURE);
 }
 
+/**
+ * @brief Spawns a child process for the given command. Note that execve()
+ * will clean all the heap memory of the process that is being replaced.
+ *
+ * @param cmd 
+ * @param pipes 
+ * @param env 
+ */
 void	spawn_child(t_command *cmd, int **pipes, char **env)
 {
 	int	fd;
