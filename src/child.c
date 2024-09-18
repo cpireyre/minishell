@@ -38,7 +38,10 @@ void	spawn_child(t_command *cmd, int **pipes, char **env)
 			err_exit();
 	if (cmd->outfile != NULL)
 	{
-		fd = open(cmd->outfile, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+		if (cmd->of_append)
+			fd = open(cmd->outfile, O_WRONLY | O_CREAT, 0644);
+		else
+			fd = open(cmd->outfile, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 		if (fd < 0 || dup2(fd, STDOUT_FILENO) < 0)
 			err_exit();
 		close(fd);
