@@ -10,10 +10,10 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <fcntl.h>
+#include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
 #include <unistd.h>
+#include <fcntl.h>
 #include "minishell.h"
 
 static void	err_exit(void)
@@ -42,8 +42,15 @@ void	spawn_child(t_command *cmd, int **pipes, char **env)
 		close(fd);
 	}
 	else
+	{
+		if (cmd->hdoc_delim)
+		{
+			ft_dprintf(2, "TODO: Implement heredoc\n");
+			exit(1);
+		}
 		if (dup2(pipes[cmd->i - 1][0], STDIN_FILENO) < 0)
 			err_exit();
+	}
 	if (cmd->outfile != NULL)
 	{
 		if (cmd->of_append)
