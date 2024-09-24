@@ -6,7 +6,7 @@
 /*   By: copireyr <copireyr@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/27 12:29:36 by copireyr          #+#    #+#             */
-/*   Updated: 2024/09/16 11:56:46 by pleander         ###   ########.fr       */
+/*   Updated: 2024/09/24 11:43:44 by pleander         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,8 +57,10 @@ typedef struct s_fds
 }	t_fds;
 
 t_list	**init_env(char **envp);
+int		export(char *export_str, t_list **env);
 int		printenv(t_list **env);
 char	*get_env(char *var, t_list **env);
+int		set_env(char *var, char *val, t_list **env);
 int		**create_pipes(size_t n_pipes);
 void	delete_pipes(int **pipes);
 int		pipeline(t_pipeline *pipeline, char **env);
