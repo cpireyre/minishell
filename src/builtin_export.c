@@ -32,7 +32,6 @@ int	export(char *export_str, t_list **env)
 		return (-1);
 	}
 	val = ft_substr(export_str, eq - export_str + 1, ft_strlen(eq + 1));
-	ft_printf("Setting env\n");
 	ret = set_env(var, val, env);
 	free(val);
 	free(var);

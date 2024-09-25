@@ -6,7 +6,7 @@
 /*   By: copireyr <copireyr@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/27 12:08:02 by copireyr          #+#    #+#             */
-/*   Updated: 2024/09/24 15:30:16 by pleander         ###   ########.fr       */
+/*   Updated: 2024/09/25 10:53:53 by pleander         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,16 +36,23 @@ int	main(int argc, char **argv, char **envp)
 		if (!user_input_line)
 			break ;
 		tokenize(user_input_line);
-		printf("user input line is: %s\n", user_input_line);
-		if (ft_streq(user_input_line, "env"))
-			printenv(env);
-		if (ft_strncmp(user_input_line, "export ", ft_strlen("export ") == 0))
-		{
-			char **var = ft_split(user_input_line, ' ');
-			export(var[1], env);
-		}
-		should_exit_shell = ft_streq(user_input_line, "exit");
+		char **input = ft_split(user_input_line, ' ');
 		free(user_input_line);
+		if (ft_streq(input[0], "env"))
+			printenv(env);
+		else if (ft_streq(input[0], "export"))
+			export(input[1], env);
+		else if (ft_streq(input[0], "unset"))
+			unset(input[1], env);
+		should_exit_shell = ft_streq(input[0], "exit");
+
+		char **orig = input;
+		while (*input)
+		{
+			free(*input);
+			input++;
+		}
+		free(orig);
 		if (should_exit_shell)
 			break ;
 	}

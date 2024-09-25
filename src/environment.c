@@ -6,7 +6,7 @@
 /*   By: pleander <pleander@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/03 13:10:23 by pleander          #+#    #+#             */
-/*   Updated: 2024/09/24 15:33:00 by pleander         ###   ########.fr       */
+/*   Updated: 2024/09/25 10:54:06 by pleander         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,19 +22,19 @@
  * @param env list of environmental variables
  * @return pointer to list element or NULL if variable does not exist
  */
-static t_list	*get_env_list_location(char *var, t_list **env)
+t_list	*get_env_list_location(char *var, t_list **env)
 {
 	int		keylen;
 	t_list	*tmp;
 
 	tmp = *env;
-	keylen = ft_strlen(var) - 1;
+	keylen = ft_strlen(var);
 	while (tmp)
 	{
-		if (!ft_strncmp(var, (tmp)->content, keylen)
+		if (!ft_strncmp(var, tmp->content, keylen)
 			&& ((char *)tmp->content)[keylen] == '=')
 			return (tmp);
-		tmp = (tmp)->next;
+		tmp = tmp->next;
 	}
 	return (NULL);
 }
