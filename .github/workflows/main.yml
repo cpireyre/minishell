@@ -1,5 +1,5 @@
-name: GitHub Actions Demo
-run-name: ${{ github.actor }} is testing out GitHub Actions 🚀
+name: Test
+run-name: Check The Norm
 on: [push]
 jobs:
   Explore-GitHub-Actions:
@@ -8,9 +8,8 @@ jobs:
     - run: |
           python3 -m pip install --upgrade pip setuptools
           python3 -m pip install norminette
-    - run: norminette > errors.txt
+    - run: norminette ${{ github.workspace }} > errors.txt
     - run: cat errors.txt
-    - run: ls
     - run: |
             ERR=$(grep Error errors.txt | wc -l)
             if [[ $ERR -gt 0 ]]
