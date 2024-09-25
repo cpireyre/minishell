@@ -10,6 +10,7 @@ jobs:
           python3 -m pip install norminette
     - run: norminette > errors.txt
     - run: cat errors.txt
+    - run: ls
     - run: |
             ERR=$(grep Error errors.txt | wc -l)
             if [[ $ERR -gt 0 ]]
