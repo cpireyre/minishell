@@ -8,4 +8,11 @@ jobs:
     - run: |
           python3 -m pip install --upgrade pip setuptools
           python3 -m pip install norminette
-    - run: echo "🍏 This job's status is ${{ job.status }}."
+    - run: norminette > errors.txt
+    - run: |
+            ERR=$(grep Error errors.txt | wc -l)
+            if [[ $ERR -gt 0 ]]
+            then
+              cat errors.txt
+              exit 1
+            fi
