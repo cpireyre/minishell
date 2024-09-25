@@ -10,8 +10,8 @@ jobs:
           python3 -m pip install norminette\
     - name: Check out repository code
       uses: actions/checkout@v4
-    - run: norminette ${{ github.workspace }} > errors.txt
     - run: norminette ${{ github.workspace }}
+    - run: norminette ${{ github.workspace }} > errors.txt
     - run: ls -l ${{ github.workspace }}
     - run: ls -l
     - run: cat errors.txt
