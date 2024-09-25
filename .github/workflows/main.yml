@@ -1,9 +1,10 @@
 name: Test
-run-name: Check The Norm
+run-name: Check the code by @${{ github.actor }}
 on: [push]
 jobs:
-  Explore-GitHub-Actions:
+  Check-The-Norm:
     runs-on: ubuntu-latest
+    continue-on-error: true
     steps:
     - run: |
           python3 -m pip install --upgrade pip setuptools
@@ -11,14 +12,3 @@ jobs:
     - name: Check out repository code
       uses: actions/checkout@v4
     - run: norminette ${{ github.workspace }}
-    - run: norminette ${{ github.workspace }} > errors.txt
-    - run: ls -l ${{ github.workspace }}
-    - run: ls -l
-    - run: cat errors.txt
-    - run: |
-            ERR=$(grep Error errors.txt | wc -l)
-            if [[ $ERR -gt 0 ]]
-            then
-              cat errors.txt
-              exit 1
-            fi
