@@ -9,6 +9,7 @@ jobs:
           python3 -m pip install --upgrade pip setuptools
           python3 -m pip install norminette
     - run: norminette > errors.txt
+    - run: cat errors.txt
     - run: |
             ERR=$(grep Error errors.txt | wc -l)
             if [[ $ERR -gt 0 ]]
