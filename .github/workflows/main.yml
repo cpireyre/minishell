@@ -7,7 +7,9 @@ jobs:
     steps:
     - run: |
           python3 -m pip install --upgrade pip setuptools
-          python3 -m pip install norminette
+          python3 -m pip install norminette\
+    - name: Check out repository code
+      uses: actions/checkout@v4
     - run: norminette ${{ github.workspace }} > errors.txt
     - run: norminette ${{ github.workspace }}
     - run: ls -l ${{ github.workspace }}
