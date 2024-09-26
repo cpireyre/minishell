@@ -6,7 +6,7 @@
 /*   By: copireyr <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/26 09:51:57 by copireyr          #+#    #+#             */
-/*   Updated: 2024/09/26 10:51:56 by copireyr         ###   ########.fr       */
+/*   Updated: 2024/09/26 11:08:28 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,13 @@
 enum e_type
 {
 	WORD,
+	APPEND,
+	REDIRECT_IN,
+	REDIRECT_OUT,
+	HEREDOC,
+	LOGICAL_AND,
+	LOGICAL_OR,
+	PIPE,
 	META,
 	SPACE,
 	ERROR,
@@ -64,7 +71,7 @@ t_token	token_next(const char *str)
 				i++;
 			if (str[i] != '"')
 				return ((t_token){.data = result.data,
-					.size = str - result.data + i, .type = ERROR});
+						.size = str - result.data + i, .type = ERROR});
 			str += i;
 		}
 		if (result.type == WORD && *str == '\'')
@@ -74,7 +81,7 @@ t_token	token_next(const char *str)
 				i++;
 			if (str[i] != '\'')
 				return ((t_token){.data = result.data,
-					.size = str - result.data + i, .type = ERROR});
+						.size = str - result.data + i, .type = ERROR});
 			str += i;
 		}
 		str++;
@@ -97,6 +104,28 @@ t_token	*realloc_token_vector(t_token *xs, size_t capacity, size_t count)
 		memcpy(tmp, xs, sizeof(*xs) * count);
 	free(xs);
 	return (tmp);
+}
+
+enum e_type	token_meta_get_type(t_token token)
+{
+	if (token.type != META)
+		return (token.type);
+	else if (token.size == 2 && !memcmp(token.data, ">>", 2))
+		return (APPEND);
+	else if (token.size == 2 && !memcmp(token.data, "<<", 2))
+		return (HEREDOC);
+	else if (token.size == 2 && !memcmp(token.data, "||", 2))
+		return (LOGICAL_OR);
+	else if (token.size == 2 && !memcmp(token.data, "&&", 2))
+		return (LOGICAL_AND);
+	else if (token.size == 1 && !memcmp(token.data, ">", 1))
+		return (REDIRECT_OUT);
+	else if (token.size == 1 && !memcmp(token.data, "<", 1))
+		return (REDIRECT_IN);
+	else if (token.size == 1 && !memcmp(token.data, "|", 1))
+		return (PIPE);
+	else
+		return (ERROR);
 }
 
 t_token	*tokenize(const char *str)
@@ -122,6 +151,8 @@ t_token	*tokenize(const char *str)
 		while (isspace(*str))
 			str++;
 		xs[i] = token_next(str);
+		if (xs[i].type == META)
+			xs[i].type = token_meta_get_type(xs[i]);
 		str += xs[i].size;
 		if (xs[i++].type == END)
 			break ;
@@ -131,8 +162,16 @@ t_token	*tokenize(const char *str)
 
 void	token_show(t_token token)
 {
-	static const char	*types[NUM_TYPES] = {
+	static const char	*types[NUM_TYPES] =
+	{
 		"WORD",
+		"APPEND",
+		"REDIRECT_IN",
+		"REDIRECT_OUT",
+		"HEREDOC",
+		"LOGICAL_AND",
+		"LOGICAL_OR",
+		"PIPE",
 		"META",
 		"SPACE",
 		"ERROR",
@@ -144,7 +183,7 @@ void	token_show(t_token token)
 	i = 0;
 	while (i < token.size)
 		putchar(token.data[i++]);
-	printf("] (%s) ", types[token.type]);
+	printf(" (%s)] ", types[token.type]);
 }
 
 int	main(int argc, char **argv)
