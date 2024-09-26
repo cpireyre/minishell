@@ -6,13 +6,14 @@
 /*   By: copireyr <copireyr@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/24 09:49:15 by copireyr          #+#    #+#             */
-/*   Updated: 2024/09/24 12:14:21 by copireyr         ###   ########.fr       */
+/*   Updated: 2024/09/24 12:24:50 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <string.h>
 #include <unistd.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <ctype.h>
 
 enum e_type
@@ -27,6 +28,7 @@ enum e_type
 	APPEND,
 	HEREDOC,
 	ERROR,
+	END,
 	NUM_TYPES,
 };
 
@@ -68,16 +70,21 @@ enum e_type	token_meta_get_type(t_token meta)
 	return (ERROR);
 }
 
-void	tokenize(const char *str)
+t_token	*tokenize(const char *str)
 {
 	const static char	*token_types[NUM_TYPES] = {"Meta", "Word", "Pipe", "Logical OR", "Logical AND", "Redirect IN", "Redirect OUT", "Append", "Heredoc", "Error"};
 	t_token	token;
 	size_t	len;
 	size_t	i;
-	t_token	tokens[100];
+	t_token	*tokens;
+	size_t	capacity;
 	size_t	token_count;
 
 	len = strlen(str);
+	capacity = 16;
+	tokens = malloc(sizeof(*tokens) * capacity);
+	if (!tokens)
+		return (NULL);
 	i = 0;
 	token_count = 0;
 	while (i < len)
@@ -85,7 +92,10 @@ void	tokenize(const char *str)
 		while (i < len && isspace(str[i]))
 			i++;
 		if (i == len)
-			return ;
+		{
+			tokens[token_count++].type = END;
+			return (tokens);
+		}
 		token.data = str + i;
 		if (is_meta_character(str[i]))
 		{
@@ -124,7 +134,18 @@ void	tokenize(const char *str)
 			token.type = token_meta_get_type(token);
 		tokens[token_count++] = token;
 	}
-	for (size_t curr = 0; curr < token_count; curr++)
+	printf("\n");
+	return (tokens);
+}
+
+int	main(int argc, char **argv)
+{
+	const char	*str = argv[1];
+	t_token	*tokens = tokenize(str);
+	size_t	i;
+
+	j = 0;
+	while (tokens[j].type != END)
 	{
 		t_token token = tokens[curr];
 		printf("%s token, length %zu: ", token_types[token.type], token.size);
@@ -132,11 +153,4 @@ void	tokenize(const char *str)
 			putchar(token.data[i]);
 		putchar('\n');
 	}
-	printf("\n");
-}
-
-int	main(int argc, char **argv)
-{
-	const char	*str = argv[1];
-	tokenize(str);
 }
