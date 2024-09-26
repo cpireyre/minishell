@@ -1,4 +1,4 @@
-CFLAGS := -fsanitize=address,undefined,leak -g3 -Og
+CFLAGS := -fsanitize=address,undefined,leak -g3 -Og -pedantic
 
 .PHONY: all
 all: bin

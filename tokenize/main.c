@@ -6,7 +6,7 @@
 /*   By: copireyr <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/26 09:51:57 by copireyr          #+#    #+#             */
-/*   Updated: 2024/09/26 11:08:28 by copireyr         ###   ########.fr       */
+/*   Updated: 2024/09/26 14:23:31 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,57 +52,58 @@ enum e_type	token_get_type(char c)
 		return (WORD);
 }
 
+const char	*ft_strchrnul(const char *str, int c)
+{
+	while (*str && *str != c)
+		str++;
+	return (str);
+}
+
 t_token	token_next(const char *str)
 {
 	t_token	result;
-	size_t	i;
 
-	result = (t_token){0};
-	result.data = str;
-	result.type = token_get_type(*str);
-	if (result.type == END)
-		return (result);
-	while (token_get_type(*str) == result.type)
+	result = (t_token){.data = str, .type = token_get_type(*str), .size = 0};
+	while (result.type != END && token_get_type(*str) == result.type)
 	{
 		if (result.type == WORD && *str == '"')
 		{
-			i = 1;
-			while (str[i] && str[i] != '"')
-				i++;
-			if (str[i] != '"')
-				return ((t_token){.data = result.data,
-						.size = str - result.data + i, .type = ERROR});
-			str += i;
+			str = ft_strchrnul(str + 1, '"');
+			if (*str != '"')
+				result.type = ERROR;
 		}
 		if (result.type == WORD && *str == '\'')
 		{
-			i = 1;
-			while (str[i] && str[i] != '\'')
-				i++;
-			if (str[i] != '\'')
-				return ((t_token){.data = result.data,
-						.size = str - result.data + i, .type = ERROR});
-			str += i;
+			str = ft_strchrnul(str + 1, '\'');
+			if (*str != '\'')
+				result.type = ERROR;
 		}
-		str++;
+		if (result.type != ERROR)
+			str++;
 	}
 	result.size = str - result.data;
 	return (result);
 }
 
-t_token	*realloc_token_vector(t_token *xs, size_t capacity, size_t count)
+t_token	*realloc_token_vector_if_needed(t_token *xs,
+		size_t *capacity, size_t count)
 {
 	t_token		*tmp;
 
-	tmp = malloc(sizeof(t_token) * capacity);
+	if (count < *capacity)
+		return (xs);
+	*capacity = 2 * *capacity + 1;
+	tmp = malloc(sizeof(t_token) * *capacity);
 	if (!tmp)
 	{
 		free(xs);
 		return (NULL);
 	}
 	if (xs)
+	{
 		memcpy(tmp, xs, sizeof(*xs) * count);
-	free(xs);
+		free(xs);
+	}
 	return (tmp);
 }
 
@@ -137,17 +138,13 @@ t_token	*tokenize(const char *str)
 	size_t			capacity;
 
 	i = 0;
-	capacity = 1;
+	capacity = 0;
 	xs = NULL;
 	while (str - ptr <= len && i < INT_MAX)
 	{
-		if (i == capacity || !xs)
-		{
-			capacity *= 2;
-			xs = realloc_token_vector(xs, capacity, i);
-			if (!xs)
-				return (NULL);
-		}
+		xs = realloc_token_vector_if_needed(xs, &capacity, i);
+		if (!xs)
+			return (NULL);
 		while (isspace(*str))
 			str++;
 		xs[i] = token_next(str);
@@ -162,8 +159,7 @@ t_token	*tokenize(const char *str)
 
 void	token_show(t_token token)
 {
-	static const char	*types[NUM_TYPES] =
-	{
+	static const char	*types[NUM_TYPES] = {
 		"WORD",
 		"APPEND",
 		"REDIRECT_IN",
