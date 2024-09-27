@@ -24,6 +24,8 @@ int	export(char *export_str, t_list **env)
 	if (!eq)
 		return (-1);
 	var = ft_substr(export_str, 0, eq - export_str);
+	if (!var)
+		return (-1);
 	if (ft_strchr(var, ' '))
 	{
 		ft_dprintf(2, "%s: export: '%s': not a valid identifier\n",
