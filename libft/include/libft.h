@@ -6,7 +6,7 @@
 /*   By: copireyr <copireyr@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 12:48:12 by copireyr          #+#    #+#             */
-/*   Updated: 2024/09/03 14:57:14 by pleander         ###   ########.fr       */
+/*   Updated: 2024/09/25 10:13:48 by pleander         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ typedef struct s_list
 {
 	void			*content;
 	struct s_list	*next;
+	struct s_list	*prev;
 }					t_list;
 
 /* Mem */

@@ -6,7 +6,7 @@
 #    By: copireyr <copireyr@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/08/27 12:07:56 by copireyr          #+#    #+#              #
-#    Updated: 2024/09/16 11:35:43 by copireyr         ###   ########.fr        #
+#    Updated: 2024/09/25 10:38:05 by pleander         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,11 +14,12 @@
 CC := cc
 CPPFLAGS := -I./include/ -I./libft/include
 LDFLAGS := -lreadline -L./libft/ -lft
-CFLAGS := -Wall -Wextra -Werror -MMD -MP -g3 -Og
+#CFLAGS := -Wall -Wextra -Werror -MMD -MP -g3 -Og
+CFLAGS := -Wall -Wextra -Werror -g3
 NAME := minishell
 
 src = ./src/main.c ./src/environment.c ./src/builtin_env.c \
-	  ./src/tokenize.c
+	  ./src/tokenize.c ./src/builtin_export.c ./src/builtin_unset.c
 obj := $(src:./src/%.c=./obj/%.o)
 lib := ./libft/libft.a
 
