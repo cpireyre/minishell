@@ -6,7 +6,7 @@
 #    By: copireyr <copireyr@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/05/23 15:14:47 by copireyr          #+#    #+#              #
-#    Updated: 2024/09/13 13:02:39 by copireyr         ###   ########.fr        #
+#    Updated: 2024/09/26 14:52:39 by copireyr         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -44,7 +44,8 @@ src := ./ctype/ft_atoi.c    ./str/ft_split.c \
 		./str/ft_strtok.c ./la/v2i.c ./la/v3d.c \
 		./la/v2i_mul.c ./la/v3i.c ./io/get_next_line.c ./mem/ft_calloc.c ./math/ft_min4.c ./mem/ft_swap.c ./str/ft_streq.c ./ctype/ft_parse_int.c \
 		./lst/ft_lstadd_back.c ./lst/ft_lstadd_front.c ./lst/ft_lstclear.c ./lst/ft_lstdelone.c \
-		./lst/ft_lstiter.c ./lst/ft_lstlast.c ./lst/ft_lstmap.c ./lst/ft_lstnew.c ./lst/ft_lstsize.c
+		./lst/ft_lstiter.c ./lst/ft_lstlast.c ./lst/ft_lstmap.c ./lst/ft_lstnew.c ./lst/ft_lstsize.c \
+		./str/ft_strchrnul.c
 
 obj_dir := ./obj
 $(obj_dir)/%.o: %.c

@@ -3,92 +3,127 @@
 /*                                                        :::      ::::::::   */
 /*   tokenize.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: copireyr <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: copireyr <copireyr@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/09/13 12:46:17 by copireyr          #+#    #+#             */
-/*   Updated: 2024/09/16 11:45:07 by copireyr         ###   ########.fr       */
+/*   Created: 2024/09/26 14:51:54 by copireyr          #+#    #+#             */
+/*   Updated: 2024/09/26 15:23:12 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
 #include "tokenize.h"
 
-void	token_show(t_token token);
-t_token	token_next(char *input, size_t	start_offset, size_t input_size);
-enum e_token_types	token_type(t_token token);
+static enum e_type	token_get_type(char c);
+static t_token		*realloc_token_vector_if_needed(t_token *xs,
+						size_t *capacity, size_t count);
+static enum e_type	get_operator(t_token token);
+static t_token		token_next(const char *str);
 
-void	tokenize(char *input)
+t_token	*tokenize(const char *str)
 {
-	size_t	input_size;
-	size_t	offset;
-	t_token	token;
+	t_token			*xs;
+	const char		*ptr = str;
+	const long		len = ft_strlen(str);
+	size_t			i;
+	size_t			capacity;
 
-	if (!input)
-		return ;
-	input_size = ft_strlen(input);
-	offset = 0;
-	while (offset < input_size)
+	i = 0;
+	capacity = 0;
+	xs = NULL;
+	while (str - ptr <= len && i < INT_MAX)
 	{
-		token = token_next(input, offset, input_size);
-		offset += token.size;
-		token_show(token);
+		xs = realloc_token_vector_if_needed(xs, &capacity, i);
+		if (!xs)
+			return (NULL);
+		while (ft_isspace(*str))
+			str++;
+		xs[i] = token_next(str);
+		if (xs[i].type == META)
+			xs[i].type = get_operator(xs[i]);
+		str += xs[i].size;
+		if (xs[i++].type == END)
+			break ;
 	}
-	ft_dprintf(2, "input size: %u\n", input_size);
+	return (xs);
 }
 
-t_token	token_next(char *input, size_t	start_offset, size_t input_size)
+static t_token	*realloc_token_vector_if_needed(t_token *xs,
+		size_t *capacity, size_t count)
 {
-	t_token result;
-	size_t	i;
+	t_token		*tmp;
 
-	result = (t_token){0};
-	i = start_offset;
-	if (i < input_size)
+	if (count < *capacity)
+		return (xs);
+	*capacity = 2 * *capacity + 1;
+	tmp = malloc(sizeof(t_token) * *capacity);
+	if (!tmp)
 	{
-		if (ft_isspace(input[i]))
-			while (i < input_size && ft_isspace(input[i]))
-				i++;
-		else
-			while (i < input_size && !ft_isspace(input[i]))
-				i++;
-	result.size = i - start_offset;
-	result.data = input + start_offset;
-	result.type = token_type(result);
+		free(xs);
+		return (NULL);
 	}
+	if (xs)
+	{
+		ft_memcpy(tmp, xs, sizeof(*xs) * count);
+		free(xs);
+	}
+	return (tmp);
+}
+
+static t_token	token_next(const char *str)
+{
+	t_token	result;
+
+	result = (t_token){.data = str, .type = token_get_type(*str), .size = 0};
+	while (result.type != END && token_get_type(*str) == result.type)
+	{
+		if (result.type == WORD && *str == '"')
+		{
+			str = ft_strchrnul(str + 1, '"');
+			if (*str != '"')
+				result.type = ERROR;
+		}
+		if (result.type == WORD && *str == '\'')
+		{
+			str = ft_strchrnul(str + 1, '\'');
+			if (*str != '\'')
+				result.type = ERROR;
+		}
+		if (result.type != ERROR)
+			str++;
+	}
+	result.size = str - result.data;
 	return (result);
 }
 
-enum e_token_types	token_type(t_token token)
+static enum e_type	get_operator(t_token token)
 {
-	if (token.size == 1)
-	{
-		if (*token.data == '|')
-			return (PIPE);
-		if (*token.data == '<')
-			return (REDIRECT_IN);
-		if (*token.data == '>')
-			return (REDIRECT_OUT);
-	}
-	return (NULL_TOKEN);
+	if (token.type != META)
+		return (token.type);
+	else if (token.size == 2 && !ft_memcmp(token.data, ">>", 2))
+		return (APPEND);
+	else if (token.size == 2 && !ft_memcmp(token.data, "<<", 2))
+		return (HEREDOC);
+	else if (token.size == 2 && !ft_memcmp(token.data, "||", 2))
+		return (LOGICAL_OR);
+	else if (token.size == 2 && !ft_memcmp(token.data, "&&", 2))
+		return (LOGICAL_AND);
+	else if (token.size == 1 && !ft_memcmp(token.data, ">", 1))
+		return (REDIRECT_OUT);
+	else if (token.size == 1 && !ft_memcmp(token.data, "<", 1))
+		return (REDIRECT_IN);
+	else if (token.size == 1 && !ft_memcmp(token.data, "|", 1))
+		return (PIPE);
+	else
+		return (ERROR);
 }
 
-void	token_show(t_token token)
+static enum e_type	token_get_type(char c)
 {
-	static char	*types[NUM_TOKENS] = {"SYMBOL",
-	"SINGLE_QUOTE_STRING",
-	"DOUBLE_QUOTE_STRING",
-	"REDIRECT_IN",
-	"REDIRECT_OUT",
-	"REDIRECT_APPEND",
-	"HEREDOC_START",
-	"PIPE",
-	"VAR",
-	"NULL_TOKEN",
-	};
-	ft_dprintf(2, "Token contents: [");
-	write(2, token.data, token.size);
-	ft_dprintf(2, "]\n");
-	ft_dprintf(2, "Token type: %s\n", types[token.type]);
-	ft_dprintf(2, "Token size: %u\n", token.size);
-	ft_dprintf(2, "\n---END_TOKEN---\n");
+	if (c == '<' || c == '>' || c == '&' || c == '|')
+		return (META);
+	else if (ft_isspace(c))
+		return (TOKENIZE_SPACE);
+	else if (c == '\0')
+		return (END);
+	else
+		return (WORD);
 }
