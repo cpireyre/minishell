@@ -6,7 +6,7 @@
 #    By: copireyr <copireyr@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/08/27 12:07:56 by copireyr          #+#    #+#              #
-#    Updated: 2024/09/26 15:19:17 by copireyr         ###   ########.fr        #
+#    Updated: 2024/09/30 10:06:16 by copireyr         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,7 +21,8 @@ LDFLAGS += $(asan)
 NAME := minishell
 
 src = ./src/main.c ./src/environment.c ./src/builtin_env.c \
-	  ./src/tokenize.c ./src/tokenize_utils.c
+	  ./src/tokenize.c ./src/tokenize_utils.c \
+	  ./src/builtin_export.c ./src/builtin_unset.c
 obj := $(src:./src/%.c=./obj/%.o)
 lib := ./libft/libft.a
 

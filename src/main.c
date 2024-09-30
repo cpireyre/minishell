@@ -6,7 +6,7 @@
 /*   By: copireyr <copireyr@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/27 12:08:02 by copireyr          #+#    #+#             */
-/*   Updated: 2024/09/26 14:47:20 by copireyr         ###   ########.fr       */
+/*   Updated: 2024/09/30 10:05:36 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,7 @@ int	main(int argc, char **argv, char **envp)
 			printenv(env);
 		should_exit_shell = ft_streq(user_input_line, "exit");
 		free(user_input_line);
+		char	**input = ft_split(user_input_line, ' ');
 		if (ft_streq(input[0], "env"))
 			printenv(env);
 		else if (ft_streq(input[0], "export"))
