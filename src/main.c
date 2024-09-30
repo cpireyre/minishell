@@ -6,7 +6,7 @@
 /*   By: copireyr <copireyr@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/27 12:08:02 by copireyr          #+#    #+#             */
-/*   Updated: 2024/09/25 10:53:53 by pleander         ###   ########.fr       */
+/*   Updated: 2024/09/26 14:47:20 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 int	main(int argc, char **argv, char **envp)
 {
 	t_list	**env;
+	t_token	*xs;
 	char	*user_input_line;
 	int		should_exit_shell;
 
@@ -30,13 +31,21 @@ int	main(int argc, char **argv, char **envp)
 	env = init_env(envp);
 	if (!env)
 		exit(1);
+	tokenize_test();
 	while (1)
 	{
 		user_input_line = readline("λ> ");
 		if (!user_input_line)
 			break ;
-		tokenize(user_input_line);
-		char **input = ft_split(user_input_line, ' ');
+		xs = tokenize(user_input_line);
+		if (xs)
+		{
+			tokenize_show_tokens(xs);
+			free(xs);
+		}
+		if (ft_streq(user_input_line, "env"))
+			printenv(env);
+		should_exit_shell = ft_streq(user_input_line, "exit");
 		free(user_input_line);
 		if (ft_streq(input[0], "env"))
 			printenv(env);

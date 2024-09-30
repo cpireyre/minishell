@@ -6,7 +6,7 @@
 /*   By: copireyr <copireyr@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 12:48:12 by copireyr          #+#    #+#             */
-/*   Updated: 2024/09/25 10:13:48 by pleander         ###   ########.fr       */
+/*   Updated: 2024/09/26 14:52:25 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,21 +42,22 @@ void	ft_swap(int *a, int *b);
 
 /* Str */
 
-size_t	ft_strlen(const char *s);
-char	*ft_strdup(const char *str);
-char	*ft_strchr(const char *s, int c);
-char	*ft_strrchr(const char *s, int c);
-char	**ft_split(char const *s, char c);
-char	*ft_strndup(const char *src, size_t n);
-char	*ft_strjoin(char const *s1, char const *s2);
-char	*ft_strtrim(char const *s1, char const *set);
-int		ft_strncmp(const char *s1, const char *s2, size_t n);
-size_t	ft_strlcpy(char *dst, const char *src, size_t dstsize);
-size_t	ft_strlcat(char *dst, const char *src, size_t dstsize);
-char	*ft_substr(char const *s, unsigned int start, size_t len);
-char	*ft_strnstr(const char *haystack, const char *needle, size_t len);
-char	*ft_strtok(char *str, const char *sep);
-int		ft_streq(const char *s1, const char *s2);
+size_t		ft_strlen(const char *s);
+char		*ft_strdup(const char *str);
+char		*ft_strchr(const char *s, int c);
+char		*ft_strrchr(const char *s, int c);
+char		**ft_split(char const *s, char c);
+char		*ft_strndup(const char *src, size_t n);
+char		*ft_strjoin(char const *s1, char const *s2);
+char		*ft_strtrim(char const *s1, char const *set);
+int			ft_strncmp(const char *s1, const char *s2, size_t n);
+size_t		ft_strlcpy(char *dst, const char *src, size_t dstsize);
+size_t		ft_strlcat(char *dst, const char *src, size_t dstsize);
+char		*ft_substr(char const *s, unsigned int start, size_t len);
+char		*ft_strnstr(const char *haystack, const char *needle, size_t len);
+char		*ft_strtok(char *str, const char *sep);
+int			ft_streq(const char *s1, const char *s2);
+const char	*ft_strchrnul(const char *str, int c);
 
 /* Ctype */
 

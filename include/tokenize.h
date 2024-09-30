@@ -3,38 +3,46 @@
 /*                                                        :::      ::::::::   */
 /*   tokenize.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: copireyr <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: copireyr <copireyr@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/09/13 12:46:16 by copireyr          #+#    #+#             */
-/*   Updated: 2024/09/16 10:58:59 by copireyr         ###   ########.fr       */
+/*   Created: 2024/09/26 14:29:23 by copireyr          #+#    #+#             */
+/*   Updated: 2024/09/26 14:49:06 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef TOKENIZE_H
 # define TOKENIZE_H
 
-enum e_token_types
+#include <stdlib.h>
+#include <limits.h>
+#include "libft.h"
+
+enum e_type
 {
-	SYMBOL,
-	SINGLE_QUOTE_STRING,
-	DOUBLE_QUOTE_STRING,
+	WORD,
+	APPEND,
 	REDIRECT_IN,
 	REDIRECT_OUT,
-	REDIRECT_APPEND,
-	HEREDOC_START,
+	HEREDOC,
+	LOGICAL_AND,
+	LOGICAL_OR,
 	PIPE,
-	VAR,
-	NULL_TOKEN,
-	NUM_TOKENS,
+	META,
+	TOKENIZE_SPACE,
+	ERROR,
+	END,
+	NUM_TYPES,
 };
 
 typedef struct s_token
 {
-	char				*data;
-	size_t				size;
-	enum e_token_types	type;
+	const char	*data;
+	size_t		size;
+	enum e_type	type;
 }	t_token;
 
-void	tokenize(char *str);
+t_token	*tokenize(const char *str);
+void	tokenize_show_tokens(t_token *xs);
+void	tokenize_test(void);
 
 #endif /* TOKENIZE_H */
