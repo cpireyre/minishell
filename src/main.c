@@ -47,6 +47,21 @@ int	main(int argc, char **argv, char **envp)
 			printenv(env);
 		should_exit_shell = ft_streq(user_input_line, "exit");
 		free(user_input_line);
+		if (ft_streq(input[0], "env"))
+			printenv(env);
+		else if (ft_streq(input[0], "export"))
+			export(input[1], env);
+		else if (ft_streq(input[0], "unset"))
+			unset(input[1], env);
+		should_exit_shell = ft_streq(input[0], "exit");
+
+		char **orig = input;
+		while (*input)
+		{
+			free(*input);
+			input++;
+		}
+		free(orig);
 		if (should_exit_shell)
 			break ;
 	}

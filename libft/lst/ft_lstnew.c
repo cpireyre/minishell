@@ -6,7 +6,7 @@
 /*   By: pleander <pleander@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 13:42:07 by pleander          #+#    #+#             */
-/*   Updated: 2024/09/03 14:59:05 by pleander         ###   ########.fr       */
+/*   Updated: 2024/09/25 10:16:37 by pleander         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,5 +22,6 @@ t_list	*ft_lstnew(void *content)
 		return (NULL);
 	list->content = content;
 	list->next = NULL;
+	list->prev = NULL;
 	return (list);
 }

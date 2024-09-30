@@ -1,0 +1,21 @@
+name: Test
+run-name: Code check @${{ github.actor }}
+on: [push]
+jobs:
+  Check-The-Norm:
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+    - run: |
+          python3 -m pip install --upgrade pip setuptools
+          python3 -m pip install norminette\
+    - name: Check out repository code
+      uses: actions/checkout@v4
+    - run: norminette ${{ github.workspace }}
+  Build:
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+    - name: Check out repository code
+      uses: actions/checkout@v4
+    - run: make all

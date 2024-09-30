@@ -6,21 +6,27 @@
 /*   By: pleander <pleander@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/03 15:17:24 by pleander          #+#    #+#             */
-/*   Updated: 2024/09/03 15:23:13 by pleander         ###   ########.fr       */
+/*   Updated: 2024/09/25 10:53:46 by pleander         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
-
-static void	ft_puts(void *s)
-{
-	ft_printf("%s\n", (char *)s);
-}
+#include "minishell.h"
 
 int	printenv(t_list **env)
 {
+	t_list	*tmp;
+
+	tmp = *env;
 	if (!env)
 		return (-1);
-	ft_lstiter(*env, &ft_puts);
+	while (tmp)
+	{
+		if ((tmp)->next)
+			ft_printf("%s\n", (char *)(tmp)->content);
+		else
+			ft_printf("%s%s\n", (char *)(tmp)->content, ANSI_RESET);
+		tmp = (tmp)->next;
+	}
 	return (1);
 }

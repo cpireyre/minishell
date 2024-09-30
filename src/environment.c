@@ -6,13 +6,38 @@
 /*   By: pleander <pleander@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/03 13:10:23 by pleander          #+#    #+#             */
-/*   Updated: 2024/09/13 13:04:20 by copireyr         ###   ########.fr       */
+/*   Updated: 2024/09/25 10:54:06 by pleander         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
+#include "minishell.h"
 #include <stdlib.h>
 #include <string.h>
+
+/**
+ * @brief Gets the element in the list where the variable is stored
+ *
+ * @param var environmental variable to find
+ * @param env list of environmental variables
+ * @return pointer to list element or NULL if variable does not exist
+ */
+t_list	*get_env_list_location(char *var, t_list **env)
+{
+	int		keylen;
+	t_list	*tmp;
+
+	tmp = *env;
+	keylen = ft_strlen(var);
+	while (tmp)
+	{
+		if (!ft_strncmp(var, tmp->content, keylen)
+			&& ((char *)tmp->content)[keylen] == '=')
+			return (tmp);
+		tmp = tmp->next;
+	}
+	return (NULL);
+}
 
 /**
  * @brief Gets the value of an environmental variable
@@ -24,20 +49,57 @@
  */
 char	*get_env(char *var, t_list **env)
 {
-	char	*key;
-	int		keylen;
+	t_list	*loc;
+	char	*value;
 
-	key = ft_strjoin(var, "=");
-	keylen = ft_strlen(key);
-	if (!env)
+	loc = get_env_list_location(var, env);
+	if (!loc)
 		return (NULL);
-	while (*env)
+	value = (*env)->content + ft_strlen(var) + 1;
+	return (value);
+}
+
+static char	*make_env_str(char *var, char *val)
+{
+	size_t	str_len;
+	char	*env_str;
+
+	str_len = (ft_strlen(var) + ft_strlen(val) + 2);
+	env_str = ft_calloc(str_len, sizeof(char));
+	if (!env_str)
+		return (NULL);
+	ft_strlcat(env_str, var, str_len);
+	ft_strlcat(env_str, "=", str_len);
+	ft_strlcat(env_str, val, str_len);
+	return (env_str);
+}
+
+int	set_env(char *var, char *val, t_list **env)
+{
+	t_list	*loc;
+	t_list	*new;
+	char	*env_str;
+
+	env_str = make_env_str(var, val);
+	if (!env_str)
+		return (-1);
+	loc = get_env_list_location(var, env);
+	if (!loc)
 	{
-		if (ft_strncmp(key, (*env)->content, keylen) == 0)
-			return ((*env)->content + keylen);
-		*env = (*env)->next;
+		new = ft_lstnew(env_str);
+		if (!new)
+		{
+			free(env_str);
+			return (-1);
+		}
+		ft_lstadd_back(env, new);
 	}
-	return (NULL);
+	else
+	{
+		free(loc->content);
+		loc->content = env_str;
+	}
+	return (0);
 }
 
 /**
@@ -55,9 +117,9 @@ t_list	**init_env(char **envp)
 	if (!envp || !*envp)
 		return (NULL);
 	env = malloc(sizeof(t_list *));
-	ft_bzero(env, sizeof(*env));
 	if (!env)
 		return (NULL);
+	ft_bzero(env, sizeof(env));
 	while (*envp)
 	{
 		envstr = ft_strdup(*envp);
