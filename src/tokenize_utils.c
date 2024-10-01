@@ -6,26 +6,32 @@
 /*   By: copireyr <copireyr@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/30 13:13:38 by copireyr          #+#    #+#             */
-/*   Updated: 2024/10/01 09:14:44 by copireyr         ###   ########.fr       */
+/*   Updated: 2024/10/01 09:37:00 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "tokenize.h"
 
-void	tokenize_show(t_token token)
+const char	*ast_show_type(enum e_type type)
 {
 	static const char	*types[AST_NUM_TYPES] = {
 		"WORD", "APPEND", "REDIRECT_IN", "REDIRECT_OUT",
 		"HEREDOC", "LOGICAL_AND", "LOGICAL_OR", "PIPE",
 		"META", "TOKENIZE_SPACE", "ERROR", "END",
 	};
+
+	return (types[type]);
+}
+
+void	tokenize_show(t_token token)
+{
 	size_t				i;
 
 	ft_printf("[");
 	i = 0;
 	while (i < token.size)
-		ft_printf("%c", token.data[i++]);
-	ft_printf(" (%s)] ", types[token.type]);
+		ft_printf("%c", token.value[i++]);
+	ft_printf(" (%s)] ", ast_show_type(token.type));
 }
 
 void	tokenize_show_tokens(t_token *xs)

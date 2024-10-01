@@ -6,7 +6,7 @@
 /*   By: copireyr <copireyr@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/26 14:29:23 by copireyr          #+#    #+#             */
-/*   Updated: 2024/10/01 09:13:17 by copireyr         ###   ########.fr       */
+/*   Updated: 2024/10/01 09:37:22 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,15 +44,16 @@ typedef struct s_ast
 
 typedef struct s_token
 {
-	const char	*data;
-	size_t		size;
 	enum e_type	type;
+	const char	*value;
+	size_t		size;
 }	t_token;
 
+void	tokenize_test(void);
 t_token	*tokenize(const char *str);
 void	tokenize_show(t_token token);
 void	tokenize_show_tokens(t_token *xs);
-void	tokenize_test(void);
+const char	*ast_show_type(enum e_type type);
 
 void	parse(t_token *xs);
 

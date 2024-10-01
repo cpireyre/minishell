@@ -6,7 +6,7 @@
 /*   By: copireyr <copireyr@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/27 12:08:02 by copireyr          #+#    #+#             */
-/*   Updated: 2024/09/30 12:59:57 by copireyr         ###   ########.fr       */
+/*   Updated: 2024/10/01 09:40:53 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ int	main(int argc, char **argv, char **envp)
 	while (1)
 	{
 		user_input_line = readline("λ> ");
+		should_exit_shell = ft_streq(user_input_line, "exit");
 		if (!user_input_line)
 			break ;
 		xs = tokenize(user_input_line);
@@ -53,7 +54,6 @@ int	main(int argc, char **argv, char **envp)
 			export(input[1], env);
 		else if (ft_streq(input[0], "unset"))
 			unset(input[1], env);
-		should_exit_shell = ft_streq(input[0], "exit");
 
 		char **orig = input;
 		while (*input)

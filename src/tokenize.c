@@ -6,7 +6,7 @@
 /*   By: copireyr <copireyr@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/26 14:51:54 by copireyr          #+#    #+#             */
-/*   Updated: 2024/10/01 08:59:37 by copireyr         ###   ########.fr       */
+/*   Updated: 2024/10/01 09:29:03 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ static t_token	token_next(const char *str)
 {
 	t_token	result;
 
-	result = (t_token){.data = str, .type = token_get_type(*str), .size = 0};
+	result = (t_token){.value = str, .type = token_get_type(*str), .size = 0};
 	while (result.type != AST_END && token_get_type(*str) == result.type)
 	{
 		if (result.type == AST_WORD && *str == '"')
@@ -90,7 +90,7 @@ static t_token	token_next(const char *str)
 		if (result.type != AST_ERROR)
 			str++;
 	}
-	result.size = str - result.data;
+	result.size = str - result.value;
 	return (result);
 }
 
@@ -98,19 +98,19 @@ static enum e_type	get_operator(t_token token)
 {
 	if (token.type != AST_META)
 		return (token.type);
-	else if (token.size == 2 && !ft_memcmp(token.data, ">>", 2))
+	else if (token.size == 2 && !ft_memcmp(token.value, ">>", 2))
 		return (AST_APPEND);
-	else if (token.size == 2 && !ft_memcmp(token.data, "<<", 2))
+	else if (token.size == 2 && !ft_memcmp(token.value, "<<", 2))
 		return (AST_HEREDOC);
-	else if (token.size == 2 && !ft_memcmp(token.data, "||", 2))
+	else if (token.size == 2 && !ft_memcmp(token.value, "||", 2))
 		return (AST_LOGICAL_OR);
-	else if (token.size == 2 && !ft_memcmp(token.data, "&&", 2))
+	else if (token.size == 2 && !ft_memcmp(token.value, "&&", 2))
 		return (AST_LOGICAL_AND);
-	else if (token.size == 1 && !ft_memcmp(token.data, ">", 1))
+	else if (token.size == 1 && !ft_memcmp(token.value, ">", 1))
 		return (AST_REDIRECT_OUT);
-	else if (token.size == 1 && !ft_memcmp(token.data, "<", 1))
+	else if (token.size == 1 && !ft_memcmp(token.value, "<", 1))
 		return (AST_REDIRECT_IN);
-	else if (token.size == 1 && !ft_memcmp(token.data, "|", 1))
+	else if (token.size == 1 && !ft_memcmp(token.value, "|", 1))
 		return (AST_PIPE);
 	else
 		return (AST_ERROR);
