@@ -6,7 +6,7 @@
 /*   By: copireyr <copireyr@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/30 13:13:38 by copireyr          #+#    #+#             */
-/*   Updated: 2024/10/01 09:37:00 by copireyr         ###   ########.fr       */
+/*   Updated: 2024/10/01 10:42:54 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,19 @@
 const char	*ast_show_type(enum e_type type)
 {
 	static const char	*types[AST_NUM_TYPES] = {
-		"WORD", "APPEND", "REDIRECT_IN", "REDIRECT_OUT",
-		"HEREDOC", "LOGICAL_AND", "LOGICAL_OR", "PIPE",
-		"META", "TOKENIZE_SPACE", "ERROR", "END",
+		"AST_WORD",
+		"AST_COMMAND",
+		"AST_APPEND",
+		"AST_REDIRECT_IN",
+		"AST_REDIRECT_OUT",
+		"AST_HEREDOC",
+		"AST_LOGICAL_AND",
+		"AST_LOGICAL_OR",
+		"AST_PIPE",
+		"AST_ERROR",
+		"AST_META",
+		"AST_TOKENIZE_SPACE",
+		"AST_END",
 	};
 
 	return (types[type]);
