@@ -6,28 +6,28 @@
 /*   By: copireyr <copireyr@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/30 13:13:38 by copireyr          #+#    #+#             */
-/*   Updated: 2024/10/01 10:42:54 by copireyr         ###   ########.fr       */
+/*   Updated: 2024/10/01 13:57:44 by pleander         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "tokenize.h"
 
-const char	*ast_show_type(enum e_type type)
+const char	*ast_show_type(enum e_tok_type type)
 {
-	static const char	*types[AST_NUM_TYPES] = {
-		"AST_WORD",
-		"AST_COMMAND",
-		"AST_APPEND",
-		"AST_REDIRECT_IN",
-		"AST_REDIRECT_OUT",
-		"AST_HEREDOC",
-		"AST_LOGICAL_AND",
-		"AST_LOGICAL_OR",
-		"AST_PIPE",
-		"AST_ERROR",
-		"AST_META",
-		"AST_TOKENIZE_SPACE",
-		"AST_END",
+	static const char	*types[TOK_NUM_TYPES] = {
+		"TOK_WORD",
+		"TOK_COMMAND",
+		"TOK_APPEND",
+		"TOK_REDIRECT_IN",
+		"TOK_REDIRECT_OUT",
+		"TOK_HEREDOC",
+		"TOK_LOGICAL_AND",
+		"TOK_LOGICAL_OR",
+		"TOK_PIPE",
+		"TOK_ERROR",
+		"TOK_META",
+		"TOK_TOKENIZE_SPACE",
+		"TOK_END",
 	};
 
 	return (types[type]);
@@ -49,7 +49,7 @@ void	tokenize_show_tokens(t_token *xs)
 	size_t	j;
 
 	j = 0;
-	while (xs[j].type != AST_END)
+	while (xs[j].type != TOK_END)
 		tokenize_show(xs[j++]);
 	ft_printf("\n");
 }

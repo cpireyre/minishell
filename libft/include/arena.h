@@ -13,6 +13,8 @@
 #ifndef ARENA_H
 # define ARENA_H
 
+# include <stddef.h>
+
 typedef struct s_arena	*t_arena;
 
 struct s_arena
