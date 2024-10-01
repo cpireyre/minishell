@@ -6,7 +6,7 @@
 /*   By: copireyr <copireyr@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/26 14:51:54 by copireyr          #+#    #+#             */
-/*   Updated: 2024/09/26 15:23:12 by copireyr         ###   ########.fr       */
+/*   Updated: 2024/10/01 08:59:37 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,10 +37,10 @@ t_token	*tokenize(const char *str)
 		while (ft_isspace(*str))
 			str++;
 		xs[i] = token_next(str);
-		if (xs[i].type == META)
+		if (xs[i].type == AST_META)
 			xs[i].type = get_operator(xs[i]);
 		str += xs[i].size;
-		if (xs[i++].type == END)
+		if (xs[i++].type == AST_END)
 			break ;
 	}
 	return (xs);
@@ -73,21 +73,21 @@ static t_token	token_next(const char *str)
 	t_token	result;
 
 	result = (t_token){.data = str, .type = token_get_type(*str), .size = 0};
-	while (result.type != END && token_get_type(*str) == result.type)
+	while (result.type != AST_END && token_get_type(*str) == result.type)
 	{
-		if (result.type == WORD && *str == '"')
+		if (result.type == AST_WORD && *str == '"')
 		{
 			str = ft_strchrnul(str + 1, '"');
 			if (*str != '"')
-				result.type = ERROR;
+				result.type = AST_ERROR;
 		}
-		if (result.type == WORD && *str == '\'')
+		if (result.type == AST_WORD && *str == '\'')
 		{
 			str = ft_strchrnul(str + 1, '\'');
 			if (*str != '\'')
-				result.type = ERROR;
+				result.type = AST_ERROR;
 		}
-		if (result.type != ERROR)
+		if (result.type != AST_ERROR)
 			str++;
 	}
 	result.size = str - result.data;
@@ -96,34 +96,34 @@ static t_token	token_next(const char *str)
 
 static enum e_type	get_operator(t_token token)
 {
-	if (token.type != META)
+	if (token.type != AST_META)
 		return (token.type);
 	else if (token.size == 2 && !ft_memcmp(token.data, ">>", 2))
-		return (APPEND);
+		return (AST_APPEND);
 	else if (token.size == 2 && !ft_memcmp(token.data, "<<", 2))
-		return (HEREDOC);
+		return (AST_HEREDOC);
 	else if (token.size == 2 && !ft_memcmp(token.data, "||", 2))
-		return (LOGICAL_OR);
+		return (AST_LOGICAL_OR);
 	else if (token.size == 2 && !ft_memcmp(token.data, "&&", 2))
-		return (LOGICAL_AND);
+		return (AST_LOGICAL_AND);
 	else if (token.size == 1 && !ft_memcmp(token.data, ">", 1))
-		return (REDIRECT_OUT);
+		return (AST_REDIRECT_OUT);
 	else if (token.size == 1 && !ft_memcmp(token.data, "<", 1))
-		return (REDIRECT_IN);
+		return (AST_REDIRECT_IN);
 	else if (token.size == 1 && !ft_memcmp(token.data, "|", 1))
-		return (PIPE);
+		return (AST_PIPE);
 	else
-		return (ERROR);
+		return (AST_ERROR);
 }
 
 static enum e_type	token_get_type(char c)
 {
 	if (c == '<' || c == '>' || c == '&' || c == '|')
-		return (META);
+		return (AST_META);
 	else if (ft_isspace(c))
-		return (TOKENIZE_SPACE);
+		return (AST_TOKENIZE_SPACE);
 	else if (c == '\0')
-		return (END);
+		return (AST_END);
 	else
-		return (WORD);
+		return (AST_WORD);
 }

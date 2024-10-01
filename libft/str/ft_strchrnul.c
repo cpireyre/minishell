@@ -6,7 +6,7 @@
 /*   By: copireyr <copireyr@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/26 14:52:01 by copireyr          #+#    #+#             */
-/*   Updated: 2024/09/26 14:52:02 by copireyr         ###   ########.fr       */
+/*   Updated: 2024/10/01 09:12:21 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,4 +16,3 @@ const char	*ft_strchrnul(const char *str, int c)
 		str++;
 	return (str);
 }
-

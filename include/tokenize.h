@@ -6,33 +6,41 @@
 /*   By: copireyr <copireyr@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/26 14:29:23 by copireyr          #+#    #+#             */
-/*   Updated: 2024/09/30 13:13:39 by copireyr         ###   ########.fr       */
+/*   Updated: 2024/10/01 09:13:17 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef TOKENIZE_H
 # define TOKENIZE_H
 
-#include <stdlib.h>
-#include <limits.h>
-#include "libft.h"
+# include <stdlib.h>
+# include <limits.h>
+# include "libft.h"
 
 enum e_type
 {
-	WORD,
-	APPEND,
-	REDIRECT_IN,
-	REDIRECT_OUT,
-	HEREDOC,
-	LOGICAL_AND,
-	LOGICAL_OR,
-	PIPE,
-	META,
-	TOKENIZE_SPACE,
-	ERROR,
-	END,
-	NUM_TYPES,
+	AST_WORD,
+	AST_COMMAND,
+	AST_APPEND,
+	AST_REDIRECT_IN,
+	AST_REDIRECT_OUT,
+	AST_HEREDOC,
+	AST_LOGICAL_AND,
+	AST_LOGICAL_OR,
+	AST_PIPE,
+	AST_ERROR,
+	AST_META,
+	AST_TOKENIZE_SPACE,
+	AST_END,
+	AST_NUM_TYPES,
 };
+
+typedef struct s_ast
+{
+	enum e_type		type;
+	char			*value;
+	struct s_ast	**nodes;
+}	t_ast;
 
 typedef struct s_token
 {

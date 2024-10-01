@@ -6,7 +6,7 @@
 /*   By: copireyr <copireyr@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/27 12:29:36 by copireyr          #+#    #+#             */
-/*   Updated: 2024/09/25 10:23:48 by pleander         ###   ########.fr       */
+/*   Updated: 2024/10/01 09:14:16 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,11 +20,11 @@
 # include "libft.h"
 
 # define NAME "minishell"
-# define true 1
-# define false 0
+# define TRUE 1
+# define FALSE 0
 # define ANSI_RESET "\x1B[0m"
 
-typedef uint8_t t_bool;
+typedef uint8_t	t_bool;
 
 typedef struct s_command
 {

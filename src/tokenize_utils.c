@@ -6,7 +6,7 @@
 /*   By: copireyr <copireyr@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/30 13:13:38 by copireyr          #+#    #+#             */
-/*   Updated: 2024/09/30 13:13:39 by copireyr         ###   ########.fr       */
+/*   Updated: 2024/10/01 09:14:44 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void	tokenize_show(t_token token)
 {
-	static const char	*types[NUM_TYPES] = {
+	static const char	*types[AST_NUM_TYPES] = {
 		"WORD", "APPEND", "REDIRECT_IN", "REDIRECT_OUT",
 		"HEREDOC", "LOGICAL_AND", "LOGICAL_OR", "PIPE",
 		"META", "TOKENIZE_SPACE", "ERROR", "END",
@@ -33,7 +33,7 @@ void	tokenize_show_tokens(t_token *xs)
 	size_t	j;
 
 	j = 0;
-	while (xs[j].type != END)
+	while (xs[j].type != AST_END)
 		tokenize_show(xs[j++]);
 	ft_printf("\n");
 }
@@ -65,4 +65,3 @@ void	tokenize_test(void)
 		j++;
 	}
 }
-
