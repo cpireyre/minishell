@@ -1,6 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   tokenize_utils.c                                   :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: copireyr <copireyr@student.hive.fi>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/09/30 13:13:38 by copireyr          #+#    #+#             */
+/*   Updated: 2024/09/30 13:13:39 by copireyr         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "tokenize.h"
 
-void	tokenize_show_tokens(t_token *xs)
+void	tokenize_show(t_token token)
 {
 	static const char	*types[NUM_TYPES] = {
 		"WORD", "APPEND", "REDIRECT_IN", "REDIRECT_OUT",
@@ -8,18 +20,21 @@ void	tokenize_show_tokens(t_token *xs)
 		"META", "TOKENIZE_SPACE", "ERROR", "END",
 	};
 	size_t				i;
-	size_t				j;
+
+	ft_printf("[");
+	i = 0;
+	while (i < token.size)
+		ft_printf("%c", token.data[i++]);
+	ft_printf(" (%s)] ", types[token.type]);
+}
+
+void	tokenize_show_tokens(t_token *xs)
+{
+	size_t	j;
 
 	j = 0;
 	while (xs[j].type != END)
-	{
-		ft_printf("[");
-		i = 0;
-		while (i < xs[j].size)
-			ft_printf("%c", xs[j].data[i++]);
-		ft_printf(" (%s)] ", types[xs[j].type]);
-		j++;
-	}
+		tokenize_show(xs[j++]);
 	ft_printf("\n");
 }
 

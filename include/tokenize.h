@@ -6,7 +6,7 @@
 /*   By: copireyr <copireyr@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/26 14:29:23 by copireyr          #+#    #+#             */
-/*   Updated: 2024/09/26 14:49:06 by copireyr         ###   ########.fr       */
+/*   Updated: 2024/09/30 13:13:39 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,10 @@ typedef struct s_token
 }	t_token;
 
 t_token	*tokenize(const char *str);
+void	tokenize_show(t_token token);
 void	tokenize_show_tokens(t_token *xs);
 void	tokenize_test(void);
+
+void	parse(t_token *xs);
 
 #endif /* TOKENIZE_H */
