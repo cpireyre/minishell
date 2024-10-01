@@ -6,7 +6,7 @@
 /*   By: copireyr <copireyr@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/02 12:51:19 by copireyr          #+#    #+#             */
-/*   Updated: 2024/05/06 14:12:28 by copireyr         ###   ########.fr       */
+/*   Updated: 2024/10/01 11:44:02 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,14 +19,21 @@
 
 # define EMITTER_BUFFER_SIZE 256
 
-/* If you define and enforce a hard cap you get snprintf almost for free */
+enum e_mode
+{
+	FT_SNPRINTF,
+	FT_DPRINTF,
+};
 
 typedef struct s_emitter
 {
-	char	buf[EMITTER_BUFFER_SIZE];
-	size_t	idx;
-	ssize_t	written;
-	int		fd;
+	char		buf[EMITTER_BUFFER_SIZE];
+	size_t		idx;
+	ssize_t		written;
+	int			fd;
+	char		*output_string;
+	size_t		output_string_size;
+	enum e_mode	mode;
 }				t_emitter;
 
 void	emit_char(t_emitter *e, char c);
