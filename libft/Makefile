@@ -6,7 +6,7 @@
 #    By: copireyr <copireyr@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/05/23 15:14:47 by copireyr          #+#    #+#              #
-#    Updated: 2024/09/26 14:52:39 by copireyr         ###   ########.fr        #
+#    Updated: 2024/10/02 15:33:06 by copireyr         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -28,7 +28,8 @@ ft_printf_src := ./ft_printf/src/emit.c       \
 				 ./ft_printf/src/intformat_bonus.c \
 				 ./ft_printf/src/strformat_bonus.c  \
 				 ./ft_printf/src/charformat_bonus.c  \
-				 ./ft_printf/src/uintformat_bonus.c
+				 ./ft_printf/src/uintformat_bonus.c   \
+				 ./ft_printf/src/ft_vsnprintf.c
 
 src := ./ctype/ft_atoi.c    ./str/ft_split.c \
 	   ./mem/ft_bzero.c   ./mem/ft_memchr.c    ./mem/ft_memcmp.c \
