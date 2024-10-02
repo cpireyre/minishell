@@ -6,7 +6,7 @@
 #    By: copireyr <copireyr@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/08/27 12:07:56 by copireyr          #+#    #+#              #
-#    Updated: 2024/10/01 09:47:06 by copireyr         ###   ########.fr        #
+#    Updated: 2024/10/02 09:46:11 by copireyr         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -23,7 +23,7 @@ NAME := minishell
 src = ./src/main.c ./src/environment.c ./src/builtin_env.c \
 	  ./src/tokenize.c ./src/tokenize_utils.c \
 	  ./src/builtin_export.c ./src/builtin_unset.c \
-	  ./src/parse.c
+	  ./src/parse.c ./src/signals.c
 obj := $(src:./src/%.c=./obj/%.o)
 lib := ./libft/libft.a
 

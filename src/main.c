@@ -6,7 +6,7 @@
 /*   By: copireyr <copireyr@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/27 12:08:02 by copireyr          #+#    #+#             */
-/*   Updated: 2024/10/02 09:38:32 by copireyr         ###   ########.fr       */
+/*   Updated: 2024/10/02 12:17:58 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 #include "tokenize.h"
 #include "libft.h"
 
+
 int	main(int argc, char **argv, char **envp)
 {
 	t_list	**env;
@@ -22,6 +23,7 @@ int	main(int argc, char **argv, char **envp)
 	char	*user_input_line;
 	int		should_exit_shell;
 
+	set_signal_handler();
 	if (argc > 1)
 	{
 		ft_dprintf(2, "minishell: error: program does not accept any arguments\n");
@@ -33,7 +35,9 @@ int	main(int argc, char **argv, char **envp)
 		exit(1);
 	while (1)
 	{
-		user_input_line = readline("λ> ");
+		user_input_line = readline(MINISHELL_PROMPT);
+		if (!user_input_line)
+			break ;
 		should_exit_shell = ft_streq(user_input_line, "exit");
 		xs = tokenize(user_input_line);
 		if (xs)

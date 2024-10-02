@@ -6,7 +6,7 @@
 /*   By: copireyr <copireyr@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/27 12:29:36 by copireyr          #+#    #+#             */
-/*   Updated: 2024/10/01 09:14:16 by copireyr         ###   ########.fr       */
+/*   Updated: 2024/10/02 12:17:58 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 # include "libft.h"
 
 # define NAME "minishell"
+# define MINISHELL_PROMPT "λ> "
 # define TRUE 1
 # define FALSE 0
 # define ANSI_RESET "\x1B[0m"
@@ -68,5 +69,7 @@ int		pipeline(t_pipeline *pipeline, char **env);
 void	spawn_child(t_command *cmd, int **pipes, char **env);
 t_list	*get_env_list_location(char *var, t_list **env);
 void	unset(char *var, t_list **env);
+
+int		set_signal_handler(void);
 
 #endif /* MINISHELL_H */
