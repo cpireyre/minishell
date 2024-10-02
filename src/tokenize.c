@@ -6,7 +6,7 @@
 /*   By: copireyr <copireyr@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/26 14:51:54 by copireyr          #+#    #+#             */
-/*   Updated: 2024/10/02 16:19:35 by copireyr         ###   ########.fr       */
+/*   Updated: 2024/10/02 16:28:51 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,7 +122,7 @@ static enum e_tok_type	get_operator(t_token token)
 
 static enum e_tok_type	token_get_type(char c)
 {
-	if (c == '<' || c == '>' 
+	if (c == '<' || c == '>'
 		|| c == '&' || c == '|'
 		|| c == '(' || c == ')')
 		return (TOK_META);
