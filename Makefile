@@ -23,7 +23,8 @@ NAME := minishell
 src = ./src/main.c ./src/environment.c ./src/builtin_env.c \
 	  ./src/tokenize.c ./src/tokenize_utils.c \
 	  ./src/builtin_export.c ./src/builtin_unset.c \
-	  ./src/parse.c ./src/ast.c
+	  ./src/ast.c ./src/parse.c ./src/signals.c
+
 obj := $(src:./src/%.c=./obj/%.o)
 lib := ./libft/libft.a
 
