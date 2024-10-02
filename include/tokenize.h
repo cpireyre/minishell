@@ -6,7 +6,7 @@
 /*   By: copireyr <copireyr@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/26 14:29:23 by copireyr          #+#    #+#             */
-/*   Updated: 2024/10/02 16:15:46 by copireyr         ###   ########.fr       */
+/*   Updated: 2024/10/02 16:27:10 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,25 +40,25 @@ enum e_tok_type
 typedef struct s_ast
 {
 	enum e_tok_type		type;
-	char			*value;
-	struct s_ast	**children;
-	size_t			n_children;
+	char				*value;
+	struct s_ast		**children;
+	size_t				n_children;
 }	t_ast;
 
 typedef struct s_token
 {
 	enum e_tok_type	type;
-	const char	*value;
-	size_t		size;
+	const char		*value;
+	size_t			size;
 }	t_token;
 
-void	tokenize_test(void);
-t_token	*tokenize(const char *str);
-void	tokenize_show(t_token token);
-void	tokenize_show_tokens(t_token *xs);
+void		tokenize_test(void);
+t_token		*tokenize(const char *str);
+void		tokenize_show(t_token token);
+void		tokenize_show_tokens(t_token *xs);
 const char	*ast_show_type(enum e_tok_type type);
 
-void	parse(t_token *xs);
-int		add_child_to_node(t_ast *node, t_ast *child, t_arena arena);
+void		parse(t_token *xs);
+int			add_child_to_node(t_ast *node, t_ast *child, t_arena arena);
 
 #endif /* TOKENIZE_H */
