@@ -6,7 +6,7 @@
 /*   By: copireyr <copireyr@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/26 14:29:23 by copireyr          #+#    #+#             */
-/*   Updated: 2024/10/01 15:07:55 by pleander         ###   ########.fr       */
+/*   Updated: 2024/10/02 16:15:46 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,8 @@ enum e_tok_type
 	TOK_LOGICAL_AND,
 	TOK_LOGICAL_OR,
 	TOK_PIPE,
+	TOK_OPEN_PAREN,
+	TOK_CLOSE_PAREN,
 	TOK_ERROR,
 	TOK_META,
 	TOK_TOKENIZE_SPACE,

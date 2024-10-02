@@ -6,17 +6,17 @@
 /*   By: copireyr <copireyr@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/26 14:51:54 by copireyr          #+#    #+#             */
-/*   Updated: 2024/10/01 13:51:13 by pleander         ###   ########.fr       */
+/*   Updated: 2024/10/02 16:19:35 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "tokenize.h"
 
 static enum e_tok_type	token_get_type(char c);
-static t_token		*realloc_token_vector_if_needed(t_token *xs,
-						size_t *capacity, size_t count);
+static t_token			*realloc_token_vector_if_needed(t_token *xs,
+							size_t *capacity, size_t count);
 static enum e_tok_type	get_operator(t_token token);
-static t_token		token_next(const char *str);
+static t_token			token_next(const char *str);
 
 t_token	*tokenize(const char *str)
 {
@@ -112,13 +112,19 @@ static enum e_tok_type	get_operator(t_token token)
 		return (TOK_REDIRECT_IN);
 	else if (token.size == 1 && !ft_memcmp(token.value, "|", 1))
 		return (TOK_PIPE);
+	else if (token.size == 1 && !ft_memcmp(token.value, "(", 1))
+		return (TOK_OPEN_PAREN);
+	else if (token.size == 1 && !ft_memcmp(token.value, ")", 1))
+		return (TOK_CLOSE_PAREN);
 	else
 		return (TOK_ERROR);
 }
 
 static enum e_tok_type	token_get_type(char c)
 {
-	if (c == '<' || c == '>' || c == '&' || c == '|')
+	if (c == '<' || c == '>' 
+		|| c == '&' || c == '|'
+		|| c == '(' || c == ')')
 		return (TOK_META);
 	else if (ft_isspace(c))
 		return (TOK_TOKENIZE_SPACE);
