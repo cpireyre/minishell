@@ -6,7 +6,7 @@
 /*   By: copireyr <copireyr@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/30 13:13:38 by copireyr          #+#    #+#             */
-/*   Updated: 2024/10/01 13:57:44 by pleander         ###   ########.fr       */
+/*   Updated: 2024/10/02 16:17:24 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,8 @@ const char	*ast_show_type(enum e_tok_type type)
 		"TOK_LOGICAL_AND",
 		"TOK_LOGICAL_OR",
 		"TOK_PIPE",
+		"TOK_OPEN_PAREN",
+		"TOK_CLOSE_PAREN",
 		"TOK_ERROR",
 		"TOK_META",
 		"TOK_TOKENIZE_SPACE",

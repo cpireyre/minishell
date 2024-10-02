@@ -6,7 +6,7 @@
 /*   By: pleander <pleander@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/01 12:58:29 by pleander          #+#    #+#             */
-/*   Updated: 2024/10/01 16:49:13 by pleander         ###   ########.fr       */
+/*   Updated: 2024/10/02 16:26:31 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ enum e_ast_type
 	AST_REDIR,
 };
 
-typedef struct	s_ast_node
+typedef struct s_ast_node
 {
 	enum e_ast_type		type;
 	struct s_ast_node	**children;
@@ -33,5 +33,7 @@ typedef struct	s_ast_node
 	int					exit_code;
 }	t_ast_node;
 
-t_ast_node	*create_ast(t_token *xs, t_ast_node *ast, size_t range[2], t_arena arena);
+t_ast_node	*create_ast(t_token *xs, t_ast_node *ast,
+				size_t range[2], t_arena arena);
+
 #endif
