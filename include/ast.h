@@ -17,7 +17,6 @@
 
 enum e_ast_type
 {
-	AST_ROOT,
 	AST_LOGICAL,
 	AST_PIPELINE,
 	AST_COMMAND,
@@ -28,8 +27,8 @@ enum e_ast_type
 typedef struct	s_ast_node
 {
 	enum e_ast_type		type;
-	struct s_ast_node	*children;
-	t_token				*token;
+	struct s_ast_node	**children;
+	t_token				token;
 	size_t				n_children;
 	int					exit_code;
 }	t_ast_node;

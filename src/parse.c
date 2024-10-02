@@ -14,8 +14,8 @@
 #include "get_next_line.h"
 #include "tokenize.h"
 #include "ast.h"
-
-
+#include "libft.h"
+#include <string.h>
 
 int	has_error_token(t_token *xs)
 {
@@ -40,7 +40,43 @@ static size_t	count_toks(t_token *xs)
 	i = 0;
 	while (xs[i].type != TOK_END)
 		i++;
+	i++;
 	return (i);
+}
+
+static	char	*get_ast_type(enum e_ast_type t)
+{
+	if (t == AST_LOGICAL)
+		return("AST_LOGICAL");
+	else if (t == AST_PIPELINE)
+		return("AST_PIPELINE");
+	else if (t == AST_COMMAND)
+		return("AST_COMMAND");
+	else if (t == AST_WORD)
+		return("AST_WORD");
+	else if (t == AST_REDIR)
+		return("AST_REDIR");
+	return (NULL);
+}
+
+static	void print_ast(t_ast_node *root, size_t level)
+{
+	size_t i;
+
+	i = 0;
+	char *padding = ft_calloc(level * 2 + 1, sizeof(char));
+	ft_memset(padding, ' ', level * 2);
+	char *value = ft_calloc(root->token.size + 1, sizeof(char));
+	ft_memcpy(value, root->token.value, root->token.size);
+	ft_printf("%s%s [%s (%s)]\n", padding, get_ast_type(root->type), ast_show_type(root->token.type), value);
+	free(value);
+	free(padding);
+	level++;
+	while (i < root->n_children)
+	{
+		print_ast(root->children[i], level);
+		i++;
+	}
 }
 
 void	parse(t_token *xs)
@@ -51,9 +87,10 @@ void	parse(t_token *xs)
 
 	arena = arena_new();
 	size_t	range[2] = {0, 0};
-	range[1] = count_toks(xs);
+	range[1] = count_toks(xs) - 1; // remove end token
 	ast = NULL;
-	create_ast(xs, ast, range, arena);
+	ast = create_ast(xs, ast, range, arena);
+	print_ast(ast, 0);
 	token = xs;
 	// while (token->type != TOK_END)
 	// {
