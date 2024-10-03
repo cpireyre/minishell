@@ -16,11 +16,6 @@
 #include "libft.h"
 #include "tokenize.h"
 
-// typedef struct	s_ast_root
-// {
-// 	enum e_ast_type	type;
-// 	void			*node;
-// }	t_ast_node;
 /**
  * @brief Calculates the amount of tokens of type in the token array
  *
@@ -178,6 +173,57 @@ static	t_ast_node	*syntax_error(void)
 	return (NULL);
 }
 
+// command has first program name, then arguments. If thers's a redirect the following file is outfile
+static t_ast_node	*create_command_node(t_token *xs, t_ast_node *parent, size_t range[2], t_arena arena)
+{
+	t_ast_node	*cmd_node;
+	size_t		word_count;
+
+	cmd_node = arena_alloc(arena, sizeof(t_ast_node));
+	if (!cmd_node)
+		return (NULL);
+	word_count = count_tokens(xs, TOK_WORD, range);
+	cmd_node->type = AST_COMMAND;
+	cmd_node->token.value = concat_token_values(xs, range, arena);
+	cmd_node->token.size = ft_strlen(cmd_node->token.value);
+	cmd_node->token.type = TOK_COMMAND;
+	cmd_node->n_children = word_count; // Redirs add a redir but also remove a word
+	cmd_node->children = arena_calloc(arena, cmd_node->n_children, sizeof(t_ast_node *));
+	if (!cmd_node->children)
+		return (NULL);
+	int i = 0;
+	while (range[0] < range[1] && xs[range[0]].type != TOK_END)
+	{
+		cmd_node->children[i] = arena_calloc(arena, 1, sizeof(t_ast_node));
+		if (!cmd_node->children[i])
+			return (NULL);
+		cmd_node->children[i]->token = xs[range[0]];
+		if (xs[range[0]].type == TOK_WORD)
+			cmd_node->children[i]->type = AST_WORD;
+		else
+		{
+			cmd_node->children[i]->type = AST_REDIR;
+			if (range[0] + 1 < range[1] && xs[range[0]].type != TOK_END)
+			{
+				cmd_node->children[i]->children = arena_calloc(arena, 1, sizeof(t_ast_node *));
+				if (!cmd_node->children[i]->children)
+					return (NULL);
+				cmd_node->children[i]->children[0] = arena_calloc(arena, 1, sizeof(t_ast_node));
+				cmd_node->children[i]->children[0]->type = AST_WORD;
+				cmd_node->children[i]->children[0]->token = xs[range[0] + 1];
+				cmd_node->children[i]->children[0]->n_children = 0;
+				cmd_node->children[i]->n_children = 1;
+				range[0]++;
+			}
+			else 
+				return (syntax_error());
+		}
+		range[0]++;
+		i++;
+	}
+	return (cmd_node);
+}
+
 t_ast_node	*create_ast(t_token *xs, t_ast_node *parent, size_t range[2], t_arena arena)
 {
 	enum e_ast_type max_type;
@@ -194,11 +240,6 @@ t_ast_node	*create_ast(t_token *xs, t_ast_node *parent, size_t range[2], t_arena
 	if (max_type == AST_LOGICAL)
 	{
 		ltoken = find_next_logical_token(xs, range);
-		if (ltoken < 0)
-		{
-			ft_printf("ERROR\n");
-			return (NULL);
-		}
 		node = arena_calloc(arena, 1, sizeof(t_ast_node));
 		if (!node)
 			return (NULL);
@@ -215,11 +256,6 @@ t_ast_node	*create_ast(t_token *xs, t_ast_node *parent, size_t range[2], t_arena
 	else if (max_type == AST_PIPELINE)
 	{
 		ltoken = find_next_token_of_type(xs, TOK_PIPE, range);
-		if (ltoken < 0)
-		{
-			ft_printf("ERROR\n");
-			return (NULL);
-		}
 		node = arena_calloc(arena, 1, sizeof(t_ast_node));
 		if (!node)
 			return (NULL);
@@ -235,59 +271,10 @@ t_ast_node	*create_ast(t_token *xs, t_ast_node *parent, size_t range[2], t_arena
 	}
 	else if (max_type == AST_COMMAND)
 	{
-		// command has first program name, then arguments. If thers's a redirect the following file is outfile
-
-		node = arena_alloc(arena, sizeof(t_ast_node));
+		
+		node = create_command_node(xs, parent, range, arena);
 		if (!node)
-			return (NULL);
-		size_t word_count = count_tokens(xs, TOK_WORD, range);
-		node->type = AST_COMMAND;
-		node->token.value = concat_token_values(xs, range, arena);
-		node->token.size = ft_strlen(node->token.value);
-		node->token.type = TOK_COMMAND;
-		node->n_children = word_count; // Redirs add a redir but also remove a word
-		node->children = arena_calloc(arena, node->n_children, sizeof(t_ast_node *));
-		if (!node->children)
-		{
-			ft_printf("Error\n");
-			return (NULL);
-		}
-		int i = 0;
-		while (range[0] + i < range[1] && xs[range[0] + i].type != TOK_END)
-		{
-			node->children[i] = arena_calloc(arena, 1, sizeof(t_ast_node));
-			if (!node->children[i])
-			{
-				ft_printf("ERROR\n");
-				return (NULL);
-			}
-			node->children[i]->token = xs[range[0] + i];
-			if (xs[range[0] + i].type == TOK_WORD)
-				node->children[i]->type = AST_WORD;
-			else
-			{
-				node->children[i]->type = AST_REDIR;
-				if (range[0] + i + 1 < range[1] && xs[range[0] + i].type != TOK_END)
-				{
-					node->children[i]->children = arena_calloc(arena, 1, sizeof(t_ast_node *));
-					if (!node->children[i]->children)
-						return (NULL);
-					t_ast_node *redir_child = arena_calloc(arena, 1, sizeof(t_ast_node));
-					redir_child->type = AST_WORD;
-					redir_child->token = xs[range[0] + i + 1];
-					redir_child->n_children = 0;
-					node->children[i]->n_children = 1;
-					*node->children[i]->children = redir_child;
-					i++;
-				}
-				else 
-				{
-					ft_dprintf(2, "Syntax error\n");
-					return (NULL);
-				}
-			}
-			i++;
-		}
+			return (syntax_error());
 	}
 	else
 		ft_printf("ERROR\n");
