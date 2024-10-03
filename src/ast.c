@@ -172,6 +172,12 @@ static	char	*concat_token_values(t_token *xs, size_t range[2], t_arena arena)
 	return (str);
 }
 
+static	t_ast_node	*syntax_error(void)
+{
+	ft_dprintf(2, "Syntax error\n");
+	return (NULL);
+}
+
 t_ast_node	*create_ast(t_token *xs, t_ast_node *parent, size_t range[2], t_arena arena)
 {
 	enum e_ast_type max_type;
@@ -179,6 +185,8 @@ t_ast_node	*create_ast(t_token *xs, t_ast_node *parent, size_t range[2], t_arena
 	size_t	new_range[2];
 	t_ast_node	*node;
 
+	if (range[1] - range[0] < 1)
+		return (NULL);
 	node = NULL;
 	// ft_printf("Parsing following token array: ");
 	// show_token_range(xs, range);
@@ -200,15 +208,9 @@ t_ast_node	*create_ast(t_token *xs, t_ast_node *parent, size_t range[2], t_arena
 		new_range[1] = (size_t)ltoken;
 		range[0] = (size_t)ltoken + 1;
 		if (add_node_to_parent(node, create_ast(xs, node, new_range, arena), arena) < 0)
-		{
-			ft_printf("ERROR\n");
-			return (NULL);
-		}
+			return (syntax_error());
 		if (add_node_to_parent(node, create_ast(xs, node, range, arena), arena) < 0)
-		{
-			ft_printf("ERROR\n");
-			return (NULL);
-		}
+			return (syntax_error());
 	}
 	else if (max_type == AST_PIPELINE)
 	{
@@ -227,15 +229,9 @@ t_ast_node	*create_ast(t_token *xs, t_ast_node *parent, size_t range[2], t_arena
 		new_range[1] = (size_t)ltoken;
 		range[0] = (size_t)ltoken + 1;
 		if (add_node_to_parent(node, create_ast(xs, node, new_range, arena), arena) < 0)
-		{
-			ft_printf("ERROR\n");
-			return (NULL);
-		}
+			return (syntax_error());
 		if (add_node_to_parent(node, create_ast(xs, node, range, arena), arena) < 0)
-		{
-			ft_printf("ERROR\n");
-			return (NULL);
-		}
+			return (syntax_error());
 	}
 	else if (max_type == AST_COMMAND)
 	{
