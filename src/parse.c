@@ -6,7 +6,7 @@
 /*   By: copireyr <copireyr@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 11:57:35 by copireyr          #+#    #+#             */
-/*   Updated: 2024/10/01 17:03:42 by pleander         ###   ########.fr       */
+/*   Updated: 2024/10/04 13:08:52 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,10 +80,12 @@ static	void print_ast(t_ast_node *root, size_t level)
 	}
 }
 
-void	parse(t_token *xs)
+void	expand(t_ast_node *ast, t_arena arena, t_list *env);
+
+void	parse(t_token *xs, t_list *env)
 {
 	t_arena	arena;
-	t_token	*token;
+	/* t_token	*token; */
 	t_ast_node*	ast;
 
 	arena = arena_new();
@@ -92,8 +94,11 @@ void	parse(t_token *xs)
 	ast = NULL;
 	ast = create_ast(xs, ast, range, arena);
 	if (ast)
+	{
 		print_ast(ast, 0);
-	token = xs;
+		expand(ast, arena, env);
+	}
+	/* token = xs; */
 	// while (token->type != TOK_END)
 	// {
 	// 	t_ast	*node = new_node_from_token(arena, *token);

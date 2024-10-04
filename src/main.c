@@ -6,7 +6,7 @@
 /*   By: copireyr <copireyr@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/27 12:08:02 by copireyr          #+#    #+#             */
-/*   Updated: 2024/10/04 09:58:05 by copireyr         ###   ########.fr       */
+/*   Updated: 2024/10/04 13:09:21 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ int	main(int argc, char **argv, char **envp)
 		if (xs)
 		{
 			tokenize_show_tokens(xs);
-			parse(xs);
+			parse(xs, *env);
 			free(xs);
 		}
 		if (ft_streq(user_input_line, "env"))
