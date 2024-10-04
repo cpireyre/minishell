@@ -6,7 +6,7 @@
 /*   By: copireyr <copireyr@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/27 12:08:02 by copireyr          #+#    #+#             */
-/*   Updated: 2024/10/04 13:09:21 by copireyr         ###   ########.fr       */
+/*   Updated: 2024/10/04 13:23:26 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,18 +35,19 @@ int	main(int argc, char **argv, char **envp)
 		exit(1);
 	while (1)
 	{
+		t_arena arena;
+		arena = arena_new();
 		user_input_line = readline(MINISHELL_PROMPT);
 		if (!user_input_line)
 			break ;
 		if (*user_input_line)
 			add_history(user_input_line);
 		should_exit_shell = ft_streq(user_input_line, "exit");
-		xs = tokenize(user_input_line);
+		xs = tokenize(arena, user_input_line);
 		if (xs)
 		{
 			tokenize_show_tokens(xs);
 			parse(xs, *env);
-			free(xs);
 		}
 		if (ft_streq(user_input_line, "env"))
 			printenv(env);
@@ -67,6 +68,7 @@ int	main(int argc, char **argv, char **envp)
 			input++;
 		}
 		free(orig);
+		arena_dispose(&arena);
 		if (should_exit_shell)
 			break ;
 	}

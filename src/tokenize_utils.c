@@ -6,7 +6,7 @@
 /*   By: copireyr <copireyr@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/30 13:13:38 by copireyr          #+#    #+#             */
-/*   Updated: 2024/10/02 16:17:24 by copireyr         ###   ########.fr       */
+/*   Updated: 2024/10/04 13:23:09 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,20 +66,26 @@ void	tokenize_test(void)
 		NULL};
 	t_token		*xs;
 	size_t		j;
+	t_arena		arena;
 
 	ft_dprintf(2, "Running tokenizer tests...\n");
 	j = 0;
 	while (tests[j])
 	{
-		ft_printf("Tokenizing: %s\n", tests[j]);
-		xs = tokenize(tests[j]);
-		if (xs)
+		arena = arena_new();
+		if (arena)
 		{
-			tokenize_show_tokens(xs);
-			free(xs);
+			ft_printf("Tokenizing: %s\n", tests[j]);
+			xs = tokenize(arena, tests[j]);
+			if (xs)
+			{
+				tokenize_show_tokens(xs);
+				free(xs);
+			}
+			else
+				ft_dprintf(2, "ENOMEM??\n");
+			arena_dispose(&arena);
 		}
-		else
-			ft_dprintf(2, "ENOMEM??\n");
 		j++;
 	}
 }

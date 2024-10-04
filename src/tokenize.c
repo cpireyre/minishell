@@ -6,19 +6,19 @@
 /*   By: copireyr <copireyr@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/26 14:51:54 by copireyr          #+#    #+#             */
-/*   Updated: 2024/10/02 16:28:51 by copireyr         ###   ########.fr       */
+/*   Updated: 2024/10/04 13:22:07 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "tokenize.h"
 
 static enum e_tok_type	token_get_type(char c);
-static t_token			*realloc_token_vector_if_needed(t_token *xs,
+static t_token			*realloc_token_vector_if_needed(t_arena arena, t_token *xs,
 							size_t *capacity, size_t count);
 static enum e_tok_type	get_operator(t_token token);
 static t_token			token_next(const char *str);
 
-t_token	*tokenize(const char *str)
+t_token	*tokenize(t_arena arena, const char *str)
 {
 	t_token			*xs;
 	const char		*ptr = str;
@@ -31,7 +31,7 @@ t_token	*tokenize(const char *str)
 	xs = NULL;
 	while (str - ptr <= len && i < INT_MAX)
 	{
-		xs = realloc_token_vector_if_needed(xs, &capacity, i);
+		xs = realloc_token_vector_if_needed(arena, xs, &capacity, i);
 		if (!xs)
 			return (NULL);
 		while (ft_isspace(*str))
@@ -46,7 +46,7 @@ t_token	*tokenize(const char *str)
 	return (xs);
 }
 
-static t_token	*realloc_token_vector_if_needed(t_token *xs,
+static t_token	*realloc_token_vector_if_needed(t_arena arena, t_token *xs,
 		size_t *capacity, size_t count)
 {
 	t_token		*tmp;
@@ -54,17 +54,11 @@ static t_token	*realloc_token_vector_if_needed(t_token *xs,
 	if (count < *capacity)
 		return (xs);
 	*capacity = 2 * *capacity + 1;
-	tmp = malloc(sizeof(t_token) * *capacity);
+	tmp = arena_alloc(arena, sizeof(t_token) * *capacity);
 	if (!tmp)
-	{
-		free(xs);
 		return (NULL);
-	}
 	if (xs)
-	{
 		ft_memcpy(tmp, xs, sizeof(*xs) * count);
-		free(xs);
-	}
 	return (tmp);
 }
 

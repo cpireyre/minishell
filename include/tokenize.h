@@ -6,7 +6,7 @@
 /*   By: copireyr <copireyr@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/26 14:29:23 by copireyr          #+#    #+#             */
-/*   Updated: 2024/10/04 13:09:12 by copireyr         ###   ########.fr       */
+/*   Updated: 2024/10/04 13:22:18 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ typedef struct s_token
 }	t_token;
 
 void		tokenize_test(void);
-t_token		*tokenize(const char *str);
+t_token		*tokenize(t_arena arena, const char *str);
 void		tokenize_show(t_token token);
 void		tokenize_show_tokens(t_token *xs);
 const char	*ast_show_type(enum e_tok_type type);
