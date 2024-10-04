@@ -6,7 +6,7 @@
 /*   By: copireyr <copireyr@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 11:57:35 by copireyr          #+#    #+#             */
-/*   Updated: 2024/10/04 13:25:08 by copireyr         ###   ########.fr       */
+/*   Updated: 2024/10/04 13:38:53 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,20 +17,6 @@
 #include "libft.h"
 #include <stdio.h>
 #include <string.h>
-
-int	has_error_token(t_token *xs)
-{
-	size_t	i;
-
-	i = 0;
-	while (xs[i].type != TOK_END)
-	{
-		if (xs[i].type == TOK_ERROR)
-			return (1);
-		i++;
-	}
-	return (0);
-}
 
 t_ast	*new_node_from_token(t_arena arena, t_token token);
 
@@ -82,10 +68,10 @@ static	void print_ast(t_ast_node *root, size_t level)
 
 void	expand(t_ast_node *ast, t_arena arena, t_list *env);
 
-void	parse(t_arena arena, t_token *xs, t_list *env)
+t_ast_node	*parse(t_arena arena, t_token *xs, t_list *env)
 {
 	/* t_token	*token; */
-	t_ast_node*	ast;
+	t_ast_node	*ast;
 
 	size_t	range[2] = {0, 0};
 	range[1] = count_toks(xs) - 1; // remove end token
@@ -96,6 +82,7 @@ void	parse(t_arena arena, t_token *xs, t_list *env)
 		print_ast(ast, 0);
 		expand(ast, arena, env);
 	}
+	return (ast);
 	/* token = xs; */
 	// while (token->type != TOK_END)
 	// {

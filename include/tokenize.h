@@ -6,7 +6,7 @@
 /*   By: copireyr <copireyr@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/26 14:29:23 by copireyr          #+#    #+#             */
-/*   Updated: 2024/10/04 13:24:36 by copireyr         ###   ########.fr       */
+/*   Updated: 2024/10/04 13:37:23 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,6 @@ void		tokenize_show(t_token token);
 void		tokenize_show_tokens(t_token *xs);
 const char	*ast_show_type(enum e_tok_type type);
 
-void		parse(t_arena arena, t_token *xs, t_list *env);
 int			add_child_to_node(t_ast *node, t_ast *child, t_arena arena);
 
 #endif /* TOKENIZE_H */
