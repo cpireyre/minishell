@@ -6,18 +6,13 @@
 /*   By: copireyr <copireyr@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/27 12:08:02 by copireyr          #+#    #+#             */
-/*   Updated: 2024/10/04 14:33:54 by copireyr         ###   ########.fr       */
+/*   Updated: 2024/10/04 14:47:27 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdlib.h>
 #include <sysexits.h>
 #include <errno.h>
-#include <stdbool.h>
 #include "minishell.h"
-#include "tokenize.h"
-#include "ast.h"
-#include "libft.h"
 
 static int	minishell(t_list *env);
 static char	*arena_readline(t_arena arena, const char *prompt);

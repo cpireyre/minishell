@@ -6,7 +6,7 @@
 /*   By: pleander <pleander@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/01 12:58:29 by pleander          #+#    #+#             */
-/*   Updated: 2024/10/04 14:01:14 by copireyr         ###   ########.fr       */
+/*   Updated: 2024/10/04 14:58:16 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 # include "tokenize.h"
 
+typedef struct s_list	t_list;
 enum e_ast_type
 {
 	AST_LOGICAL,

@@ -6,16 +6,17 @@
 /*   By: copireyr <copireyr@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/26 14:29:23 by copireyr          #+#    #+#             */
-/*   Updated: 2024/10/04 13:37:23 by copireyr         ###   ########.fr       */
+/*   Updated: 2024/10/04 14:58:20 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef TOKENIZE_H
 # define TOKENIZE_H
 
-# include <stdlib.h>
-# include <limits.h>
 # include "libft.h"
+# include "arena.h"
+# include "tokenize.h"
+# include <limits.h>
 
 enum e_tok_type
 {
@@ -52,12 +53,9 @@ typedef struct s_token
 	size_t			size;
 }	t_token;
 
-void		tokenize_test(void);
-t_token		*tokenize(t_arena arena, const char *str);
-void		tokenize_show(t_token token);
-void		tokenize_show_tokens(t_token *xs);
-const char	*ast_show_type(enum e_tok_type type);
-
-int			add_child_to_node(t_ast *node, t_ast *child, t_arena arena);
+extern t_token		*tokenize(t_arena arena, const char *str);
+void				tokenize_show(t_token token);
+void				tokenize_show_tokens(t_token *xs);
+const char			*ast_show_type(enum e_tok_type type);
 
 #endif /* TOKENIZE_H */

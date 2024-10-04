@@ -6,17 +6,12 @@
 /*   By: copireyr <copireyr@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 11:57:35 by copireyr          #+#    #+#             */
-/*   Updated: 2024/10/04 14:00:56 by copireyr         ###   ########.fr       */
+/*   Updated: 2024/10/04 14:58:58 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "arena.h"
-#include "get_next_line.h"
-#include "tokenize.h"
-#include "ast.h"
 #include "libft.h"
-#include <stdio.h>
-#include <string.h>
+#include "ast.h"
 
 t_ast	*new_node_from_token(t_arena arena, t_token token);
 
@@ -87,7 +82,6 @@ t_ast_node	*parse(t_arena arena, char *user_input_line, t_list *env)
 	return (ast);
 }
 
-
 t_ast	*new_node_from_token(t_arena arena, t_token token)
 {
 	t_ast	*result;
@@ -118,4 +112,3 @@ t_ast	*new_node_from_token(t_arena arena, t_token token)
 // 	new_child_array[node->n_children - 1] = child;
 // 	return (0);
 // }
-
