@@ -188,6 +188,8 @@ static t_ast_node	*create_command_node(t_token *xs, t_ast_node *parent, size_t r
 	cmd_node->token.size = ft_strlen(cmd_node->token.value);
 	cmd_node->token.type = TOK_COMMAND;
 	cmd_node->n_children = word_count; // Redirs add a redir but also remove a word
+	if (word_count < count_redirs(xs, range))
+		return (syntax_error());
 	cmd_node->children = arena_calloc(arena, cmd_node->n_children, sizeof(t_ast_node *));
 	if (!cmd_node->children)
 		return (NULL);
@@ -203,6 +205,8 @@ static t_ast_node	*create_command_node(t_token *xs, t_ast_node *parent, size_t r
 		else
 		{
 			cmd_node->children[i]->type = AST_REDIR;
+			if (xs[range[0] + 1].type != TOK_WORD)
+				return (syntax_error());
 			if (range[0] + 1 < range[1] && xs[range[0]].type != TOK_END)
 			{
 				cmd_node->children[i]->children = arena_calloc(arena, 1, sizeof(t_ast_node *));
