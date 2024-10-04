@@ -6,7 +6,7 @@
 /*   By: copireyr <copireyr@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/27 12:08:02 by copireyr          #+#    #+#             */
-/*   Updated: 2024/10/02 16:17:48 by copireyr         ###   ########.fr       */
+/*   Updated: 2024/10/04 09:58:05 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,8 @@ int	main(int argc, char **argv, char **envp)
 		user_input_line = readline(MINISHELL_PROMPT);
 		if (!user_input_line)
 			break ;
+		if (*user_input_line)
+			add_history(user_input_line);
 		should_exit_shell = ft_streq(user_input_line, "exit");
 		xs = tokenize(user_input_line);
 		if (xs)
