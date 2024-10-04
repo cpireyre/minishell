@@ -6,7 +6,7 @@
 /*   By: copireyr <copireyr@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/27 12:08:02 by copireyr          #+#    #+#             */
-/*   Updated: 2024/10/04 14:12:19 by copireyr         ###   ########.fr       */
+/*   Updated: 2024/10/04 14:13:49 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,24 +19,8 @@
 #include "ast.h"
 #include "libft.h"
 
-char	*arena_readline(t_arena arena, const char *prompt)
-{
-	char	*line;
-	size_t	length_line;
-	char	*result;
-
-	line = readline(prompt);
-	if (!line)
-		return (NULL);
-	length_line = ft_strlen(line);
-	result = arena_calloc(arena, 1, length_line + 1);
-	if (result)
-		ft_memcpy(result, line, length_line);
-	free(line);
-	return (result);
-}
-
-void	print_ast(t_ast_node *root, size_t level);
+static char	*arena_readline(t_arena arena, const char *prompt);
+void		print_ast(t_ast_node *root, size_t level);
 
 int	main(int argc, char **argv, char **envp)
 {
@@ -74,4 +58,21 @@ int	main(int argc, char **argv, char **envp)
 	ft_lstclear(env, &free);
 	free(env);
 	return (0);
+}
+
+static char	*arena_readline(t_arena arena, const char *prompt)
+{
+	char	*line;
+	size_t	length_line;
+	char	*result;
+
+	line = readline(prompt);
+	if (!line)
+		return (NULL);
+	length_line = ft_strlen(line);
+	result = arena_calloc(arena, 1, length_line + 1);
+	if (result)
+		ft_memcpy(result, line, length_line);
+	free(line);
+	return (result);
 }
