@@ -6,7 +6,7 @@
 /*   By: copireyr <copireyr@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/27 12:08:02 by copireyr          #+#    #+#             */
-/*   Updated: 2024/10/04 14:13:49 by copireyr         ###   ########.fr       */
+/*   Updated: 2024/10/04 14:33:54 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,16 +19,14 @@
 #include "ast.h"
 #include "libft.h"
 
+static int	minishell(t_list *env);
 static char	*arena_readline(t_arena arena, const char *prompt);
 void		print_ast(t_ast_node *root, size_t level);
 
 int	main(int argc, char **argv, char **envp)
 {
 	t_list		**env;
-	char		*user_input_line;
-	bool		should_exit_shell;
-	t_ast_node	*ast;
-	t_arena		arena;
+	int			exit_code;
 
 	if (argc > 1)
 	{
@@ -38,7 +36,23 @@ int	main(int argc, char **argv, char **envp)
 	set_signal_handler();
 	env = init_env(envp);
 	if (!env)
+	{
+		ft_dprintf(2, "%s: Couldn't allocate memory", argv[0]);
 		return (ENOMEM);
+	}
+	exit_code = minishell(*env);
+	ft_lstclear(env, &free);
+	free(env);
+	return (exit_code);
+}
+
+static int	minishell(t_list *env)
+{
+	char		*user_input_line;
+	bool		should_exit_shell;
+	t_ast_node	*ast;
+	t_arena		arena;
+
 	should_exit_shell = false;
 	while (!should_exit_shell)
 	{
@@ -50,13 +64,11 @@ int	main(int argc, char **argv, char **envp)
 		if (!should_exit_shell && *user_input_line)
 		{
 			add_history(user_input_line);
-			ast = parse(arena, user_input_line, *env);
+			ast = parse(arena, user_input_line, env);
 			print_ast(ast, 0);
 		}
 		arena_dispose(&arena);
 	}
-	ft_lstclear(env, &free);
-	free(env);
 	return (0);
 }
 
