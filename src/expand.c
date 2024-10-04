@@ -6,7 +6,7 @@
 /*   By: copireyr <copireyr@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 10:00:45 by copireyr          #+#    #+#             */
-/*   Updated: 2024/10/04 13:15:06 by copireyr         ###   ########.fr       */
+/*   Updated: 2024/10/04 13:47:29 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,8 @@ char	*val(t_list *env, const char *key, size_t length_key)
 
 void	expand(t_ast_node *ast, t_arena arena, t_list *env)
 {
+	if (!ast)
+		return ;
 	const char		*expandable = find_expandable(arena, ast->token);
 	if (expandable)
 	{

@@ -6,7 +6,7 @@
 /*   By: copireyr <copireyr@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 11:57:35 by copireyr          #+#    #+#             */
-/*   Updated: 2024/10/04 13:38:53 by copireyr         ###   ########.fr       */
+/*   Updated: 2024/10/04 13:57:05 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,53 +46,45 @@ static	char	*get_ast_type(enum e_ast_type t)
 	return (NULL);
 }
 
-static	void print_ast(t_ast_node *root, size_t level)
+void print_ast(t_ast_node *root, size_t level)
 {
-	size_t i;
+	size_t	i;
+	size_t	pad;
 
+	if (!root)
+		return ;
+	pad = 0;
+	while (pad++ < level * 2)
+		ft_printf(" ");
+	ft_printf("%s ", get_ast_type(root->type));
+	ft_printf("[%s (", ast_show_type(root->token.type));
 	i = 0;
-	char *padding = ft_calloc(level * 2 + 1, sizeof(char));
-	ft_memset(padding, ' ', level * 2);
-	char *value = ft_calloc(root->token.size + 1, sizeof(char));
-	ft_memcpy(value, root->token.value, root->token.size);
-	ft_printf("%s%s [%s (%s)]\n", padding, get_ast_type(root->type), ast_show_type(root->token.type), value);
-	free(value);
-	free(padding);
+	while (i < root->token.size)
+		ft_printf("%c", root->token.value[i++]);
+	ft_printf(")]\n");
 	level++;
+	i = 0;
 	while (i < root->n_children)
-	{
-		print_ast(root->children[i], level);
-		i++;
-	}
+		print_ast(root->children[i++], level);
 }
 
 void	expand(t_ast_node *ast, t_arena arena, t_list *env);
 
-t_ast_node	*parse(t_arena arena, t_token *xs, t_list *env)
+t_ast_node	*parse(t_arena arena, char *user_input_line, t_list *env)
 {
-	/* t_token	*token; */
+	t_token		*xs;
 	t_ast_node	*ast;
 
-	size_t	range[2] = {0, 0};
-	range[1] = count_toks(xs) - 1; // remove end token
 	ast = NULL;
-	ast = create_ast(xs, ast, range, arena);
-	if (ast)
+	xs = tokenize(arena, user_input_line);
+	if (xs)
 	{
-		print_ast(ast, 0);
+		size_t	range[2] = {0, 0};
+		range[1] = count_toks(xs) - 1; // remove end token
+		ast = create_ast(xs, ast, range, arena);
 		expand(ast, arena, env);
 	}
 	return (ast);
-	/* token = xs; */
-	// while (token->type != TOK_END)
-	// {
-	// 	t_ast	*node = new_node_from_token(arena, *token);
-	// 	if (node)
-	// 	{
-	// 		//ft_printf("%s [%s]\n", node->value, ast_show_type(token->type));
-	// 	}
-	// 	token++;
-	// }
 }
 
 

@@ -6,7 +6,7 @@
 /*   By: copireyr <copireyr@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/27 12:08:02 by copireyr          #+#    #+#             */
-/*   Updated: 2024/10/04 13:37:06 by copireyr         ###   ########.fr       */
+/*   Updated: 2024/10/04 13:46:51 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,12 +59,11 @@ int	main(int argc, char **argv, char **envp)
 			break ;
 		user_input_line = arena_readline(arena, MINISHELL_PROMPT);
 		should_exit_shell = !user_input_line || ft_streq(user_input_line, "exit");
-		if (!should_exit_shell)
+		if (!should_exit_shell && *user_input_line)
 		{
-			if (*user_input_line)
-				add_history(user_input_line);
-			xs = tokenize(arena, user_input_line);
-			t_ast_node *ast = parse(arena, xs, *env);
+			add_history(user_input_line);
+			t_ast_node *ast = parse(arena, user_input_line, *env);
+			print_ast(ast, 0);
 		}
 		arena_dispose(&arena);
 	}
