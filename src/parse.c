@@ -15,6 +15,7 @@
 #include "tokenize.h"
 #include "ast.h"
 #include "libft.h"
+#include <stdio.h>
 #include <string.h>
 
 int	has_error_token(t_token *xs)
@@ -90,7 +91,8 @@ void	parse(t_token *xs)
 	range[1] = count_toks(xs) - 1; // remove end token
 	ast = NULL;
 	ast = create_ast(xs, ast, range, arena);
-	print_ast(ast, 0);
+	if (ast)
+		print_ast(ast, 0);
 	token = xs;
 	// while (token->type != TOK_END)
 	// {

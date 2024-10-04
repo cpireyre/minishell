@@ -45,7 +45,7 @@ int	main(int argc, char **argv, char **envp)
 		if (xs)
 		{
 			tokenize_show_tokens(xs);
-			/* parse(xs); */
+			parse(xs);
 			free(xs);
 		}
 		if (ft_streq(user_input_line, "env"))
