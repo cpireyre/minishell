@@ -6,40 +6,62 @@
 /*   By: copireyr <copireyr@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 11:57:35 by copireyr          #+#    #+#             */
-/*   Updated: 2024/10/04 14:58:58 by copireyr         ###   ########.fr       */
+/*   Updated: 2024/10/04 15:10:05 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 #include "ast.h"
 
-t_ast	*new_node_from_token(t_arena arena, t_token token);
+static char	*get_ast_type(enum e_ast_type t);
 
-static size_t	count_toks(t_token *xs)
+t_ast_node	*parse(t_arena arena, char *user_input_line, t_list *env)
 {
-	size_t i;
+	t_token		*xs;
+	t_ast_node	*ast;
 
-	i = 0;
-	while (xs[i].type != TOK_END)
-		i++;
-	i++;
-	return (i);
+	ast = NULL;
+	xs = tokenize(arena, user_input_line);
+	if (xs)
+	{
+		size_t	range[2] = {0, 0};
+		range[1] = count_toks(xs) - 1; // remove end token
+		ast = create_ast(xs, ast, range, arena);
+		expand(ast, arena, env);
+	}
+	return (ast);
 }
 
-static char	*get_ast_type(enum e_ast_type t)
-{
-	if (t == AST_LOGICAL)
-		return("AST_LOGICAL");
-	else if (t == AST_PIPELINE)
-		return("AST_PIPELINE");
-	else if (t == AST_COMMAND)
-		return("AST_COMMAND");
-	else if (t == AST_WORD)
-		return("AST_WORD");
-	else if (t == AST_REDIR)
-		return("AST_REDIR");
-	return (NULL);
-}
+/* t_ast	*new_node_from_token(t_arena arena, t_token token) */
+/* { */
+/* 	t_ast	*result; */
+
+/* 	result = arena_calloc(arena, 1, sizeof(*result)); */
+/* 	if (result) */
+/* 	{ */
+/* 		result->type = token.type; */
+/* 		result->value = arena_calloc(arena, 1, token.size + 1); */
+/* 		if (!result->value) */
+/* 			return (NULL); */
+/* 		ft_memcpy(result->value, token.value, token.size); */
+/* 		result->n_children = 0; */
+/* 		result->children = NULL; */
+/* 	} */
+/* 	return (result); */
+/* } */
+
+// int	add_child_to_node(t_ast *node, t_ast *child, t_arena arena)
+// {
+// 	t_ast **new_child_array;
+//
+// 	new_child_array = arena_calloc(arena, node->n_children + 1, sizeof(t_ast *));
+// 	if (!new_child_array)
+// 		return (-1);
+// 	ft_memcpy(new_child_array, node->children, node->n_children);
+// 	node->n_children++;
+// 	new_child_array[node->n_children - 1] = child;
+// 	return (0);
+// }
 
 void print_ast(t_ast_node *root, size_t level)
 {
@@ -63,52 +85,18 @@ void print_ast(t_ast_node *root, size_t level)
 		print_ast(root->children[i++], level);
 }
 
-void	expand(t_ast_node *ast, t_arena arena, t_list *env);
-
-t_ast_node	*parse(t_arena arena, char *user_input_line, t_list *env)
+static char	*get_ast_type(enum e_ast_type t)
 {
-	t_token		*xs;
-	t_ast_node	*ast;
-
-	ast = NULL;
-	xs = tokenize(arena, user_input_line);
-	if (xs)
-	{
-		size_t	range[2] = {0, 0};
-		range[1] = count_toks(xs) - 1; // remove end token
-		ast = create_ast(xs, ast, range, arena);
-		expand(ast, arena, env);
-	}
-	return (ast);
+	if (t == AST_LOGICAL)
+		return("AST_LOGICAL");
+	else if (t == AST_PIPELINE)
+		return("AST_PIPELINE");
+	else if (t == AST_COMMAND)
+		return("AST_COMMAND");
+	else if (t == AST_WORD)
+		return("AST_WORD");
+	else if (t == AST_REDIR)
+		return("AST_REDIR");
+	return (NULL);
 }
 
-t_ast	*new_node_from_token(t_arena arena, t_token token)
-{
-	t_ast	*result;
-
-	result = arena_calloc(arena, 1, sizeof(*result));
-	if (result)
-	{
-		result->type = token.type;
-		result->value = arena_calloc(arena, 1, token.size + 1);
-		if (!result->value)
-			return (NULL);
-		ft_memcpy(result->value, token.value, token.size);
-		result->n_children = 0;
-		result->children = NULL;
-	}
-	return (result);
-}
-
-// int	add_child_to_node(t_ast *node, t_ast *child, t_arena arena)
-// {
-// 	t_ast **new_child_array;
-//
-// 	new_child_array = arena_calloc(arena, node->n_children + 1, sizeof(t_ast *));
-// 	if (!new_child_array)
-// 		return (-1);
-// 	ft_memcpy(new_child_array, node->children, node->n_children);
-// 	node->n_children++;
-// 	new_child_array[node->n_children - 1] = child;
-// 	return (0);
-// }

@@ -6,7 +6,7 @@
 /*   By: copireyr <copireyr@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/26 14:29:23 by copireyr          #+#    #+#             */
-/*   Updated: 2024/10/04 14:58:20 by copireyr         ###   ########.fr       */
+/*   Updated: 2024/10/04 15:10:05 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,13 +38,13 @@ enum e_tok_type
 	TOK_NUM_TYPES,
 };
 
-typedef struct s_ast
-{
-	enum e_tok_type		type;
-	char				*value;
-	struct s_ast		**children;
-	size_t				n_children;
-}	t_ast;
+/* typedef struct s_ast */
+/* { */
+/* 	enum e_tok_type		type; */
+/* 	char				*value; */
+/* 	struct s_ast		**children; */
+/* 	size_t				n_children; */
+/* }	t_ast; */
 
 typedef struct s_token
 {
@@ -56,6 +56,7 @@ typedef struct s_token
 extern t_token		*tokenize(t_arena arena, const char *str);
 void				tokenize_show(t_token token);
 void				tokenize_show_tokens(t_token *xs);
+size_t				count_toks(t_token *xs);
 const char			*ast_show_type(enum e_tok_type type);
 
 #endif /* TOKENIZE_H */
