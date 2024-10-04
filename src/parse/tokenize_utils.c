@@ -6,7 +6,7 @@
 /*   By: copireyr <copireyr@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/30 13:13:38 by copireyr          #+#    #+#             */
-/*   Updated: 2024/10/04 15:00:58 by copireyr         ###   ########.fr       */
+/*   Updated: 2024/10/04 15:12:00 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ void	tokenize_show_tokens(t_token *xs)
 
 size_t	count_toks(t_token *xs)
 {
-	size_t i;
+	size_t	i;
 
 	i = 0;
 	while (xs[i].type != TOK_END)

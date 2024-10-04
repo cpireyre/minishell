@@ -6,7 +6,7 @@
 /*   By: copireyr <copireyr@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 11:57:35 by copireyr          #+#    #+#             */
-/*   Updated: 2024/10/04 15:10:05 by copireyr         ###   ########.fr       */
+/*   Updated: 2024/10/04 15:13:55 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,12 +19,13 @@ t_ast_node	*parse(t_arena arena, char *user_input_line, t_list *env)
 {
 	t_token		*xs;
 	t_ast_node	*ast;
+	size_t		range[2];
 
 	ast = NULL;
 	xs = tokenize(arena, user_input_line);
 	if (xs)
 	{
-		size_t	range[2] = {0, 0};
+		ft_bzero(range, sizeof(range));
 		range[1] = count_toks(xs) - 1; // remove end token
 		ast = create_ast(xs, ast, range, arena);
 		expand(ast, arena, env);
@@ -63,7 +64,7 @@ t_ast_node	*parse(t_arena arena, char *user_input_line, t_list *env)
 // 	return (0);
 // }
 
-void print_ast(t_ast_node *root, size_t level)
+void	print_ast(t_ast_node *root, size_t level)
 {
 	size_t	i;
 	size_t	pad;
@@ -88,15 +89,14 @@ void print_ast(t_ast_node *root, size_t level)
 static char	*get_ast_type(enum e_ast_type t)
 {
 	if (t == AST_LOGICAL)
-		return("AST_LOGICAL");
+		return ("AST_LOGICAL");
 	else if (t == AST_PIPELINE)
-		return("AST_PIPELINE");
+		return ("AST_PIPELINE");
 	else if (t == AST_COMMAND)
-		return("AST_COMMAND");
+		return ("AST_COMMAND");
 	else if (t == AST_WORD)
-		return("AST_WORD");
+		return ("AST_WORD");
 	else if (t == AST_REDIR)
-		return("AST_REDIR");
+		return ("AST_REDIR");
 	return (NULL);
 }
-
