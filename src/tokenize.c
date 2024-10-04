@@ -6,15 +6,15 @@
 /*   By: copireyr <copireyr@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/26 14:51:54 by copireyr          #+#    #+#             */
-/*   Updated: 2024/10/04 13:22:07 by copireyr         ###   ########.fr       */
+/*   Updated: 2024/10/04 14:01:54 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "tokenize.h"
 
 static enum e_tok_type	token_get_type(char c);
-static t_token			*realloc_token_vector_if_needed(t_arena arena, t_token *xs,
-							size_t *capacity, size_t count);
+static t_token			*realloc_token_vector_if_needed(t_arena arena,
+							t_token *xs, size_t *capacity, size_t count);
 static enum e_tok_type	get_operator(t_token token);
 static t_token			token_next(const char *str);
 

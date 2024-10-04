@@ -6,14 +6,12 @@
 /*   By: copireyr <copireyr@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 10:00:45 by copireyr          #+#    #+#             */
-/*   Updated: 2024/10/04 13:47:29 by copireyr         ###   ########.fr       */
+/*   Updated: 2024/10/04 14:00:32 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 #include "ast.h"
-
-char	*get_ast_type(enum e_ast_type t);
 
 int	ft_isalnum(char c)
 {

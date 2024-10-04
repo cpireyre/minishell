@@ -6,7 +6,7 @@
 /*   By: copireyr <copireyr@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 11:57:35 by copireyr          #+#    #+#             */
-/*   Updated: 2024/10/04 13:57:05 by copireyr         ###   ########.fr       */
+/*   Updated: 2024/10/04 14:00:56 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ static size_t	count_toks(t_token *xs)
 	return (i);
 }
 
-static	char	*get_ast_type(enum e_ast_type t)
+static char	*get_ast_type(enum e_ast_type t)
 {
 	if (t == AST_LOGICAL)
 		return("AST_LOGICAL");

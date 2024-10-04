@@ -6,7 +6,7 @@
 /*   By: copireyr <copireyr@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/30 13:13:38 by copireyr          #+#    #+#             */
-/*   Updated: 2024/10/04 13:23:09 by copireyr         ###   ########.fr       */
+/*   Updated: 2024/10/04 14:02:11 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,38 +54,4 @@ void	tokenize_show_tokens(t_token *xs)
 	while (xs[j].type != TOK_END)
 		tokenize_show(xs[j++]);
 	ft_printf("\n");
-}
-
-void	tokenize_test(void)
-{
-	const char	*tests[] = {"ls", "echo a", "date > outfile",
-		"| ah &&", "echo\"a   b   c\"", "\"a\"", "\"a",
-		"echo\"a b c \"'this should be one though   'still   tok",
-		"cat << EOF hello heredoc >>",
-		"cat < infile > outfile",
-		NULL};
-	t_token		*xs;
-	size_t		j;
-	t_arena		arena;
-
-	ft_dprintf(2, "Running tokenizer tests...\n");
-	j = 0;
-	while (tests[j])
-	{
-		arena = arena_new();
-		if (arena)
-		{
-			ft_printf("Tokenizing: %s\n", tests[j]);
-			xs = tokenize(arena, tests[j]);
-			if (xs)
-			{
-				tokenize_show_tokens(xs);
-				free(xs);
-			}
-			else
-				ft_dprintf(2, "ENOMEM??\n");
-			arena_dispose(&arena);
-		}
-		j++;
-	}
 }
