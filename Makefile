@@ -6,7 +6,7 @@
 #    By: copireyr <copireyr@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/08/27 12:07:56 by copireyr          #+#    #+#              #
-#    Updated: 2024/10/04 13:07:04 by copireyr         ###   ########.fr        #
+#    Updated: 2024/10/04 14:40:03 by copireyr         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,11 +20,11 @@ CFLAGS += $(asan)
 LDFLAGS += $(asan)
 NAME := minishell
 
-src = ./src/main.c ./src/environment.c ./src/builtin_env.c \
-	  ./src/tokenize.c ./src/tokenize_utils.c \
-	  ./src/builtin_export.c ./src/builtin_unset.c \
-	  ./src/ast.c ./src/parse.c ./src/expand.c \
-	  ./src/signals.c
+src := ./src/main.c ./src/environment.c ./src/signals.c
+
+parse := $(addprefix ./src/parse/, ast.c parse.c tokenize.c tokenize_utils.c expand.c)
+builtins := $(addprefix ./src/builtins/, builtin_env.c builtin_export.c builtin_unset.c)
+src += $(parse) $(builtins)
 
 obj := $(src:./src/%.c=./obj/%.o)
 lib := ./libft/libft.a
@@ -44,7 +44,7 @@ all: $(NAME)
 
 .PHONY: clean
 clean:
-	$(RM) -r $(obj)
+	$(RM) -r ./obj
 	make -C ./libft/ clean
 
 .PHONY: fclean
