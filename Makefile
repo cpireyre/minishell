@@ -6,16 +6,18 @@
 #    By: copireyr <copireyr@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/08/27 12:07:56 by copireyr          #+#    #+#              #
-#    Updated: 2024/10/04 14:40:03 by copireyr         ###   ########.fr        #
+#    Updated: 2024/10/06 10:57:14 by copireyr         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 .DEFAULT_GOAL := all
 CC := cc
 CPPFLAGS := -I./include/ -I./libft/include
+CPPFLAGS += -I/opt/homebrew/opt/readline/include
 LDFLAGS := -lreadline -L./libft/ -lft
+LDFLAGS += -L/opt/homebrew/opt/readline/lib
 CFLAGS := -Wall -Wextra -MMD -MP -g3 -Og
-asan := -fsanitize=address,undefined,leak
+asan := -fsanitize=address,undefined#,leak
 CFLAGS += $(asan)
 LDFLAGS += $(asan)
 NAME := minishell
