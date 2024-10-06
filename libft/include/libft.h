@@ -6,7 +6,7 @@
 /*   By: copireyr <copireyr@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 12:48:12 by copireyr          #+#    #+#             */
-/*   Updated: 2024/10/02 16:28:13 by copireyr         ###   ########.fr       */
+/*   Updated: 2024/10/06 11:01:19 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,7 @@ int			ft_isspace(int c);
 int			ft_atoi(const char *str);
 long		ft_atol(const char *str);
 int			ft_parse_int(char *str, long *n);
+int			ft_isalnum(char c);
 
 /* IO */
 
