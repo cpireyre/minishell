@@ -6,7 +6,7 @@
 #    By: copireyr <copireyr@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/08/27 12:07:56 by copireyr          #+#    #+#              #
-#    Updated: 2024/10/07 09:32:28 by copireyr         ###   ########.fr        #
+#    Updated: 2024/10/07 12:15:08 by copireyr         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,7 +21,7 @@ CFLAGS += $(asan)
 LDFLAGS += $(asan)
 NAME := minishell
 
-ifeq ($(UNAME_S), Darwin)
+ifeq ($(shell uname -s), Darwin)
 	include macOS.mk
 endif
 
