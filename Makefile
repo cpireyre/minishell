@@ -6,7 +6,7 @@
 #    By: copireyr <copireyr@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/08/27 12:07:56 by copireyr          #+#    #+#              #
-#    Updated: 2024/10/07 12:15:08 by copireyr         ###   ########.fr        #
+#    Updated: 2024/10/07 19:07:03 by copireyr         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -58,7 +58,9 @@ fclean: clean
 	make -C ./libft/ fclean
 
 .PHONY: re
-re: fclean all
+re:
+	@make -s fclean
+	@make -s -j
 
 .PHONY: run
 run: $(NAME)
