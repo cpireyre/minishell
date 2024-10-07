@@ -6,7 +6,7 @@
 /*   By: copireyr <copireyr@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 12:48:12 by copireyr          #+#    #+#             */
-/*   Updated: 2024/10/06 11:01:19 by copireyr         ###   ########.fr       */
+/*   Updated: 2024/10/07 18:52:55 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,7 @@ char		*ft_strnstr(const char *haystack, const char *needle, size_t len);
 char		*ft_strtok(char *str, const char *sep);
 int			ft_streq(const char *s1, const char *s2);
 const char	*ft_strchrnul(const char *str, int c);
+char		*ft_arena_strndup(t_arena arena, const char *src, size_t n);
 
 /* Ctype */
 
