@@ -6,14 +6,53 @@
 /*   By: copireyr <copireyr@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 10:00:45 by copireyr          #+#    #+#             */
-/*   Updated: 2024/10/07 19:03:20 by copireyr         ###   ########.fr       */
+/*   Updated: 2024/10/07 19:21:26 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 #include "ast.h"
 
-char	*val(t_list *env, const char *key, size_t length_key)
+static char	*val(t_list *env, const char *key, size_t length_key);
+
+void	expand_str(t_arena arena, t_list *env, const char *str)
+{
+    while (*str)
+    {
+	while (*str && *str != '$')
+	{
+	    if (*str == '\'')
+		str = ft_strchrnul(str + 1, '\'');
+	    str++;
+	}
+	if (*str++ != '$')
+	    break ;
+	size_t length_expandable = 0;
+	while (ft_isalnum(str[length_expandable]) || str[length_expandable] == '_')
+	    length_expandable++;
+	char *expandable = ft_arena_strndup(arena, str, length_expandable);
+	str += length_expandable;
+	ft_printf("Found expandable: [%s]\n", expandable);
+	const char *match = val(env, expandable, length_expandable);
+	if (match)
+	    ft_printf("%s -> %s\n", expandable, match);
+    }
+}
+
+void	expand(t_ast_node *ast, t_arena arena, t_list *env)
+{
+    if (!ast)
+	return ;
+    for (size_t i = 0; i < ast->n_children; i++)
+    {
+	if (ast->children[i]->type == AST_WORD)
+	    expand_str(arena, env, ast->children[i]->token.value);
+    }
+    for (size_t i = 0; i < ast->n_children; i++)
+	expand(ast->children[i], arena, env);
+}
+
+static char	*val(t_list *env, const char *key, size_t length_key)
 {
     while (env)
     {
@@ -26,36 +65,4 @@ char	*val(t_list *env, const char *key, size_t length_key)
 	env = env->next;
     }
     return (NULL);
-}
-
-void	expand(t_ast_node *ast, t_arena arena, t_list *env)
-{
-    if (!ast)
-	return ;
-    if (ast->type == AST_WORD)
-    {
-	const char *str = ast->token.value;
-	while (*str)
-	{
-	    while (*str && *str != '$')
-	    {
-		if (*str == '\'')
-		    str = ft_strchrnul(str + 1, '\'');
-		str++;
-	    }
-	    if (*str++ != '$')
-		break ;
-	    size_t length_expandable = 0;
-	    while (ft_isalnum(str[length_expandable]) || str[length_expandable] == '_')
-		length_expandable++;
-	    char *expandable = ft_arena_strndup(arena, str, length_expandable);
-	    str += length_expandable;
-	    ft_printf("Found expandable: [%s]\n", expandable);
-	    const char *match = val(env, expandable, length_expandable);
-	    if (match)
-		ft_printf("%s -> %s\n", expandable, match);
-	}
-    }
-    for (size_t i = 0; i < ast->n_children; i++)
-	expand(ast->children[i], arena, env);
 }
