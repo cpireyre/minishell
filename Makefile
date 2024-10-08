@@ -25,7 +25,7 @@ ifeq ($(shell uname -s), Darwin)
 	include macOS.mk
 endif
 
-src := ./src/main.c ./src/environment.c ./src/signals.c
+src := ./src/main.c ./src/environment.c ./src/signals.c ./src/execute_ast.c
 
 parse := $(addprefix ./src/parse/, ast.c parse.c tokenize.c tokenize_utils.c expand.c)
 builtins := $(addprefix ./src/builtins/, builtin_env.c builtin_export.c builtin_unset.c)

@@ -6,7 +6,7 @@
 /*   By: copireyr <copireyr@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/27 12:08:02 by copireyr          #+#    #+#             */
-/*   Updated: 2024/10/04 14:47:27 by copireyr         ###   ########.fr       */
+/*   Updated: 2024/10/08 20:56:03 by pleander         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,7 @@ static int	minishell(t_list *env)
 			add_history(user_input_line);
 			ast = parse(arena, user_input_line, env);
 			print_ast(ast, 0);
+			execute_ast(ast);
 		}
 		arena_dispose(&arena);
 	}
