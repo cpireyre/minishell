@@ -30,9 +30,7 @@ int	execute_ast(t_ast_node *ast)
 	{
 		i = 0;
 		ft_printf("Execute AST command: ");
-		while (i < ast->token.size)
-			ft_printf("%c", ast->token.value[i++]);
-		ft_printf("\n");
+		ft_printf("%s\n", ast->token.value);
 		return (0);
 	}
 

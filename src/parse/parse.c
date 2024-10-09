@@ -74,12 +74,7 @@ void	print_ast(t_ast_node *root, size_t level)
 	pad = 0;
 	while (pad++ < level * 2)
 		ft_printf(" ");
-	ft_printf("%s ", get_ast_type(root->type));
-	ft_printf("[%s (", ast_show_type(root->token.type));
-	i = 0;
-	while (i < root->token.size)
-		ft_printf("%c", root->token.value[i++]);
-	ft_printf(")]\n");
+	ft_printf("%s [%s (%s)]\n", get_ast_type(root->type), ast_show_type(root->token.type), root->token.value);
 	level++;
 	i = 0;
 	while (i < root->n_children)
