@@ -10,8 +10,10 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "arena.h"
 #include "libft.h"
 #include "ast.h"
+#include "minishell.h"
 
 /**
  * @brief Executes the AST and returns the exit code
@@ -53,3 +55,46 @@ int	execute_ast(t_ast_node *ast)
 	}
 	return (0);
 }
+
+int		count_cmd_args(t_ast_node *ast)
+{
+	int c;
+	int i;
+
+	c = 0;
+	i = 0;
+	while (i < ast->n_children)
+	{
+		if (ast->children[i]->type == AST_WORD)
+			c++;
+		i++;
+	}
+	return (c);
+}
+
+int	parse_command(t_command *cmd, t_ast_node *ast, t_arena arena)
+{
+	int	i;
+
+	i = 0;
+	cmd->args = arena_calloc(arena, count_cmd_args(ast), sizeof(char *));
+	if (cmd->args)
+		return (-1);
+	// TODO: copy commands to cmd
+	// Open file descriptors and store them in cmd
+	// Read heredoc
+	return (0);
+}
+
+int	execute_cmd(t_ast_node *ast, t_arena arena)
+{
+	t_command cmd;
+
+	if (ast->type != AST_COMMAND)
+	{
+		ft_dprintf(2, "Error\n");
+		return (1);
+	}
+	return (1);
+}
+

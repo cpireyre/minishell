@@ -28,23 +28,32 @@
 
 typedef uint8_t	t_bool;
 
+// typedef struct s_command
+// {
+// 	size_t	i;
+// 	char	*path;
+// 	char	**args;
+// 	char	*infile;
+// 	char	*outfile;
+// 	char	*hdoc_delim;
+// 	t_bool	*of_append;
+// 	int		exit_code;
+// }	t_command;
+//
+// typedef struct s_pipeline
+// {
+// 	t_command	*cmds;
+// 	size_t		n_cmds;
+// }	t_pipeline;
+
 typedef struct s_command
 {
-	size_t	i;
 	char	*path;
 	char	**args;
-	char	*infile;
-	char	*outfile;
-	char	*hdoc_delim;
-	t_bool	*of_append;
-	int		exit_code;
-}	t_command;
+	int		infile;
+	int		outfile;
 
-typedef struct s_pipeline
-{
-	t_command	*cmds;
-	size_t		n_cmds;
-}	t_pipeline;
+}	t_command;
 
 typedef struct s_children
 {
@@ -66,7 +75,7 @@ char	*get_env(char *var, t_list **env);
 int		set_env(char *var, char *val, t_list **env);
 int		**create_pipes(size_t n_pipes);
 void	delete_pipes(int **pipes);
-int		pipeline(t_pipeline *pipeline, char **env);
+//int		pipeline(t_pipeline *pipeline, char **env);
 void	spawn_child(t_command *cmd, int **pipes, char **env);
 t_list	*get_env_list_location(char *var, t_list **env);
 void	unset(char *var, t_list **env);
