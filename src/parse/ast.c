@@ -6,7 +6,7 @@
 /*   By: pleander <pleander@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/01 14:07:01 by pleander          #+#    #+#             */
-/*   Updated: 2024/10/01 17:04:40 by pleander         ###   ########.fr       */
+/*   Updated: 2024/10/07 19:09:05 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ static size_t	count_tokens(t_token *xs, enum e_tok_type type, size_t range[2])
 	return (n);
 }
 
-static size_t	count_logicals(t_token *xs, size_t range[2])
+size_t	count_logicals(t_token *xs, size_t range[2])
 {
 	size_t	tokens;
 
@@ -108,7 +108,7 @@ static size_t	count_redirs(t_token *xs, size_t range[2])
 	return (sum);
 }
 
-static void show_token_range(t_token *xs, size_t range[2])
+void show_token_range(t_token *xs, size_t range[2])
 {
 	size_t	i;
 
@@ -176,6 +176,7 @@ static	t_ast_node	*syntax_error(void)
 // command has first program name, then arguments. If thers's a redirect the following file is outfile
 static t_ast_node	*create_command_node(t_token *xs, t_ast_node *parent, size_t range[2], t_arena arena)
 {
+    (void)parent;
 	t_ast_node	*cmd_node;
 	size_t		word_count;
 

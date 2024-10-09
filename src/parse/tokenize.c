@@ -6,7 +6,7 @@
 /*   By: copireyr <copireyr@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/26 14:51:54 by copireyr          #+#    #+#             */
-/*   Updated: 2024/10/04 14:57:28 by copireyr         ###   ########.fr       */
+/*   Updated: 2024/10/07 18:55:18 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ static enum e_tok_type	token_get_type(char c);
 static t_token			*realloc_token_vector_if_needed(t_arena arena,
 							t_token *xs, size_t *capacity, size_t count);
 static enum e_tok_type	get_operator(t_token token);
-static t_token			token_next(const char *str);
+static t_token	token_next(t_arena arena, const char *str);
 
 t_token	*tokenize(t_arena arena, const char *str)
 {
@@ -36,7 +36,7 @@ t_token	*tokenize(t_arena arena, const char *str)
 			return (NULL);
 		while (ft_isspace(*str))
 			str++;
-		xs[i] = token_next(str);
+		xs[i] = token_next(arena, str);
 		if (xs[i].type == TOK_META)
 			xs[i].type = get_operator(xs[i]);
 		str += xs[i].size;
@@ -62,7 +62,7 @@ static t_token	*realloc_token_vector_if_needed(t_arena arena, t_token *xs,
 	return (tmp);
 }
 
-static t_token	token_next(const char *str)
+static t_token	token_next(t_arena arena, const char *str)
 {
 	t_token	result;
 
@@ -85,6 +85,9 @@ static t_token	token_next(const char *str)
 			str++;
 	}
 	result.size = str - result.value;
+	result.value = ft_arena_strndup(arena, result.value, result.size);
+	if (!result.value)
+	    result.type = TOK_ERROR;
 	return (result);
 }
 
