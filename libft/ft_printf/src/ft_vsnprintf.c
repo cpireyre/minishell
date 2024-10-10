@@ -6,13 +6,15 @@
 /*   By: copireyr <copireyr@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/01 12:02:53 by copireyr          #+#    #+#             */
-/*   Updated: 2024/10/01 12:47:33 by copireyr         ###   ########.fr       */
+/*   Updated: 2024/10/10 17:06:33 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 #include <stdlib.h>
+#include <limits.h>
 
+#include <stdio.h>
 void				convert(t_emitter *e, t_spec s, va_list *ap);
 static t_emitter	init_emitter(char *str, size_t size);
 
@@ -21,8 +23,6 @@ int	ft_vsnprintf(char *str, size_t size, const char *format, va_list ap)
 	t_emitter	e;
 	va_list		copy;
 
-	if (!size)
-		return (-1);
 	e = init_emitter(str, size);
 	va_copy(copy, ap);
 	if (str)
@@ -51,7 +51,10 @@ static t_emitter	init_emitter(char *str, size_t size)
 
 	ft_bzero(&e, sizeof(e));
 	e.output_string = str;
-	e.output_string_size = size;
+	if (size)
+		e.output_string_size = size;
+	else
+		e.output_string_size = INT_MAX;
 	e.mode = FT_SNPRINTF;
 	return (e);
 }
