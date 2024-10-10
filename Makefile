@@ -6,7 +6,7 @@
 #    By: copireyr <copireyr@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/08/27 12:07:56 by copireyr          #+#    #+#              #
-#    Updated: 2024/10/10 08:38:02 by copireyr         ###   ########.fr        #
+#    Updated: 2024/10/10 09:59:04 by copireyr         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -73,5 +73,5 @@ val: $(NAME)
 
 .PHONY: test
 test: $(NAME)
-	./$< < tests/expansion.msh
+	SPACE_VAR="hello world" EMPTY="" ./$< < tests/expansion.msh
 -include $(obj:.o=.d)

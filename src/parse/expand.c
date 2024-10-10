@@ -6,7 +6,7 @@
 /*   By: copireyr <copireyr@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 10:00:45 by copireyr          #+#    #+#             */
-/*   Updated: 2024/10/10 09:35:54 by copireyr         ###   ########.fr       */
+/*   Updated: 2024/10/10 10:02:49 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,11 +22,13 @@ char	*expand_str(t_arena arena, t_list *env, const char *str)
     char	*substrings[256];
     int		count_substrings = 0;
     t_arena	scratch = arena_new();
-    const char	*ptr = str;
+    const char	*ptr;
+
     if (!scratch)
 	return (NULL);
     while (*str)
     {
+	ptr = str;
 	while (*str && *str != '$')
 	{
 	    if (*str == '"')
@@ -35,61 +37,53 @@ char	*expand_str(t_arena arena, t_list *env, const char *str)
 		str = ft_strchrnul(str + 1, '\'');
 	    str++;
 	}
-	int size_current_substring = str - ptr;
-	if (size_current_substring)
-	{
-	    char *substring = ft_arena_strndup(scratch, ptr, size_current_substring);
-	    if (!substring)
-		return (NULL);
-	    substrings[count_substrings++] = substring;
-	}
+	substrings[count_substrings++] = ft_arena_strndup(scratch, ptr, str - ptr);
+	if (!substrings[count_substrings - 1])
+	    return (NULL);
 	if (*str++ != '$')
 	    break ;
-	size_t length_expandable = 0;
-	while (ft_isalnum(str[length_expandable]) || str[length_expandable] == '_')
-	    length_expandable++;
-	char *expandable = ft_arena_strndup(scratch, str, length_expandable);
-	str += length_expandable;
-	char *match = val(env, expandable, length_expandable);
+	ptr = str;
+	while (ft_isalnum(*str) || *str == '_')
+	    str++;
+	char *expandable = ft_arena_strndup(scratch, ptr, str - ptr);
+	char *match = val(env, expandable, str - ptr);
 	if (match)
 	    substrings[count_substrings++] = match;
-	ptr = str;
     }
-    int total_expanded_size = 0;
-    for (int i = 0; i < count_substrings; i++)
-	total_expanded_size += ft_strlen(substrings[i]);
-    char *result = arena_calloc(arena, 1, total_expanded_size + 1);
-    char *tmp = result;
-    for (int i = 0; i < count_substrings; i++)
-    {
-	int length_current_substring = ft_strlen(substrings[i]);
-	result = ft_memcpy(result, substrings[i], length_current_substring);
-	result += length_current_substring;
-    }
-    result = tmp;
+    char *result = ft_arena_strjoin(arena, substrings, count_substrings);
     arena_dispose(&scratch);
     return (result);
 }
 
 void	expand(t_ast_node *ast, t_arena arena, t_list *env)
 {
+    size_t	i;
+
     if (!ast)
 	return ;
-    for (size_t i = 0; i < ast->n_children; i++)
+    i = 0;
+    while (i < ast->n_children)
     {
 	if (ast->children[i]->type == AST_WORD)
 	    ast->children[i]->token.value = expand_str(arena, env, ast->children[i]->token.value);
+	i++;
     }
-    for (size_t i = 0; i < ast->n_children; i++)
+    i = 0;
+    while (i < ast->n_children)
+    {
 	expand(ast->children[i], arena, env);
+	i++;
+    }
 }
 
 static char	*val(t_list *env, const char *key, size_t length_key)
 {
+    char	*curr;
+
     while (env)
     {
 	size_t i = 0;
-	char *curr = env->content;
+	curr = env->content;
 	while (curr[i] != '=')
 	    i++;
 	if (i == length_key && !ft_memcmp(key, curr, length_key))

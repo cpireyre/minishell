@@ -21,7 +21,6 @@ EMPTY=""
 echo $EMPTY
 echo "$EMPTY"
 echo $EMPTY$USER
-SPACE_VAR="hello world"
 echo $SPACE_VAR
 echo "$SPACE_VAR"
 exit
