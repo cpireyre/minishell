@@ -6,7 +6,7 @@
 /*   By: copireyr <copireyr@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 10:00:45 by copireyr          #+#    #+#             */
-/*   Updated: 2024/10/10 11:13:03 by copireyr         ###   ########.fr       */
+/*   Updated: 2024/10/10 11:41:32 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,42 +14,59 @@
 #include "ast.h"
 #include <stdbool.h>
 
-static int	find_next_expandable(const char *str)
+static char	**realloc_maybe(t_arena arena, char **array, int *cap, int count);
+static int	find_next_expandable(const char *str);
 static char	*val(t_list *env, const char *key, size_t length_key);
-
-/*
- * static variable is dangerous here, because the state will NOT
- * be wiped clean when we parse the next command. However we know
- * from the tokenizer that double quotes only occur in pairs, so
- * expand_anyway should always be false when we are done expanding.
-*/
 
 /* TODO: $? */
 
+typedef struct s_string_vector
+{
+	char	**strings;
+	int		count;
+	int		capacity;
+}	t_string_vector;
+
 char	*expand_str(t_arena arena, t_list *env, const char *end)
 {
-	char		*substrings[256];
-	int			count;
+	t_string_vector	substrings;
 	const char	*start;
 
-	count = 0;
+	substrings = (t_string_vector){0};
 	while (*end)
 	{
+		substrings.strings = realloc_maybe(arena, substrings.strings, &substrings.capacity, substrings.count);
+		if (!substrings.strings)
+			return (NULL);
 		start = end;
 		end += find_next_expandable(end);
-		substrings[count++] = ft_arena_strndup(arena, start, end - start);
-		if (!substrings[count - 1])
+		substrings.strings[substrings.count++] = ft_arena_strndup(arena, start, end - start);
+		if (!substrings.strings[substrings.count - 1])
 			return (NULL);
 		if (*end == '$')
 		{
 			start = ++end;
 			while (ft_isalnum(*end) || *end == '_')
 				end++;
-			substrings[count++] = val(env, start, end - start);
+			substrings.strings[substrings.count++] = val(env, start, end - start);
 		}
 	}
-	return (ft_arena_strjoin(arena, substrings, count));
+	return (ft_arena_strjoin(arena, substrings.strings, substrings.count));
 }
+
+static char	**realloc_maybe(t_arena arena, char **array, int *cap, int count)
+{
+	char	**tmp;
+
+	if (count < *cap)
+		return (array);
+	*cap = 2 * *cap + 16;
+	tmp = arena_alloc(arena, sizeof(char *) * *cap);
+	if (tmp)
+		tmp = ft_memcpy(tmp, array, sizeof(char *) * count);
+	return (tmp);
+}
+
 
 void	expand(t_ast_node *ast, t_arena arena, t_list *env)
 {
@@ -71,6 +88,13 @@ void	expand(t_ast_node *ast, t_arena arena, t_list *env)
 		i++;
 	}
 }
+
+/*
+ * static variable is dangerous here, because the state will NOT
+ * be wiped clean when we parse the next command. However we know
+ * from the tokenizer that double quotes only occur in pairs, so
+ * expand_anyway should always be false when we are done expanding.
+*/
 
 static int	find_next_expandable(const char *str)
 {
