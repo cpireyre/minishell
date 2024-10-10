@@ -6,7 +6,7 @@
 /*   By: pleander <pleander@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/01 12:58:29 by pleander          #+#    #+#             */
-/*   Updated: 2024/10/04 15:10:29 by copireyr         ###   ########.fr       */
+/*   Updated: 2024/10/10 11:13:07 by pleander         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,6 @@ t_ast_node	*create_ast(t_token *xs, t_ast_node *ast,
 t_ast_node	*parse(t_arena arena, char *user_input_line, t_list *env);
 void		expand(t_ast_node *ast, t_arena arena, t_list *env);
 void		print_ast(t_ast_node *root, size_t level);
-int			execute_ast(t_ast_node *ast);
 
 /* t_ast		*new_node_from_token(t_arena arena, t_token token); */
 

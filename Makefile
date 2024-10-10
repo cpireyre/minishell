@@ -6,7 +6,7 @@
 #    By: copireyr <copireyr@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/08/27 12:07:56 by copireyr          #+#    #+#              #
-#    Updated: 2024/10/07 19:07:03 by copireyr         ###   ########.fr        #
+#    Updated: 2024/10/10 16:35:46 by pleander         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,7 +15,7 @@ CC := cc
 
 CPPFLAGS := -I./include/ -I./libft/include
 LDFLAGS := -lreadline -L./libft/ -lft
-CFLAGS := -Wall -Wextra -MMD -MP -g3 -Og
+CFLAGS := -Wall -Wextra -MMD -MP -g3 #-Og
 asan := -fsanitize=address,undefined#,leak
 CFLAGS += $(asan)
 LDFLAGS += $(asan)
@@ -25,11 +25,12 @@ ifeq ($(shell uname -s), Darwin)
 	include macOS.mk
 endif
 
-src := ./src/main.c ./src/environment.c ./src/signals.c ./src/execute_ast.c
+src := ./src/main.c ./src/environment.c ./src/signals.c
 
 parse := $(addprefix ./src/parse/, ast.c parse.c tokenize.c tokenize_utils.c expand.c)
 builtins := $(addprefix ./src/builtins/, builtin_env.c builtin_export.c builtin_unset.c)
-src += $(parse) $(builtins)
+execute := $(addprefix ./src/execute/, execute_ast.c make_command.c)
+src += $(parse) $(builtins) $(execute)
 
 obj := $(src:./src/%.c=./obj/%.o)
 lib := ./libft/libft.a

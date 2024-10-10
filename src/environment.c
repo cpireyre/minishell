@@ -6,7 +6,7 @@
 /*   By: pleander <pleander@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/03 13:10:23 by pleander          #+#    #+#             */
-/*   Updated: 2024/09/25 10:54:06 by pleander         ###   ########.fr       */
+/*   Updated: 2024/10/10 14:50:36 by pleander         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ char	*get_env(char *var, t_list **env)
 	loc = get_env_list_location(var, env);
 	if (!loc)
 		return (NULL);
-	value = (*env)->content + ft_strlen(var) + 1;
+	value = loc->content + ft_strlen(var) + 1;
 	return (value);
 }
 

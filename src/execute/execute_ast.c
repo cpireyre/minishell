@@ -6,14 +6,17 @@
 /*   By: pleander <pleander@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/08 20:51:52 by pleander          #+#    #+#             */
-/*   Updated: 2024/10/08 20:56:02 by pleander         ###   ########.fr       */
+/*   Updated: 2024/10/10 14:18:31 by pleander         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "arena.h"
 #include "libft.h"
 #include "ast.h"
+#include "execute.h"
 #include "minishell.h"
+
+static int	execute_cmd(t_ast_node *ast, t_list *env, t_arena arena);
 
 /**
  * @brief Executes the AST and returns the exit code
@@ -21,16 +24,15 @@
  * @param ast AST node
  * @return exit code
  */
-int	execute_ast(t_ast_node *ast)
+int	execute_ast(t_ast_node *ast, t_list	*env, t_arena arena)
 {
-	int	cur_child;
-	int i;
+	size_t	cur_child;
 
 	if (ast->type == AST_COMMAND)
 	{
-		i = 0;
 		ft_printf("Execute AST command: ");
 		ft_printf("%s\n", ast->token.value);
+		execute_cmd(ast, env ,arena);
 		return (0);
 	}
 
@@ -40,12 +42,12 @@ int	execute_ast(t_ast_node *ast)
 		if (ast->type == AST_PIPELINE)
 		{
 			ft_printf("Execute pipeline\n");
-			execute_ast(ast->children[cur_child]);
+			execute_ast(ast->children[cur_child], env, arena);
 		}
 		else if (ast->type == AST_LOGICAL)
 		{
 			ft_printf("Execute logical statment\n");
-			execute_ast(ast->children[cur_child]);
+			execute_ast(ast->children[cur_child], env, arena);
 		}
 		else
 			ft_printf("We should not be here..\n");
@@ -54,37 +56,7 @@ int	execute_ast(t_ast_node *ast)
 	return (0);
 }
 
-int		count_cmd_args(t_ast_node *ast)
-{
-	int c;
-	int i;
-
-	c = 0;
-	i = 0;
-	while (i < ast->n_children)
-	{
-		if (ast->children[i]->type == AST_WORD)
-			c++;
-		i++;
-	}
-	return (c);
-}
-
-int	parse_command(t_command *cmd, t_ast_node *ast, t_arena arena)
-{
-	int	i;
-
-	i = 0;
-	cmd->args = arena_calloc(arena, count_cmd_args(ast), sizeof(char *));
-	if (cmd->args)
-		return (-1);
-	// TODO: copy commands to cmd
-	// Open file descriptors and store them in cmd
-	// Read heredoc
-	return (0);
-}
-
-int	execute_cmd(t_ast_node *ast, t_arena arena)
+static int	execute_cmd(t_ast_node *ast, t_list *env, t_arena arena)
 {
 	t_command cmd;
 
@@ -93,6 +65,7 @@ int	execute_cmd(t_ast_node *ast, t_arena arena)
 		ft_dprintf(2, "Error\n");
 		return (1);
 	}
+	make_command(&cmd, ast, env, arena);
 	return (1);
 }
 
