@@ -6,7 +6,7 @@
 /*   By: pleander <pleander@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/01 12:58:29 by pleander          #+#    #+#             */
-/*   Updated: 2024/10/04 15:10:29 by copireyr         ###   ########.fr       */
+/*   Updated: 2024/10/10 11:59:39 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,5 +40,12 @@ void		expand(t_ast_node *ast, t_arena arena, t_list *env);
 void		print_ast(t_ast_node *root, size_t level);
 
 /* t_ast		*new_node_from_token(t_arena arena, t_token token); */
+
+typedef struct s_string_vector
+{
+	char	**strings;
+	int		count;
+	int		capacity;
+}	t_string_vector;
 
 #endif
