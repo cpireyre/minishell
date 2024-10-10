@@ -6,7 +6,7 @@
 /*   By: copireyr <copireyr@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 10:00:45 by copireyr          #+#    #+#             */
-/*   Updated: 2024/10/10 08:33:57 by copireyr         ###   ########.fr       */
+/*   Updated: 2024/10/10 08:46:08 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,9 +18,9 @@ static char	*val(t_list *env, const char *key, size_t length_key);
 
 void	expand_str(t_arena arena, t_list *env, const char *str)
 {
+    bool expand_anyway = false;
     while (*str)
     {
-	bool expand_anyway = false;
 	while (*str && *str != '$')
 	{
 	    if (*str == '"')
