@@ -6,7 +6,7 @@
 #    By: copireyr <copireyr@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/08/27 12:07:56 by copireyr          #+#    #+#              #
-#    Updated: 2024/10/10 09:59:04 by copireyr         ###   ########.fr        #
+#    Updated: 2024/10/10 20:18:17 by copireyr         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -27,7 +27,7 @@ endif
 
 src := ./src/main.c ./src/environment.c ./src/signals.c
 
-parse := $(addprefix ./src/parse/, ast.c parse.c tokenize.c tokenize_utils.c expand.c)
+parse := $(addprefix ./src/parse/, ast.c parse.c tokenize.c tokenize_utils.c expand.c glob.c)
 builtins := $(addprefix ./src/builtins/, builtin_env.c builtin_export.c builtin_unset.c)
 src += $(parse) $(builtins)
 
@@ -73,5 +73,6 @@ val: $(NAME)
 
 .PHONY: test
 test: $(NAME)
-	SPACE_VAR="hello world" EMPTY="" ./$< < tests/expansion.msh
+	# SPACE_VAR="hello world" EMPTY="" ./$< < tests/expansion.msh
+	./$< < tests/glob.msh
 -include $(obj:.o=.d)
