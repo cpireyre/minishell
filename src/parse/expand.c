@@ -6,7 +6,7 @@
 /*   By: copireyr <copireyr@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 10:00:45 by copireyr          #+#    #+#             */
-/*   Updated: 2024/10/10 11:10:23 by copireyr         ###   ########.fr       */
+/*   Updated: 2024/10/10 11:13:03 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #include "ast.h"
 #include <stdbool.h>
 
+static int	find_next_expandable(const char *str)
 static char	*val(t_list *env, const char *key, size_t length_key);
 
 /*
@@ -23,23 +24,7 @@ static char	*val(t_list *env, const char *key, size_t length_key);
  * expand_anyway should always be false when we are done expanding.
 */
 
-int	find_next_expandable(const char *str)
-{
-	static bool	expand_anyway = false;
-	int			i;
-
-	i = 0;
-	while (str[i] && str[i] != '$')
-	{
-		if (str[i] == '"')
-			expand_anyway = !expand_anyway;
-		if (str[i] == '\'' && !expand_anyway)
-			while (str[++i] != '\'')
-				;
-		i++;
-	}
-	return (i);
-}
+/* TODO: $? */
 
 char	*expand_str(t_arena arena, t_list *env, const char *end)
 {
@@ -85,6 +70,24 @@ void	expand(t_ast_node *ast, t_arena arena, t_list *env)
 		expand(ast->children[i], arena, env);
 		i++;
 	}
+}
+
+static int	find_next_expandable(const char *str)
+{
+	static bool	expand_anyway = false;
+	int			i;
+
+	i = 0;
+	while (str[i] && str[i] != '$')
+	{
+		if (str[i] == '"')
+			expand_anyway = !expand_anyway;
+		if (str[i] == '\'' && !expand_anyway)
+			while (str[++i] != '\'')
+				;
+		i++;
+	}
+	return (i);
 }
 
 static char	*val(t_list *env, const char *key, size_t length_key)
