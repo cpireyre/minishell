@@ -6,7 +6,7 @@
 /*   By: copireyr <copireyr@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 10:00:45 by copireyr          #+#    #+#             */
-/*   Updated: 2024/10/10 20:26:56 by copireyr         ###   ########.fr       */
+/*   Updated: 2024/10/11 09:41:51 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 #include "ast.h"
 #include <stdbool.h>
 
-static t_string_vector	realloc_maybe(t_arena arena, t_string_vector vec);
+t_string_vector	realloc_maybe(t_arena arena, t_string_vector vec);
 static int				find_next_expandable(const char *str);
 static char				*val(t_list *env, const char *key, size_t length_key);
 
@@ -46,14 +46,16 @@ char	*expand_str(t_arena arena, t_list *env, const char *end)
 	return (ft_arena_strjoin(arena, vec.strings, vec.count));
 }
 
-static t_string_vector	realloc_maybe(t_arena arena, t_string_vector vec)
+t_string_vector	realloc_maybe(t_arena arena, t_string_vector vec)
 {
 	char	**tmp;
 
 	if (vec.count < vec.capacity)
 		return (vec);
-	vec.capacity = 2 * vec.capacity + 16;
-	tmp = arena_alloc(arena, sizeof(char *) * vec.capacity);
+	if (!vec.capacity)
+		vec.capacity = 8;
+	vec.capacity = 2 * vec.capacity;
+	tmp = arena_calloc(arena, vec.capacity, sizeof(char *));
 	if (tmp)
 		ft_memcpy(tmp, vec.strings, sizeof(char *) * vec.count);
 	vec.strings = tmp;
