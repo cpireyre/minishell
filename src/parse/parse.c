@@ -6,13 +6,14 @@
 /*   By: copireyr <copireyr@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 11:57:35 by copireyr          #+#    #+#             */
-/*   Updated: 2024/10/10 20:15:29 by copireyr         ###   ########.fr       */
+/*   Updated: 2024/10/11 10:08:56 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 #include "ast.h"
 #include "glob.h"
+#include "expand.h"
 
 static char	*get_ast_type(enum e_ast_type t);
 
