@@ -30,8 +30,8 @@ int	execute_ast(t_ast_node *ast, t_list	*env, t_arena arena)
 
 	if (ast->type == AST_COMMAND)
 	{
-		ft_printf("Execute AST command: ");
-		ft_printf("%s\n", ast->token.value);
+		// ft_printf("Execute AST command: ");
+		// ft_printf("%s\n", ast->token.value);
 		execute_cmd(ast, env ,arena);
 		return (0);
 	}
@@ -65,7 +65,8 @@ static int	execute_cmd(t_ast_node *ast, t_list *env, t_arena arena)
 		ft_dprintf(2, "Error\n");
 		return (1);
 	}
-	make_command(&cmd, ast, env, arena);
+	if (make_command(&cmd, ast, env, arena) < 0)
+		ft_dprintf(2, "Error making command\n");
 	return (1);
 }
 

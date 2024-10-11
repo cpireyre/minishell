@@ -18,7 +18,7 @@
 typedef struct s_command
 {
 	char	*path;
-	char	**args;
+	const char	**args;
 	int		infile;
 	int		outfile;
 
