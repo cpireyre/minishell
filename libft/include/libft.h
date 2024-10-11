@@ -6,7 +6,7 @@
 /*   By: copireyr <copireyr@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 12:48:12 by copireyr          #+#    #+#             */
-/*   Updated: 2024/10/10 09:48:26 by copireyr         ###   ########.fr       */
+/*   Updated: 2024/10/11 10:05:57 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 # include <stddef.h>
 # include <stdint.h>
 # include <sys/types.h>
+# include <stdbool.h>
 # include "arena.h"
 # include "ft_la.h"
 # include "get_next_line.h"

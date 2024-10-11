@@ -6,20 +6,45 @@
 /*   By: copireyr <copireyr@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 10:00:45 by copireyr          #+#    #+#             */
-/*   Updated: 2024/10/11 09:41:51 by copireyr         ###   ########.fr       */
+/*   Updated: 2024/10/11 10:07:58 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
-#include "ast.h"
-#include <stdbool.h>
+#include "expand.h"
 
-t_string_vector	realloc_maybe(t_arena arena, t_string_vector vec);
-static int				find_next_expandable(const char *str);
-static char				*val(t_list *env, const char *key, size_t length_key);
+static char			*expand_str(t_arena arena, t_list *env, const char *end)
+t_string_vector		realloc_maybe(t_arena arena, t_string_vector vec);
+static int			find_next_expandable(const char *str);
+static char			*val(t_list *env, const char *key, size_t length_key);
+
+void	expand(t_ast_node *ast, t_arena arena, t_list *env)
+{
+	size_t	i;
+
+	if (!ast)
+		return ;
+	i = 0;
+	while (i < ast->n_children)
+	{
+		if (ast->children[i]->type == AST_WORD)
+		{
+			ast->children[i]->token.value = expand_str(
+					arena, env, ast->children[i]->token.value);
+			ast->children[i]->token.size = ft_strlen(
+					ast->children[i]->token.value);
+		}
+		i++;
+	}
+	i = 0;
+	while (i < ast->n_children)
+	{
+		expand(ast->children[i], arena, env);
+		i++;
+	}
+}
 
 /* TODO: $? */
-char	*expand_str(t_arena arena, t_list *env, const char *end)
+static char	*expand_str(t_arena arena, t_list *env, const char *end)
 {
 	t_string_vector	vec;
 	const char		*start;
@@ -60,28 +85,6 @@ t_string_vector	realloc_maybe(t_arena arena, t_string_vector vec)
 		ft_memcpy(tmp, vec.strings, sizeof(char *) * vec.count);
 	vec.strings = tmp;
 	return (vec);
-}
-
-void	expand(t_ast_node *ast, t_arena arena, t_list *env)
-{
-	size_t	i;
-
-	if (!ast)
-		return ;
-	i = 0;
-	while (i < ast->n_children)
-	{
-		if (ast->children[i]->type == AST_WORD)
-			ast->children[i]->token.value = expand_str(
-					arena, env, ast->children[i]->token.value);
-		i++;
-	}
-	i = 0;
-	while (i < ast->n_children)
-	{
-		expand(ast->children[i], arena, env);
-		i++;
-	}
 }
 
 /*
