@@ -6,13 +6,13 @@
 /*   By: copireyr <copireyr@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 10:00:45 by copireyr          #+#    #+#             */
-/*   Updated: 2024/10/11 10:07:58 by copireyr         ###   ########.fr       */
+/*   Updated: 2024/10/11 10:16:42 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "expand.h"
 
-static char			*expand_str(t_arena arena, t_list *env, const char *end)
+static char			*expand_str(t_arena arena, t_list *env, const char *end);
 t_string_vector		realloc_maybe(t_arena arena, t_string_vector vec);
 static int			find_next_expandable(const char *str);
 static char			*val(t_list *env, const char *key, size_t length_key);
@@ -23,6 +23,7 @@ void	expand(t_ast_node *ast, t_arena arena, t_list *env)
 
 	if (!ast)
 		return ;
+	ft_printf("%p\n", ast->children[ast->n_children]);
 	i = 0;
 	while (i < ast->n_children)
 	{
@@ -33,11 +34,6 @@ void	expand(t_ast_node *ast, t_arena arena, t_list *env)
 			ast->children[i]->token.size = ft_strlen(
 					ast->children[i]->token.value);
 		}
-		i++;
-	}
-	i = 0;
-	while (i < ast->n_children)
-	{
 		expand(ast->children[i], arena, env);
 		i++;
 	}
