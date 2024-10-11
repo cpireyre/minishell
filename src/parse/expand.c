@@ -6,7 +6,7 @@
 /*   By: copireyr <copireyr@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 10:00:45 by copireyr          #+#    #+#             */
-/*   Updated: 2024/10/11 10:19:51 by copireyr         ###   ########.fr       */
+/*   Updated: 2024/10/11 10:28:47 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@ t_string_vector		realloc_maybe(t_arena arena, t_string_vector vec);
 static int			find_next_expandable(const char *str);
 static char			*val(t_list *env, const char *key, size_t length_key);
 
+/*TODO: Check return values for ENOMEM*/
 void	expand(t_ast_node *ast, t_arena arena, t_list *env)
 {
 	size_t	i;
