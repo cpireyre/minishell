@@ -6,12 +6,13 @@
 /*   By: copireyr <copireyr@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 20:02:19 by copireyr          #+#    #+#             */
-/*   Updated: 2024/10/11 09:39:23 by copireyr         ###   ########.fr       */
+/*   Updated: 2024/10/11 10:25:17 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <dirent.h>
 #include <stdbool.h>
+#include <stdlib.h>
 #include "libft.h"
 #include "ast.h"
 
@@ -30,8 +31,10 @@ void	glob_str(const char *str)
 	entry = readdir(dir);
 	while (entry)
 	{
-		if (entry->d_name[0] != '.' && match(str, entry->d_name))
+		if ((str[0] == '.' || entry->d_name[0] != '.') && match(str, entry->d_name))
+		{
 			ft_printf("%s ", entry->d_name);
+		}
 		entry = readdir(dir);
 	}
 	closedir(dir);
@@ -47,15 +50,7 @@ void	glob(t_ast_node *ast)
 	while (i < ast->n_children)
 	{
 		if (ast->children[i]->type == AST_WORD)
-		{
-			const char *str = ast->children[i]->token.value;
-			glob_str(str);
-		}
-		i++;
-	}
-	i = 0;
-	while (i < ast->n_children)
-	{
+			glob_str(ast->children[i]->token.value);
 		glob(ast->children[i]);
 		i++;
 	}

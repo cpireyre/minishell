@@ -6,7 +6,7 @@
 /*   By: copireyr <copireyr@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 10:00:45 by copireyr          #+#    #+#             */
-/*   Updated: 2024/10/11 10:16:42 by copireyr         ###   ########.fr       */
+/*   Updated: 2024/10/11 10:19:51 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,6 @@ void	expand(t_ast_node *ast, t_arena arena, t_list *env)
 
 	if (!ast)
 		return ;
-	ft_printf("%p\n", ast->children[ast->n_children]);
 	i = 0;
 	while (i < ast->n_children)
 	{
