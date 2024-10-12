@@ -6,7 +6,7 @@
 /*   By: copireyr <copireyr@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 20:02:19 by copireyr          #+#    #+#             */
-/*   Updated: 2024/10/12 16:00:09 by copireyr         ###   ########.fr       */
+/*   Updated: 2024/10/12 17:12:31 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,50 +19,80 @@
 
 static bool	match(const char *pattern, const char *candidate);
 
-/*If you don't find anything when globbing, keep the star*/
-
-void	glob_str(t_arena arena, const char *str)
+const char	**get_cwd_entries(t_arena arena)
 {
-	t_string_vector	vec;
 	DIR				*dir;
 	struct dirent	*entry;
+	int				count;
+	const char		**result;
 
+	count = 0;
 	dir = opendir(".");
 	if (!dir)
-		return ;
-	vec = (t_string_vector){0};
+		return (NULL);
+	while (readdir(dir))
+		count++;
+	closedir(dir);
+	result = arena_calloc(arena, count + 1, sizeof(char *));
+	dir = opendir(".");
+	if (!dir)
+		return (NULL);
 	entry = readdir(dir);
 	while (entry)
 	{
-		if ((str[0] == '.' || entry->d_name[0] != '.') && match(str, entry->d_name))
-		{
-			vec = realloc_maybe(arena, vec);
-			vec.strings[vec.count++] = ft_arena_strndup(arena, entry->d_name, entry->d_namlen);
-			if (!vec.strings[vec.count - 1])
-				return ;
-		}
+		*result++ = ft_arena_strndup(arena, entry->d_name, entry->d_namlen);
 		entry = readdir(dir);
 	}
 	closedir(dir);
-	ft_printf("%s", ft_arena_strjoin_with_separator(arena, vec.strings, vec.count, ' '));
+	return (result - count);
 }
 
-void	glob(t_ast_node *ast)
+/*If you don't find anything when globbing, keep the star*/
+
+char	*glob_str(t_arena arena, const char *str)
+{
+	const char	**entries = get_cwd_entries(arena);
+	t_string_vector	vec;
+
+	if (!entries)
+		return (NULL);
+	vec = (t_string_vector){0};
+	while (*entries)
+	{
+		if ((str[0] == '.' || *entries) && match(str, *entries))
+		{
+			vec = realloc_maybe(arena, vec);
+			vec.strings[vec.count++] = ft_arena_strndup(arena, *entries, ft_strlen(*entries));
+			if (!vec.strings[vec.count - 1])
+				return (NULL);
+		}
+		entries++;
+	}
+	if (!vec.count)
+		return ((char *)str);
+	return (ft_arena_strjoin_with_separator(arena, vec.strings, vec.count, ' '));
+}
+
+void	glob(t_arena arena, t_ast_node *ast)
 {
 	size_t	i;
 
-	t_arena scratch = arena_new();
 	if (!ast)
 		return ;
 	i = 0;
 	while (i < ast->n_children)
 	{
 		if (ast->children[i]->type == AST_WORD)
-			glob_str(scratch, ast->children[i]->token.value);
-		glob(ast->children[i]);
+		{
+			char	*globbed = glob_str(arena, ast->children[i]->token.value);
+			if (!*globbed)
+				ft_printf("no matches\n");
+			else
+				ft_printf("%s\n", globbed);
+		}
+		glob(arena, ast->children[i]);
 		i++;
 	}
-	arena_dispose(&scratch);
 }
 
 static bool	match(const char *pattern, const char *candidate)
