@@ -129,6 +129,8 @@ static int	execute_cmd(t_ast_node *ast, t_list *env, t_arena arena, int pipefds[
 	if (cmd.outfile > -1)
 		dup2(cmd.outfile, STDOUT_FILENO);
 	execve(cmd.path, (char *const *)cmd.args, make_raw_env_array(env, arena));
+	perror(NAME);
+	exit(1);
 	return (1);
 }
 
