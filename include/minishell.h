@@ -65,6 +65,7 @@ int		export(char *export_str, t_list **env);
 int		printenv(t_list **env);
 char	*get_env(char *var, t_list **env);
 int		set_env(char *var, char *val, t_list **env);
+char	**make_raw_env_array(t_list *env, t_arena arena);
 int		**create_pipes(size_t n_pipes);
 void	delete_pipes(int **pipes);
 //int		pipeline(t_pipeline *pipeline, char **env);

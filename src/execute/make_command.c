@@ -79,6 +79,13 @@ static char	*find_path(const char *command, t_list *env, t_arena arena)
 	return (path);
 }
 
+static void	close_fd_if_open(int *fd)
+{
+	if (*fd != -1)
+		close(*fd);
+	*fd = -1;
+}
+
 int handle_redir(t_command *cmd, t_ast_node *ast)
 {
 
@@ -86,6 +93,7 @@ int handle_redir(t_command *cmd, t_ast_node *ast)
 		return (-1);
 	if (ast->token.type == TOK_REDIRECT_IN)
 	{
+		close_fd_if_open(&cmd->infile);
 		cmd->infile = open(ast->children[0]->token.value, O_RDONLY);
 		if (cmd->infile < 0)
 		{
@@ -95,6 +103,7 @@ int handle_redir(t_command *cmd, t_ast_node *ast)
 	}
 	else if (ast->token.type == TOK_REDIRECT_OUT)
 	{
+		close_fd_if_open(&cmd->infile);
 		cmd->outfile = open(ast->children[0]->token.value, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 		if (cmd->outfile < 0)
 		{
@@ -104,6 +113,7 @@ int handle_redir(t_command *cmd, t_ast_node *ast)
 	}
 	else if (ast->token.type == TOK_APPEND)
 	{
+		close_fd_if_open(&cmd->infile);
 		cmd->outfile = open(ast->children[0]->token.value, O_WRONLY | O_CREAT, 0644);
 		{
 			perror(NAME);
