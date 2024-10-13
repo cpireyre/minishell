@@ -10,6 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "arena.h"
 #include "libft.h"
 #include "minishell.h"
 #include <stdlib.h>
@@ -132,4 +133,22 @@ t_list	**init_env(char **envp)
 		envp++;
 	}
 	return (env);
+}
+
+char **make_raw_env_array(t_list *env, t_arena arena)
+{
+	char	**renv;
+	size_t	i;
+
+	renv = arena_calloc(arena, ft_lstsize(env) + 1, sizeof(char *));
+	if (renv)
+		return (NULL);
+	i = 0;
+	while (renv[i])
+	{
+		renv[i] = env->content;
+		env = env->next;
+		i++;
+	}
+	return (renv);
 }
