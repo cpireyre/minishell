@@ -6,49 +6,21 @@
 /*   By: copireyr <copireyr@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 20:02:19 by copireyr          #+#    #+#             */
-/*   Updated: 2024/10/14 09:38:14 by copireyr         ###   ########.fr       */
+/*   Updated: 2024/10/14 09:51:57 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <dirent.h>
 #include <stdbool.h>
-#include <stdlib.h>
 #include "libft.h"
 #include "expand.h"
 #include "ast.h"
 
-static char	*glob_pattern(t_arena arena, const char *str);
-static bool	match(const char *pattern, const char *candidate);
+static char			*glob_pattern(t_arena arena, const char *str);
+static bool			match(const char *pattern, const char *candidate);
+static const char	**get_cwd_entries(t_arena arena);
 
-const char	**get_cwd_entries(t_arena arena)
-{
-	DIR				*dir;
-	struct dirent	*entry;
-	int				count;
-	const char		**result;
-
-	count = 0;
-	dir = opendir(".");
-	if (!dir)
-		return (NULL);
-	while (readdir(dir))
-		count++;
-	closedir(dir);
-	result = arena_calloc(arena, count + 1, sizeof(char *));
-	dir = opendir(".");
-	if (!dir)
-		return (NULL);
-	entry = readdir(dir);
-	while (entry)
-	{
-		*result++ = ft_arena_strndup(
-				arena, entry->d_name, ft_strlen(entry->d_name));
-		entry = readdir(dir);
-	}
-	closedir(dir);
-	return (result - count);
-}
-
+/*TODO: Add return value and check for ENOMEM*/
 void	glob(t_arena arena, t_ast_node *ast)
 {
 	size_t	i;
@@ -62,10 +34,7 @@ void	glob(t_arena arena, t_ast_node *ast)
 		if (ast->children[i]->type == AST_WORD)
 		{
 			globbed = glob_pattern(arena, ast->children[i]->token.value);
-			if (!*globbed)
-				ft_printf("no matches\n");
-			else
-				ft_printf("%s\n", globbed);
+			ast->children[i]->token.value = globbed;
 		}
 		glob(arena, ast->children[i]);
 		i++;
@@ -116,4 +85,33 @@ static bool	match(const char *pattern, const char *candidate)
 	if (*pattern == *candidate)
 		return (match(++pattern, ++candidate));
 	return (false);
+}
+
+static const char	**get_cwd_entries(t_arena arena)
+{
+	DIR				*dir;
+	struct dirent	*entry;
+	int				count;
+	const char		**result;
+
+	count = 0;
+	dir = opendir(".");
+	if (!dir)
+		return (NULL);
+	while (readdir(dir))
+		count++;
+	closedir(dir);
+	result = arena_calloc(arena, count + 1, sizeof(char *));
+	dir = opendir(".");
+	if (!dir)
+		return (NULL);
+	entry = readdir(dir);
+	while (entry)
+	{
+		*result++ = ft_arena_strndup(
+				arena, entry->d_name, ft_strlen(entry->d_name));
+		entry = readdir(dir);
+	}
+	closedir(dir);
+	return (result - count);
 }
