@@ -51,7 +51,7 @@ const char	**get_cwd_entries(t_arena arena)
 
 char	*glob_str(t_arena arena, const char *str)
 {
-	const char	**entries = get_cwd_entries(arena);
+	const char		**entries = get_cwd_entries(arena);
 	t_string_vector	vec;
 
 	if (!entries)
@@ -62,7 +62,8 @@ char	*glob_str(t_arena arena, const char *str)
 		if ((str[0] == '.' || *entries) && match(str, *entries))
 		{
 			vec = realloc_maybe(arena, vec);
-			vec.strings[vec.count++] = ft_arena_strndup(arena, *entries, ft_strlen(*entries));
+			vec.strings[vec.count++] = ft_arena_strndup(
+					arena, *entries, ft_strlen(*entries));
 			if (!vec.strings[vec.count - 1])
 				return (NULL);
 		}
@@ -70,12 +71,14 @@ char	*glob_str(t_arena arena, const char *str)
 	}
 	if (!vec.count)
 		return ((char *)str);
-	return (ft_arena_strjoin_with_separator(arena, vec.strings, vec.count, ' '));
+	return (ft_arena_strjoin_with_separator(
+			arena, vec.strings, vec.count, ' '));
 }
 
 void	glob(t_arena arena, t_ast_node *ast)
 {
 	size_t	i;
+	char	*globbed;
 
 	if (!ast)
 		return ;
@@ -84,7 +87,7 @@ void	glob(t_arena arena, t_ast_node *ast)
 	{
 		if (ast->children[i]->type == AST_WORD)
 		{
-			char	*globbed = glob_str(arena, ast->children[i]->token.value);
+			globbed = glob_str(arena, ast->children[i]->token.value);
 			if (!*globbed)
 				ft_printf("no matches\n");
 			else
