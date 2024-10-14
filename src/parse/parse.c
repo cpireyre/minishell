@@ -6,7 +6,7 @@
 /*   By: copireyr <copireyr@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 11:57:35 by copireyr          #+#    #+#             */
-/*   Updated: 2024/10/14 13:04:04 by copireyr         ###   ########.fr       */
+/*   Updated: 2024/10/14 14:30:07 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,8 @@
 #include "expand.h"
 
 static char	*get_ast_type(enum e_ast_type t);
+void		split_words(t_arena arena, t_ast_node *ast);
 
-void	split_words(t_arena arena, t_ast_node *ast);
 t_ast_node	*parse(t_arena arena, char *user_input_line, t_list *env)
 {
 	t_token		*xs;
@@ -29,7 +29,7 @@ t_ast_node	*parse(t_arena arena, char *user_input_line, t_list *env)
 	if (xs)
 	{
 		ft_bzero(range, sizeof(range));
-		range[1] = count_toks(xs) - 1; // remove end token
+		range[1] = count_toks(xs) - 1;
 		ast = create_ast(xs, ast, range, arena);
 		expand(ast, arena, env);
 		glob(arena, ast);
@@ -37,37 +37,6 @@ t_ast_node	*parse(t_arena arena, char *user_input_line, t_list *env)
 	}
 	return (ast);
 }
-
-/* t_ast	*new_node_from_token(t_arena arena, t_token token) */
-/* { */
-/* 	t_ast	*result; */
-
-/* 	result = arena_calloc(arena, 1, sizeof(*result)); */
-/* 	if (result) */
-/* 	{ */
-/* 		result->type = token.type; */
-/* 		result->value = arena_calloc(arena, 1, token.size + 1); */
-/* 		if (!result->value) */
-/* 			return (NULL); */
-/* 		ft_memcpy(result->value, token.value, token.size); */
-/* 		result->n_children = 0; */
-/* 		result->children = NULL; */
-/* 	} */
-/* 	return (result); */
-/* } */
-
-// int	add_child_to_node(t_ast *node, t_ast *child, t_arena arena)
-// {
-// 	t_ast **new_child_array;
-//
-// 	new_child_array = arena_calloc(arena, node->n_children + 1, sizeof(t_ast *));
-// 	if (!new_child_array)
-// 		return (-1);
-// 	ft_memcpy(new_child_array, node->children, node->n_children);
-// 	node->n_children++;
-// 	new_child_array[node->n_children - 1] = child;
-// 	return (0);
-// }
 
 void	print_ast(t_ast_node *root, size_t level)
 {

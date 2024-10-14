@@ -6,16 +6,17 @@
 /*   By: copireyr <copireyr@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 12:54:15 by copireyr          #+#    #+#             */
-/*   Updated: 2024/10/14 13:15:53 by copireyr         ###   ########.fr       */
+/*   Updated: 2024/10/14 14:29:31 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ast.h"
 
-int		count_words(const char *str)
+int	count_words(const char *str)
 {
-	int			count = 0;
+	int			count;
 
+	count = 0;
 	while (*str)
 	{
 		while (*str && !ft_isspace(*str))
@@ -39,7 +40,7 @@ char	**split_str(t_arena arena, const char *str)
 	const int	count = count_words(str);
 	char		**result;
 
- 	result = arena_calloc(arena, count + 1, sizeof(*result));
+	result = arena_calloc(arena, count + 1, sizeof(*result));
 	if (!result)
 		return (NULL);
 	while (*str)
@@ -79,5 +80,4 @@ void	split_words(t_arena arena, t_ast_node *ast)
 		split_words(arena, ast->children[i]);
 		i++;
 	}
-
 }
