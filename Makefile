@@ -6,7 +6,7 @@
 #    By: copireyr <copireyr@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/08/27 12:07:56 by copireyr          #+#    #+#              #
-#    Updated: 2024/10/14 10:03:29 by copireyr         ###   ########.fr        #
+#    Updated: 2024/10/14 12:54:45 by copireyr         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -27,7 +27,8 @@ endif
 
 src := ./src/main.c ./src/environment.c ./src/signals.c
 
-parse := $(addprefix ./src/parse/, ast.c parse.c tokenize.c tokenize_utils.c expand.c glob.c)
+parse := $(addprefix ./src/parse/, ast.c parse.c tokenize.c tokenize_utils.c \
+		 expand.c glob.c split_words.c)
 builtins := $(addprefix ./src/builtins/, builtin_env.c builtin_export.c builtin_unset.c)
 src += $(parse) $(builtins)
 

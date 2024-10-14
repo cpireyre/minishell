@@ -6,7 +6,7 @@
 /*   By: copireyr <copireyr@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 11:57:35 by copireyr          #+#    #+#             */
-/*   Updated: 2024/10/12 16:22:43 by copireyr         ###   ########.fr       */
+/*   Updated: 2024/10/14 13:04:04 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 
 static char	*get_ast_type(enum e_ast_type t);
 
+void	split_words(t_arena arena, t_ast_node *ast);
 t_ast_node	*parse(t_arena arena, char *user_input_line, t_list *env)
 {
 	t_token		*xs;
@@ -32,6 +33,7 @@ t_ast_node	*parse(t_arena arena, char *user_input_line, t_list *env)
 		ast = create_ast(xs, ast, range, arena);
 		expand(ast, arena, env);
 		glob(arena, ast);
+		split_words(arena, ast);
 	}
 	return (ast);
 }
