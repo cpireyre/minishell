@@ -6,14 +6,13 @@
 /*   By: copireyr <copireyr@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 10:00:45 by copireyr          #+#    #+#             */
-/*   Updated: 2024/10/11 10:28:47 by copireyr         ###   ########.fr       */
+/*   Updated: 2024/10/14 10:00:50 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "expand.h"
 
 static char			*expand_str(t_arena arena, t_list *env, const char *end);
-t_string_vector		realloc_maybe(t_arena arena, t_string_vector vec);
 static int			find_next_expandable(const char *str);
 static char			*val(t_list *env, const char *key, size_t length_key);
 

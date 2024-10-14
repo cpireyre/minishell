@@ -6,7 +6,7 @@
 #    By: copireyr <copireyr@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/08/27 12:07:56 by copireyr          #+#    #+#              #
-#    Updated: 2024/10/11 10:19:25 by copireyr         ###   ########.fr        #
+#    Updated: 2024/10/14 10:03:29 by copireyr         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,8 +15,8 @@ CC := cc
 
 CPPFLAGS := -I./include/ -I./libft/include
 LDFLAGS := -lreadline -L./libft/ -lft
-CFLAGS := -Wall -Wextra -MMD -MP -g3 -Og
-asan := -fsanitize=address,undefined#,leak
+CFLAGS := -Wall -Wextra -MMD -MP -g3
+asan := -fsanitize=address,undefined,leak
 CFLAGS += $(asan)
 LDFLAGS += $(asan)
 NAME := minishell
