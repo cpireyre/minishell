@@ -6,7 +6,7 @@
 #    By: copireyr <copireyr@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/08/27 12:07:56 by copireyr          #+#    #+#              #
-#    Updated: 2024/10/07 19:07:03 by copireyr         ###   ########.fr        #
+#    Updated: 2024/10/14 10:03:29 by copireyr         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,8 +15,8 @@ CC := cc
 
 CPPFLAGS := -I./include/ -I./libft/include
 LDFLAGS := -lreadline -L./libft/ -lft
-CFLAGS := -Wall -Wextra -MMD -MP -g3 -Og
-asan := -fsanitize=address,undefined#,leak
+CFLAGS := -Wall -Wextra -MMD -MP -g3
+asan := -fsanitize=address,undefined,leak
 CFLAGS += $(asan)
 LDFLAGS += $(asan)
 NAME := minishell
@@ -27,7 +27,7 @@ endif
 
 src := ./src/main.c ./src/environment.c ./src/signals.c
 
-parse := $(addprefix ./src/parse/, ast.c parse.c tokenize.c tokenize_utils.c expand.c)
+parse := $(addprefix ./src/parse/, ast.c parse.c tokenize.c tokenize_utils.c expand.c glob.c)
 builtins := $(addprefix ./src/builtins/, builtin_env.c builtin_export.c builtin_unset.c)
 src += $(parse) $(builtins)
 
@@ -70,4 +70,9 @@ run: $(NAME)
 val: $(NAME)
 	valgrind --leak-check=full --show-leak-kinds=all --track-fds=yes --suppressions=valgrind_readline_suppressions.supp ./$(NAME) < tests/test.txt
 
+
+.PHONY: test
+test: $(NAME)
+	# SPACE_VAR="hello world" EMPTY="" ./$< < tests/expansion.msh
+	./$< < tests/glob.msh
 -include $(obj:.o=.d)

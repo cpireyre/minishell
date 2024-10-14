@@ -1,35 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_arena_strndup.c                                 :+:      :+:    :+:   */
+/*   expand.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: copireyr <copireyr@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/07 18:51:55 by copireyr          #+#    #+#             */
-/*   Updated: 2024/10/10 11:31:44 by copireyr         ###   ########.fr       */
+/*   Created: 2024/10/11 10:03:17 by copireyr          #+#    #+#             */
+/*   Updated: 2024/10/12 15:52:51 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#ifndef EXPAND_H
+# define EXPAND_H
+
 #include "libft.h"
+#include "ast.h"
 
-char	*ft_arena_strndup(t_arena arena, const char *src, size_t n)
+typedef struct s_string_vector
 {
-	size_t	i;
-	size_t	j;
-	char	*dup;
+	char	**strings;
+	int		count;
+	int		capacity;
+}	t_string_vector;
 
-	i = 0;
-	while (src[i] && i < n)
-		i++;
-	dup = arena_alloc(arena, i + 1);
-	if (!dup)
-		return (NULL);
-	j = 0;
-	while (j < i)
-	{
-		dup[j] = src[j];
-		j++;
-	}
-	dup[j] = '\0';
-	return (dup);
-}
+extern void	expand(t_ast_node *ast, t_arena arena, t_list *env);
+t_string_vector	realloc_maybe(t_arena arena, t_string_vector vec);
+
+#endif /* EXPAND_H */

@@ -1,35 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_arena_strndup.c                                 :+:      :+:    :+:   */
+/*   glob.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: copireyr <copireyr@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/07 18:51:55 by copireyr          #+#    #+#             */
-/*   Updated: 2024/10/10 11:31:44 by copireyr         ###   ########.fr       */
+/*   Created: 2024/10/10 20:08:57 by copireyr          #+#    #+#             */
+/*   Updated: 2024/10/14 10:00:11 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#ifndef GLOB_H
+# define GLOB_H
 
-char	*ft_arena_strndup(t_arena arena, const char *src, size_t n)
-{
-	size_t	i;
-	size_t	j;
-	char	*dup;
+extern void	glob(t_arena arena, t_ast_node *ast);
 
-	i = 0;
-	while (src[i] && i < n)
-		i++;
-	dup = arena_alloc(arena, i + 1);
-	if (!dup)
-		return (NULL);
-	j = 0;
-	while (j < i)
-	{
-		dup[j] = src[j];
-		j++;
-	}
-	dup[j] = '\0';
-	return (dup);
-}
+#endif /* GLOB_H */
