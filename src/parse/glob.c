@@ -6,7 +6,7 @@
 /*   By: copireyr <copireyr@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 20:02:19 by copireyr          #+#    #+#             */
-/*   Updated: 2024/10/14 09:51:57 by copireyr         ###   ########.fr       */
+/*   Updated: 2024/10/14 14:32:15 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ void	glob(t_arena arena, t_ast_node *ast)
 		{
 			globbed = glob_pattern(arena, ast->children[i]->token.value);
 			ast->children[i]->token.value = globbed;
+			ast->children[i]->token.size = ft_strlen(globbed);
 		}
 		glob(arena, ast->children[i]);
 		i++;
