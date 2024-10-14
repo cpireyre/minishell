@@ -6,7 +6,7 @@
 /*   By: copireyr <copireyr@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/01 12:02:53 by copireyr          #+#    #+#             */
-/*   Updated: 2024/10/10 17:06:33 by copireyr         ###   ########.fr       */
+/*   Updated: 2024/10/14 10:25:33 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 #include <stdlib.h>
 #include <limits.h>
 
-#include <stdio.h>
 void				convert(t_emitter *e, t_spec s, va_list *ap);
 static t_emitter	init_emitter(char *str, size_t size);
 

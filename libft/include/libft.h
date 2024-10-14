@@ -6,7 +6,7 @@
 /*   By: copireyr <copireyr@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 12:48:12 by copireyr          #+#    #+#             */
-/*   Updated: 2024/10/12 15:59:55 by copireyr         ###   ########.fr       */
+/*   Updated: 2024/10/14 10:25:56 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ int			ft_streq(const char *s1, const char *s2);
 const char	*ft_strchrnul(const char *str, int c);
 char		*ft_arena_strndup(t_arena arena, const char *src, size_t n);
 char		*ft_arena_strjoin(t_arena arena, char **substrings, int count);
-char 		*ft_arena_strjoin_with_separator(
+char		*ft_arena_strjoin_with_separator(
 				t_arena arena, char **substrings, int count, char separator);
 
 /* Ctype */
