@@ -6,7 +6,7 @@
 /*   By: copireyr <copireyr@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 20:02:19 by copireyr          #+#    #+#             */
-/*   Updated: 2024/10/14 09:34:34 by copireyr         ###   ########.fr       */
+/*   Updated: 2024/10/14 09:38:14 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 #include "expand.h"
 #include "ast.h"
 
+static char	*glob_pattern(t_arena arena, const char *str);
 static bool	match(const char *pattern, const char *candidate);
 
 const char	**get_cwd_entries(t_arena arena)
@@ -48,9 +49,30 @@ const char	**get_cwd_entries(t_arena arena)
 	return (result - count);
 }
 
-/*If you don't find anything when globbing, keep the star*/
+void	glob(t_arena arena, t_ast_node *ast)
+{
+	size_t	i;
+	char	*globbed;
 
-char	*glob_str(t_arena arena, const char *str)
+	if (!ast)
+		return ;
+	i = 0;
+	while (i < ast->n_children)
+	{
+		if (ast->children[i]->type == AST_WORD)
+		{
+			globbed = glob_pattern(arena, ast->children[i]->token.value);
+			if (!*globbed)
+				ft_printf("no matches\n");
+			else
+				ft_printf("%s\n", globbed);
+		}
+		glob(arena, ast->children[i]);
+		i++;
+	}
+}
+
+static char	*glob_pattern(t_arena arena, const char *str)
 {
 	const char		**entries = get_cwd_entries(arena);
 	t_string_vector	vec;
@@ -60,7 +82,7 @@ char	*glob_str(t_arena arena, const char *str)
 	vec = (t_string_vector){0};
 	while (*entries)
 	{
-		if ((str[0] == '.' || *entries) && match(str, *entries))
+		if ((str[0] == '.' || **entries != '.') && match(str, *entries))
 		{
 			vec = realloc_maybe(arena, vec);
 			vec.strings[vec.count++] = ft_arena_strndup(
@@ -74,29 +96,6 @@ char	*glob_str(t_arena arena, const char *str)
 		return ((char *)str);
 	return (ft_arena_strjoin_with_separator(
 			arena, vec.strings, vec.count, ' '));
-}
-
-void	glob(t_arena arena, t_ast_node *ast)
-{
-	size_t	i;
-	char	*globbed;
-
-	if (!ast)
-		return ;
-	i = 0;
-	while (i < ast->n_children)
-	{
-		if (ast->children[i]->type == AST_WORD)
-		{
-			globbed = glob_str(arena, ast->children[i]->token.value);
-			if (!*globbed)
-				ft_printf("no matches\n");
-			else
-				ft_printf("%s\n", globbed);
-		}
-		glob(arena, ast->children[i]);
-		i++;
-	}
 }
 
 static bool	match(const char *pattern, const char *candidate)
