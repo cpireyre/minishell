@@ -6,7 +6,7 @@
 /*   By: copireyr <copireyr@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 20:02:19 by copireyr          #+#    #+#             */
-/*   Updated: 2024/10/12 17:12:31 by copireyr         ###   ########.fr       */
+/*   Updated: 2024/10/14 09:34:34 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,8 @@ const char	**get_cwd_entries(t_arena arena)
 	entry = readdir(dir);
 	while (entry)
 	{
-		*result++ = ft_arena_strndup(arena, entry->d_name, entry->d_namlen);
+		*result++ = ft_arena_strndup(
+				arena, entry->d_name, ft_strlen(entry->d_name));
 		entry = readdir(dir);
 	}
 	closedir(dir);
