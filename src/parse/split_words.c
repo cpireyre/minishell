@@ -12,6 +12,20 @@
 
 #include "ast.h"
 
+/* AST_WORD nodes don't branch so no need to fill that in */
+t_ast_node	*ast_from_str(t_arena arena, const char *str)
+{
+	t_ast_node	*result;
+
+	result = arena_calloc(arena, 1, sizeof(*result));
+	if (!result)
+		return (NULL);
+	result->type = AST_WORD;
+	result->token.value = str;
+	result->token.size = ft_strlen(str);
+	return (result);
+}
+
 int	count_words(const char *str)
 {
 	int			count;
@@ -63,21 +77,23 @@ char	**split_str(t_arena arena, const char *str)
 
 void	split_words(t_arena arena, t_ast_node *ast)
 {
-	size_t	i;
-	char	**split;
-
 	if (!ast)
 		return ;
-	i = 0;
-	while (i < ast->n_children)
+	size_t	count = 0;
+	t_ast_node	**new_children = arena_calloc(arena, 256, sizeof(*new_children));
+	for (size_t i = 0; i < ast->n_children; i++)
 	{
 		if (ast->children[i]->type == AST_WORD)
 		{
-			split = split_str(arena, ast->children[i]->token.value);
+			char **split = split_str(arena, ast->children[i]->token.value);
 			while (*split)
-				ft_printf("%s\n", *split++);
+				new_children[count++] = ast_from_str(arena, *split++);
 		}
-		split_words(arena, ast->children[i]);
-		i++;
+		else
+			new_children[count++] = ast->children[i];
 	}
+	ast->children = new_children;
+	ast->n_children = count;
+	for (size_t i = 0; i < ast->n_children; i++)
+		split_words(arena, ast->children[i]);
 }
