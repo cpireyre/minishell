@@ -17,6 +17,7 @@
 
 static char	*get_ast_type(enum e_ast_type t);
 void		split_words(t_arena arena, t_ast_node *ast);
+void		remove_quotes(t_arena arena, t_ast_node *ast);
 
 t_ast_node	*parse(t_arena arena, char *user_input_line, t_list *env)
 {

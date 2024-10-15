@@ -87,6 +87,8 @@ t_ast_vec	*ast_push(t_arena arena, t_ast_vec *vec, t_ast_node *node)
 	return (vec);
 }
 
+char	*remove_quotes_from_str(t_arena arena, const char *str);
+
 t_ast_vec	*expand_children(
 		t_arena arena, const char *str, t_ast_vec *new_children)
 {
@@ -100,10 +102,13 @@ t_ast_vec	*expand_children(
 		if (!new_child)
 			return (NULL);
 		new_child->type = AST_WORD;
-		new_child->token.value = *split;
-		new_child->token.size = ft_strlen(*split);
-		if (!ast_push(arena, new_children, new_child))
-			return (NULL);
+		new_child->token.value = remove_quotes_from_str(arena, *split);
+		new_child->token.size = ft_strlen(new_child->token.value);
+		if (new_child->token.size)
+		{
+			if (!ast_push(arena, new_children, new_child))
+				return (NULL);
+		}
 		split++;
 	}
 	return (new_children);
@@ -119,8 +124,8 @@ void	split_words(t_arena arena, t_ast_node *ast)
 	if (!ast || !ast->children)
 		return ;
 	ft_bzero(&new_children, sizeof(new_children));
-	i = -1;
-	while (i++ < ast->n_children)
+	i = 0;
+	while (i < ast->n_children)
 	{
 		if (ast->children[i]->type == AST_WORD)
 		{
@@ -130,6 +135,7 @@ void	split_words(t_arena arena, t_ast_node *ast)
 		}
 		else if (!ast_push(arena, &new_children, ast->children[i]))
 			return ;
+		i++;
 	}
 	ast->children = new_children.data;
 	ast->n_children = new_children.size;
