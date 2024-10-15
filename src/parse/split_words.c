@@ -110,7 +110,7 @@ void	split_words(t_arena arena, t_ast_node *ast)
 
 	if (!ast || !ast->children)
 		return ;
-	new_children = (t_ast_vec){0};
+	ft_bzero(&new_children, sizeof(new_children));
 	i = 0;
 	while (i < ast->n_children)
 	{

@@ -49,7 +49,7 @@ static char	*glob_pattern(t_arena arena, const char *str)
 
 	if (!entries)
 		return (NULL);
-	vec = (t_string_vector){0};
+	ft_bzero(&vec, sizeof(vec));
 	while (*entries)
 	{
 		if ((str[0] == '.' || **entries != '.') && match(str, *entries))

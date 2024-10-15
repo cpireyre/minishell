@@ -44,7 +44,7 @@ static char	*expand_str(t_arena arena, t_list *env, const char *end)
 	t_string_vector	vec;
 	const char		*start;
 
-	vec = (t_string_vector){0};
+	ft_bzero(&vec, sizeof(vec));
 	while (*end)
 	{
 		vec = realloc_maybe(arena, vec);
