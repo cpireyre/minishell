@@ -75,25 +75,60 @@ char	**split_str(t_arena arena, const char *str)
 	return (result - count);
 }
 
+typedef struct s_ast_vec
+{
+	t_ast_node	**data;
+	size_t		size;
+	size_t		capacity;
+}	t_ast_vec;
+
+t_ast_vec	*vector_push(t_arena arena, t_ast_vec *vec, t_ast_node *node)
+{
+	const size_t	new_capacity = 2 * vec->capacity + 4;
+	t_ast_node		**new_data;
+
+	if (vec->size >= vec->capacity)
+	{
+		new_data = arena_alloc(arena, new_capacity * sizeof(t_ast_node *));
+		if (!new_data)
+			return (NULL);
+		if (vec->data)
+			ft_memcpy(new_data, vec->data, vec->size * sizeof(t_ast_node *));
+		vec->data = new_data;
+		vec->capacity = new_capacity;
+	}
+	vec->data[vec->size++] = node;
+	return (vec);
+}
+
+/* TODO: Check return val for ENOMEM */
 void	split_words(t_arena arena, t_ast_node *ast)
 {
-	if (!ast)
+	t_ast_vec	new_children;
+	size_t		i;
+	char		**split;
+
+	if (!ast || !ast->children)
 		return ;
-	size_t	count = 0;
-	t_ast_node	**new_children = arena_calloc(arena, 256, sizeof(*new_children));
-	for (size_t i = 0; i < ast->n_children; i++)
+	new_children = (t_ast_vec){0};
+	i = 0;
+	while (i < ast->n_children)
 	{
 		if (ast->children[i]->type == AST_WORD)
 		{
-			char **split = split_str(arena, ast->children[i]->token.value);
+			split = split_str(arena, ast->children[i]->token.value);
 			while (*split)
-				new_children[count++] = ast_from_str(arena, *split++);
+				if (!vector_push(arena, &new_children, ast_from_str(arena, *split++)))
+					return ;
 		}
 		else
-			new_children[count++] = ast->children[i];
+			if (!vector_push(arena, &new_children, ast->children[i]))
+				return ;
+		i++;
 	}
-	ast->children = new_children;
-	ast->n_children = count;
-	for (size_t i = 0; i < ast->n_children; i++)
-		split_words(arena, ast->children[i]);
+	ast->children = new_children.data;
+	ast->n_children = new_children.size;
+	i = 0;
+	while (i < ast->n_children)
+		split_words(arena, ast->children[i++]);
 }
