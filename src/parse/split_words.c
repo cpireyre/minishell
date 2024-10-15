@@ -12,20 +12,6 @@
 
 #include "ast.h"
 
-/* AST_WORD nodes don't branch so no need to fill that in */
-t_ast_node	*ast_from_str(t_arena arena, const char *str)
-{
-	t_ast_node	*result;
-
-	result = arena_calloc(arena, 1, sizeof(*result));
-	if (!result)
-		return (NULL);
-	result->type = AST_WORD;
-	result->token.value = str;
-	result->token.size = ft_strlen(str);
-	return (result);
-}
-
 int	count_words(const char *str)
 {
 	int			count;
@@ -101,12 +87,34 @@ t_ast_vec	*vector_push(t_arena arena, t_ast_vec *vec, t_ast_node *node)
 	return (vec);
 }
 
+t_ast_vec	*expand_children(
+		t_arena arena, const char *str, t_ast_vec *new_children)
+{
+	char		**split;
+	t_ast_node	*new_child;
+
+	split = split_str(arena, str);
+	while (*split)
+	{
+		new_child = arena_calloc(arena, 1, sizeof(*new_child));
+		if (!new_child)
+			return (NULL);
+		new_child->type = AST_WORD;
+		new_child->token.value = *split;
+		new_child->token.size = ft_strlen(*split);
+		if (!vector_push(arena, new_children, new_child))
+			return (NULL);
+		split++;
+	}
+	return (new_children);
+}
+
 /* TODO: Check return val for ENOMEM */
 void	split_words(t_arena arena, t_ast_node *ast)
 {
 	t_ast_vec	new_children;
 	size_t		i;
-	char		**split;
+	const char	*str;
 
 	if (!ast || !ast->children)
 		return ;
@@ -114,13 +122,10 @@ void	split_words(t_arena arena, t_ast_node *ast)
 	i = 0;
 	while (i < ast->n_children)
 	{
-		if (ast->children[i]->type == AST_WORD)
-		{
-			split = split_str(arena, ast->children[i]->token.value);
-			while (*split)
-				if (!vector_push(arena, &new_children, ast_from_str(arena, *split++)))
-					return ;
-		}
+		str = ast->children[i]->token.value;
+		if (ast->children[i]->type == AST_WORD
+			&& !expand_children(arena, str, &new_children))
+			return ;
 		else
 			if (!vector_push(arena, &new_children, ast->children[i]))
 				return ;
