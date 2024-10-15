@@ -68,7 +68,7 @@ typedef struct s_ast_vec
 	size_t		capacity;
 }	t_ast_vec;
 
-t_ast_vec	*vector_push(t_arena arena, t_ast_vec *vec, t_ast_node *node)
+t_ast_vec	*ast_push(t_arena arena, t_ast_vec *vec, t_ast_node *node)
 {
 	const size_t	new_capacity = 2 * vec->capacity + 4;
 	t_ast_node		**new_data;
@@ -102,7 +102,7 @@ t_ast_vec	*expand_children(
 		new_child->type = AST_WORD;
 		new_child->token.value = *split;
 		new_child->token.size = ft_strlen(*split);
-		if (!vector_push(arena, new_children, new_child))
+		if (!ast_push(arena, new_children, new_child))
 			return (NULL);
 		split++;
 	}
@@ -119,17 +119,17 @@ void	split_words(t_arena arena, t_ast_node *ast)
 	if (!ast || !ast->children)
 		return ;
 	ft_bzero(&new_children, sizeof(new_children));
-	i = 0;
-	while (i < ast->n_children)
+	i = -1;
+	while (i++ < ast->n_children)
 	{
-		str = ast->children[i]->token.value;
-		if (ast->children[i]->type == AST_WORD
-			&& !expand_children(arena, str, &new_children))
-			return ;
-		else
-			if (!vector_push(arena, &new_children, ast->children[i]))
+		if (ast->children[i]->type == AST_WORD)
+		{
+			str = ast->children[i]->token.value;
+			if (!expand_children(arena, str, &new_children))
 				return ;
-		i++;
+		}
+		else if (!ast_push(arena, &new_children, ast->children[i]))
+			return ;
 	}
 	ast->children = new_children.data;
 	ast->n_children = new_children.size;
