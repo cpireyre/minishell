@@ -6,7 +6,7 @@
 /*   By: copireyr <copireyr@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 12:54:15 by copireyr          #+#    #+#             */
-/*   Updated: 2024/10/14 14:29:31 by copireyr         ###   ########.fr       */
+/*   Updated: 2024/10/16 09:55:11 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,11 +104,8 @@ t_ast_vec	*expand_children(
 		new_child->type = AST_WORD;
 		new_child->token.value = remove_quotes_from_str(arena, *split);
 		new_child->token.size = ft_strlen(new_child->token.value);
-		if (new_child->token.size)
-		{
-			if (!ast_push(arena, new_children, new_child))
-				return (NULL);
-		}
+		if (!ast_push(arena, new_children, new_child))
+			return (NULL);
 		split++;
 	}
 	return (new_children);
