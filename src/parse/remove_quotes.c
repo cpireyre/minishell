@@ -10,6 +10,24 @@ char	*remove_quotes_from_str(t_arena arena, const char *str)
 	size = 0;
 	while (str[i])
 	{
+		if (str[i] == '"')
+		{
+			i++;
+			while (str[i] && str[i] != '"')
+			{
+				size++;
+				i++;
+			}
+		}
+		if (str[i] == '\'')
+		{
+			i++;
+			while (str[i] && str[i] != '\'')
+			{
+				size++;
+				i++;
+			}
+		}
 		size += str[i] != '"' && str[i] != '\'';
 		i++;
 	}
@@ -20,6 +38,18 @@ char	*remove_quotes_from_str(t_arena arena, const char *str)
 	{
 		if (*str != '"' && *str != '\'')
 			*result++ = *str;
+		else if (*str == '"')
+		{
+			str++;
+			while (*str && *str != '"')
+			*result++ = *str++;
+		}
+		else if (*str == '\'')
+		{
+			str++;
+			while (*str && *str != '\'')
+			*result++ = *str++;
+		}
 		str++;
 	}
 	*result = '\0';
