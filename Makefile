@@ -6,7 +6,7 @@
 #    By: copireyr <copireyr@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/08/27 12:07:56 by copireyr          #+#    #+#              #
-#    Updated: 2024/10/14 12:54:45 by copireyr         ###   ########.fr        #
+#    Updated: 2024/10/16 09:40:16 by copireyr         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,7 +16,7 @@ CC := cc
 CPPFLAGS := -I./include/ -I./libft/include
 LDFLAGS := -lreadline -L./libft/ -lft
 CFLAGS := -Wall -Wextra -MMD -MP -g3
-asan := -fsanitize=address,undefined#,leak
+asan := -fsanitize=address,undefined,leak
 CFLAGS += $(asan)
 LDFLAGS += $(asan)
 NAME := minishell
@@ -69,7 +69,7 @@ run: $(NAME)
 
 .PHONY: val
 val: $(NAME)
-	valgrind --leak-check=full --show-leak-kinds=all --track-fds=yes --suppressions=valgrind_readline_suppressions.supp ./$(NAME) < tests/test.txt
+	valgrind --suppressions=readline.supp -s ./$(NAME)
 
 
 .PHONY: test
