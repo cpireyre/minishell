@@ -29,12 +29,14 @@ typedef struct	s_command_context
 	t_ast_node	*ast;
 	t_list		*env;
 	int			**pipes;
-	int			cur_child;
+	size_t		cur_child;
+	size_t		n_children;
 }	t_command_context;
 
 int		execute_ast(t_ast_node *ast, t_list	*env, t_arena arena);
 int		make_command(t_command *cmd, t_ast_node *ast, t_list *env, t_arena arena);
 int		**make_pipes(int n_pipes, t_arena arena);
 void	close_pipes(int **pipes, int n_pipes);
+size_t	calculate_n_pipes(t_ast_node *ast);
 
 #endif

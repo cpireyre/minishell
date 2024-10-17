@@ -134,11 +134,6 @@ static int parse_children(t_command *cmd, t_ast_node *ast, t_list *env, t_arena 
 	size_t i;
 	size_t arg_i;
 
-	cmd->args = arena_calloc(arena, count_cmd_args(ast) + 1, sizeof(char *));
-	if (!cmd->args)
-		return (-1);
-	
-	cmd->args[0] = cmd->path;
 	i = 0;
 	arg_i = 0;
 	while (i < ast->n_children)
@@ -186,10 +181,15 @@ static void	print_cmd(t_command *cmd)
 
 int	make_command(t_command *cmd, t_ast_node *ast, t_list *env, t_arena arena)
 {
+	if (ast->type != AST_COMMAND)
+	{
+		ft_dprintf(2, "Error: Wrong AST type\n");
+		return (-1);
+	}
 	cmd->infile = -1;
 	cmd->outfile = -1;
 	cmd->path = NULL;
-	cmd->args = arena_calloc(arena, count_cmd_args(ast), sizeof(char *));
+	cmd->args = arena_calloc(arena, count_cmd_args(ast) + 1, sizeof(char *));
 	if (!cmd->args)
 		return (-1);
 	if (parse_children(cmd, ast, env, arena) < 0)

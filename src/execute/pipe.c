@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include <unistd.h>
+#include "ast.h"
 #include "minishell.h"
 #include "arena.h"
 
@@ -38,6 +39,14 @@ int	**make_pipes(int n_pipes, t_arena arena)
 	return (pipes);
 }
 
+size_t	calculate_n_pipes(t_ast_node *ast)
+{
+	if (ast->type != AST_PIPELINE)
+		return (0);
+
+	return (calculate_n_pipes(ast->children[1]) + 1);
+}
+
 void	close_pipes(int **pipes, int n_pipes)
 {
 	int	i;
@@ -47,5 +56,6 @@ void	close_pipes(int **pipes, int n_pipes)
 	{
 		close(pipes[i][0]);
 		close(pipes[i][1]);
+		i++;
 	}
 }
