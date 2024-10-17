@@ -1,59 +1,42 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   remove_quotes.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: copireyr <copireyr@student.hive.fi>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/10/17 09:48:17 by copireyr          #+#    #+#             */
+/*   Updated: 2024/10/17 10:05:45 by copireyr         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "ast.h"
 
 char	*remove_quotes_from_str(t_arena arena, const char *str)
 {
-	size_t	i;
-	size_t	size;
 	char	*result;
+	char	*save;
+	char	quote;
 
-	i = 0;
-	size = 0;
-	while (str[i])
-	{
-		if (str[i] == '"')
-		{
-			i++;
-			while (str[i] && str[i] != '"')
-			{
-				size++;
-				i++;
-			}
-		}
-		if (str[i] == '\'')
-		{
-			i++;
-			while (str[i] && str[i] != '\'')
-			{
-				size++;
-				i++;
-			}
-		}
-		size += str[i] != '"' && str[i] != '\'';
-		i++;
-	}
-	result = arena_alloc(arena, size + 1);
+	if (!ft_strchr(str, '"') && !ft_strchr(str, '\''))
+		return (str);
+	result = arena_alloc(arena, ft_strlen(str) + 1);
 	if (!result)
 		return (NULL);
+	save = result;
 	while (*str)
 	{
 		if (*str != '"' && *str != '\'')
-			*result++ = *str;
-		else if (*str == '"')
-		{
-			str++;
-			while (*str && *str != '"')
 			*result++ = *str++;
-		}
-		else if (*str == '\'')
+		else if (*str == '"' || *str == '\'')
 		{
-			str++;
-			while (*str && *str != '\'')
-			*result++ = *str++;
+			quote = *str++;
+			while (*str && *str != quote)
+				*result++ = *str++;
 		}
-		str++;
 	}
 	*result = '\0';
-	return (result - size);
+	return (save);
 }
 
 /* TODO: Check return value for ENOMEM */
