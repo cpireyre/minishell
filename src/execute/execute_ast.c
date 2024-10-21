@@ -87,22 +87,25 @@ static	int	execute_pipeline(t_ast_node *ast, t_list *env, t_arena arena)
 
 static	int	execute_single_command(t_ast_node *ast, t_list *env, t_arena arena)
 {
-	int		wstatus;
-	int		e_status;
-	pid_t	pid;
+	t_command_context	con;
+	int					status;
+	pid_t				*child_pids;
 
-	// pid = fork();
-	// if (pid == 0)
-	// 	execute_cmd(ast, env, arena, NULL);
-	// if (pid == -1)
-	// 	return (1); //error exit?
-	// waitpid(pid, &wstatus, 0);
-	// if (WIFEXITED(wstatus))
-	// 	e_status = WEXITSTATUS(wstatus);
-	// else
-	// 	e_status = EXIT_FAILURE;
-	// return (e_status);
-	return (0);
+	con.ast = ast;
+	con.env = env;
+	con.pipes = NULL;
+	con.cur_child = 0;
+	con.n_children = 1;
+	child_pids = arena_alloc(arena, (con.n_children) * sizeof(pid_t));
+	if (!child_pids)
+		return (-1);
+	child_pids[0] = fork();
+	if (child_pids[0] == 0)
+		execute_cmd(&con, arena);
+	else if (child_pids[0] < 0)
+		return (-1);
+	status = wait_for_children(child_pids, con.n_children);
+	return (status);
 }
 
 static int	execute_cmd(t_command_context *con, t_arena arena)
@@ -114,15 +117,16 @@ static int	execute_cmd(t_command_context *con, t_arena arena)
 		ft_dprintf(2, "Error making command\n");
 		return (1);
 	}
-	if (con->cur_child > 0)
+	if (con->pipes && con->cur_child > 0)
 		cmd.infile = con->pipes[con->cur_child - 1][0];
-	if (con->cur_child != con->n_children - 1)
+	if (con->pipes && con->cur_child != con->n_children - 1)
 		cmd.outfile = con->pipes[con->cur_child][1];
 	if (cmd.infile > -1)
 		dup2(cmd.infile, STDIN_FILENO);
 	if (cmd.outfile > -1)
 		dup2(cmd.outfile, STDOUT_FILENO);
-	close_pipes(con->pipes, con->n_children - 1);
+	if (con->pipes)
+		close_pipes(con->pipes, con->n_children - 1);
 	execve(cmd.path, (char *const *)cmd.args, make_raw_env_array(con->env, arena));
 	perror(NAME);
 	exit(1);
