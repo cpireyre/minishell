@@ -91,17 +91,12 @@ static t_token	token_next(t_arena arena, const char *str)
 static t_token	match_operator(t_arena arena, const char *str, size_t remaining)
 {
 	static const struct s_operator	operators[] = {
-	{"||",	2, TOK_LOGICAL_OR},
-	{">>",	2, TOK_APPEND},
-	{"<<",	2, TOK_HEREDOC},
-	{"&&",	2, TOK_LOGICAL_AND},
-	{">",	1, TOK_REDIRECT_OUT},
-	{"<",	1, TOK_REDIRECT_IN},
+	{">>",	2, TOK_APPEND}, {"<<",	2, TOK_HEREDOC},
+	{"||",	2, TOK_LOGICAL_OR}, {"&&",	2, TOK_LOGICAL_AND},
+	{">",	1, TOK_REDIRECT_OUT}, {"<",	1, TOK_REDIRECT_IN},
 	{"|",	1, TOK_PIPE},
-	{"(",	1, TOK_OPEN_PAREN},
-	{")",	1, TOK_CLOSE_PAREN},
-	{"&",	1, TOK_ERROR},
-	{NULL,	0, TOK_ERROR}
+	{"(",	1, TOK_OPEN_PAREN}, {")",	1, TOK_CLOSE_PAREN},
+	{"&",	1, TOK_ERROR}, {NULL,	0, TOK_ERROR}
 	};
 	int								i;
 
