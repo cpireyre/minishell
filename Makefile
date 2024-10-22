@@ -16,7 +16,7 @@ CC := cc
 CPPFLAGS := -I./include/ -I./libft/include
 LDFLAGS := -lreadline -L./libft/ -lft
 CFLAGS := -Wall -Wextra -MMD -MP -g3
-asan := -fsanitize=address,undefined#,leak
+asan := -fsanitize=address,undefined,leak
 CFLAGS += $(asan)
 LDFLAGS += $(asan)
 NAME := minishell
