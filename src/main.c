@@ -18,11 +18,13 @@ static int	minishell(t_list *env);
 static char	*arena_readline(t_arena arena, const char *prompt);
 void		print_ast(t_ast_node *root, size_t level);
 
+int test_tokenize(void);
 int	main(int argc, char **argv, char **envp)
 {
 	t_list		**env;
 	int			exit_code;
 
+	test_tokenize();
 	if (argc > 1)
 	{
 		ft_dprintf(2, "Usage: %s", argv[0]);

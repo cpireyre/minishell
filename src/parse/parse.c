@@ -27,6 +27,7 @@ t_ast_node	*parse(t_arena arena, char *user_input_line, t_list *env)
 	xs = tokenize(arena, user_input_line);
 	if (xs)
 	{
+		tokenize_show_tokens(xs);
 		ft_bzero(range, sizeof(range));
 		range[1] = count_toks(xs) - 1; // remove end token
 		ast = create_ast(xs, ast, range, arena);

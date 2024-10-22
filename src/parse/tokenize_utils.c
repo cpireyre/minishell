@@ -53,6 +53,7 @@ void	tokenize_show_tokens(t_token *xs)
 	j = 0;
 	while (xs[j].type != TOK_END)
 		tokenize_show(xs[j++]);
+	tokenize_show(xs[j]);
 	ft_printf("\n");
 }
 
@@ -65,4 +66,18 @@ size_t	count_toks(t_token *xs)
 		i++;
 	i++;
 	return (i);
+}
+
+enum e_tok_type	token_get_type(char c)
+{
+	if (c == '<' || c == '>'
+		|| c == '&' || c == '|'
+		|| c == '(' || c == ')')
+		return (TOK_META);
+	else if (ft_isspace(c))
+		return (TOK_TOKENIZE_SPACE);
+	else if (c == '\0')
+		return (TOK_END);
+	else
+		return (TOK_WORD);
 }

@@ -53,6 +53,13 @@ typedef struct s_token
 	size_t			size;
 }	t_token;
 
+typedef struct s_token_vector
+{
+	t_token	*data;
+	int		len;
+	int		capacity;
+}	t_token_vec;
+
 struct s_operator
 {
 	const char         *str;
@@ -65,5 +72,6 @@ void				tokenize_show(t_token token);
 void				tokenize_show_tokens(t_token *xs);
 size_t				count_toks(t_token *xs);
 const char			*ast_show_type(enum e_tok_type type);
+enum 				e_tok_type	token_get_type(char c);
 
 #endif /* TOKENIZE_H */
