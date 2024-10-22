@@ -29,8 +29,7 @@ src := ./src/main.c ./src/environment.c ./src/signals.c
 
 parse := $(addprefix ./src/parse/, ast.c parse.c tokenize.c tokenize_utils.c expand.c glob.c)
 builtins := $(addprefix ./src/builtins/, builtin_env.c builtin_export.c builtin_unset.c)
-tests := ./src/parse/test_tokenize.c
-src += $(parse) $(builtins) $(tests)
+src += $(parse) $(builtins)
 
 obj := $(src:./src/%.c=./obj/%.o)
 lib := ./libft/libft.a
