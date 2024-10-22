@@ -43,8 +43,6 @@ t_token	*tokenize(t_arena arena, const char *str)
 		}
 		else
 		{
-			if (next.type == TOK_END)
-				ft_printf("Adding TOK_END\n");
 			xs = realloc_token_vector_if_needed(arena, xs, &capacity, i);
 			if (!xs)
 				return (NULL);
@@ -54,8 +52,6 @@ t_token	*tokenize(t_arena arena, const char *str)
 			break ;
 		str += next.size;
 	}
-	ft_printf("i = %d\n", i);
-	ft_printf("capacity = %d\n", capacity);
 	return (xs);
 }
 
