@@ -103,7 +103,7 @@ static t_token	token_next(t_arena arena, const char *str)
 
 static t_token	match_operator(t_arena arena, const char *str, size_t remaining)
 {
-	static const struct operator	operators[] = {
+	static const struct s_operator	operators[] = {
 	{"||",	2, TOK_LOGICAL_OR},
 	{">>",	2, TOK_APPEND},
 	{"<<",	2, TOK_HEREDOC},

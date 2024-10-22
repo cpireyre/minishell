@@ -53,7 +53,7 @@ typedef struct s_token
 	size_t			size;
 }	t_token;
 
-struct operator
+struct s_operator
 {
 	const char         *str;
 	size_t            len;
