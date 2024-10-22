@@ -53,6 +53,13 @@ typedef struct s_token
 	size_t			size;
 }	t_token;
 
+struct operator
+{
+	const char         *str;
+	size_t            len;
+	enum e_tok_type   type;
+};
+
 extern t_token		*tokenize(t_arena arena, const char *str);
 void				tokenize_show(t_token token);
 void				tokenize_show_tokens(t_token *xs);
