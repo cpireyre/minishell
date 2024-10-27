@@ -16,43 +16,92 @@
 #include "expand.h"
 #include "ast.h"
 
-static char			*glob_pattern(t_arena arena, const char *str);
-static bool			match(const char *pattern, const char *candidate);
+typedef unsigned short t_quote;
+static bool			match(const t_quote *pattern, const char *candidate);
 static const char	**get_cwd_entries(t_arena arena);
 
-/*TODO: Add return value and check for ENOMEM*/
-void	glob(t_arena arena, t_ast_node *ast)
-{
-	size_t	i;
-	char	*globbed;
+# define QUOTED_BIT (1 << 15)
+# define CHAR_MASK  (0x7F)
 
-	if (!ast)
-		return ;
-	i = 0;
-	while (i < ast->n_children)
+t_quote *quotes_lift(t_arena arena, const char *str)
+{
+	t_quote	*result;
+	int		j;
+	char	current_quote;
+	bool	should_toggle_quote;
+
+	if (!str)
+		return (NULL);
+	result = arena_calloc(arena, ft_strlen(str) + 1, sizeof(*result));
+	if (!result)
+		return (NULL);
+	j = 0;
+	current_quote = 0;
+	while (*str)
 	{
-		if (ast->children[i]->type == AST_WORD)
-		{
-			globbed = glob_pattern(arena, ast->children[i]->token.value);
-			ast->children[i]->token.value = globbed;
-			ast->children[i]->token.size = ft_strlen(globbed);
-		}
-		glob(arena, ast->children[i]);
-		i++;
+		should_toggle_quote = (*str == '\'' || *str == '\"')
+			&& (current_quote == 0 || *str == current_quote);
+		if (should_toggle_quote)
+			current_quote = !current_quote * *str;
+		else
+			result[j++] = *str | (!!current_quote * QUOTED_BIT);
+		str++;
 	}
+	result[j] = '\0';
+	return (result);
 }
 
-static char	*glob_pattern(t_arena arena, const char *str)
+char	*quotes_lower(t_arena arena, const t_quote *str)
 {
-	const char		**entries = get_cwd_entries(arena);
+	char	*result;
+	int		len;
+
+	len = 0;
+	while (str[len++])
+		;
+	result = arena_calloc(arena, len + 1, sizeof(*result));
+	while (result && *str)
+		*result++ = *str++ & CHAR_MASK;
+	*result++ = '\0';
+	return (result - len);
+}
+typedef struct s_ast_vec
+{
+	t_ast_node	**data;
+	size_t		size;
+	size_t		capacity;
+}	t_ast_vec;
+
+t_ast_vec	*ast_push(t_arena arena, t_ast_vec *vec, t_ast_node *node)
+{
+	const size_t	new_capacity = 2 * vec->capacity + 4;
+	t_ast_node		**new_data;
+
+	if (vec->size >= vec->capacity)
+	{
+		new_data = arena_alloc(arena, new_capacity * sizeof(t_ast_node *));
+		if (!new_data)
+			return (NULL);
+		if (vec->data)
+			ft_memcpy(new_data, vec->data, vec->size * sizeof(t_ast_node *));
+		vec->data = new_data;
+		vec->capacity = new_capacity;
+	}
+	vec->data[vec->size++] = node;
+	return (vec);
+}
+
+char	*glob_pattern(t_arena arena, const char **entries, const char *str)
+{
+	const t_quote	*glob_pattern = quotes_lift(arena, str);
 	t_string_vector	vec;
 
-	if (!entries)
+	if (!entries || !glob_pattern)
 		return (NULL);
 	ft_bzero(&vec, sizeof(vec));
 	while (*entries)
 	{
-		if ((str[0] == '.' || **entries != '.') && match(str, *entries))
+		if ((str[0] == '.' || **entries != '.') && match(glob_pattern, *entries))
 		{
 			vec = realloc_maybe(arena, vec);
 			vec.strings[vec.count++] = ft_arena_strndup(
@@ -63,18 +112,42 @@ static char	*glob_pattern(t_arena arena, const char *str)
 		entries++;
 	}
 	if (!vec.count)
-		return ((char *)str);
+		return (quotes_lower(arena, glob_pattern));
 	return (ft_arena_strjoin_with_separator(
 			arena, vec.strings, vec.count, ' '));
 }
 
-static bool	match(const char *pattern, const char *candidate)
+
+/*TODO: Add return value and check for ENOMEM*/
+void	glob(t_arena arena, t_ast_node *ast)
+{
+	const char		**entries = get_cwd_entries(arena);
+	size_t	i;
+	char	*globbed;
+
+	if (!ast || !entries)
+		return ;
+	i = 0;
+	while (i < ast->n_children)
+	{
+		if (ast->children[i]->type == AST_WORD)
+		{
+			globbed = glob_pattern(arena, entries, ast->children[i]->token.value);
+			ast->children[i]->token.value = globbed;
+			ast->children[i]->token.size = ft_strlen(globbed);
+		}
+		glob(arena, ast->children[i]);
+		i++;
+	}
+}
+
+static bool	match(const t_quote *pattern, const char *candidate)
 {
 	if (!*pattern)
 		return (!*candidate);
-	if (*pattern == '*')
+	if ((*pattern & CHAR_MASK) == '*' && !(*pattern & QUOTED_BIT))
 	{
-		while (*pattern == '*')
+		while ((*pattern & CHAR_MASK) == '*' && !(*pattern & QUOTED_BIT))
 			pattern++;
 		if (!*pattern)
 			return (true);
@@ -83,7 +156,7 @@ static bool	match(const char *pattern, const char *candidate)
 				return (true);
 		return (false);
 	}
-	if (*pattern == *candidate)
+	if ((*pattern & CHAR_MASK) == *candidate)
 		return (match(++pattern, ++candidate));
 	return (false);
 }
