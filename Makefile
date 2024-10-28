@@ -13,7 +13,7 @@
 .DEFAULT_GOAL := all
 CC := cc
 
-DEBUG := 1
+DEBUG := 0
 CPPFLAGS := -I./include/ -I./libft/include
 LDFLAGS := -lreadline -L./libft/ -lft
 CFLAGS := -Wall -Wextra -MMD -MP -g
