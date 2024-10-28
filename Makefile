@@ -6,7 +6,7 @@
 #    By: copireyr <copireyr@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/08/27 12:07:56 by copireyr          #+#    #+#              #
-#    Updated: 2024/10/14 10:03:29 by copireyr         ###   ########.fr        #
+#    Updated: 2024/10/28 11:53:13 by pleander         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -27,9 +27,10 @@ endif
 
 src := ./src/main.c ./src/environment.c ./src/signals.c
 
-parse := $(addprefix ./src/parse/, ast.c parse.c tokenize.c tokenize_utils.c expand.c glob.c)
-builtins := $(addprefix ./src/builtins/, builtin_env.c builtin_export.c builtin_unset.c)
-src += $(parse) $(builtins)
+parse := $(addprefix ./src/parse/, ast.c parse.c tokenize.c tokenize_utils.c expand.c)
+builtins := $(addprefix ./src/builtins/, builtins.c builtin_env.c builtin_export.c builtin_unset.c)
+execute := $(addprefix ./src/execute/, execute_ast.c make_command.c pipe.c run_builtin.c)
+src += $(parse) $(builtins) $(execute)
 
 obj := $(src:./src/%.c=./obj/%.o)
 lib := ./libft/libft.a

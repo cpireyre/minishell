@@ -6,13 +6,14 @@
 /*   By: copireyr <copireyr@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/27 12:08:02 by copireyr          #+#    #+#             */
-/*   Updated: 2024/10/14 10:28:55 by copireyr         ###   ########.fr       */
+/*   Updated: 2024/10/28 11:54:14 by pleander         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <sysexits.h>
 #include <errno.h>
 #include "minishell.h"
+#include "execute.h"
 
 static int	minishell(t_list *env);
 static char	*arena_readline(t_arena arena, const char *prompt);
@@ -62,6 +63,7 @@ static int	minishell(t_list *env)
 			ast = parse(arena, user_input_line, env);
 			ft_printf("\n");
 			print_ast(ast, 0);
+			execute_ast(ast, env, arena);
 		}
 		arena_dispose(&arena);
 	}

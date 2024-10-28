@@ -6,7 +6,7 @@
 /*   By: copireyr <copireyr@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 11:57:35 by copireyr          #+#    #+#             */
-/*   Updated: 2024/10/12 16:22:43 by copireyr         ###   ########.fr       */
+/*   Updated: 2024/10/28 11:54:49 by pleander         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,11 +78,7 @@ void	print_ast(t_ast_node *root, size_t level)
 	pad = 0;
 	while (pad++ < level * 2)
 		ft_printf(" ");
-	ft_printf("%s ", get_ast_type(root->type));
-	ft_printf("[%s (", ast_show_type(root->token.type));
-	i = 0;
-	ft_printf("%s", root->token.value);
-	ft_printf(")]\n");
+	ft_printf("%s [%s (%s)]\n", get_ast_type(root->type), ast_show_type(root->token.type), root->token.value);
 	level++;
 	i = 0;
 	while (i < root->n_children)
