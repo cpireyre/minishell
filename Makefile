@@ -13,9 +13,10 @@
 .DEFAULT_GOAL := all
 CC := cc
 
+DEBUG := 1
 CPPFLAGS := -I./include/ -I./libft/include
 LDFLAGS := -lreadline -L./libft/ -lft
-CFLAGS := -Wall -Wextra -MMD -MP -g3
+CFLAGS := -Wall -Wextra -MMD -MP -g
 asan := -fsanitize=address,undefined,leak
 CFLAGS += $(asan)
 LDFLAGS += $(asan)
@@ -37,7 +38,7 @@ lib := ./libft/libft.a
 
 ./obj/%.o: ./src/%.c
 	@mkdir -p $(@D)
-	$(CC) $(CPPFLAGS) $(CFLAGS) -c $< -o $@
+	$(CC) -D DEBUG=$(DEBUG) $(CPPFLAGS) $(CFLAGS) -c $< -o $@
 
 $(lib):
 	make -j4 -C ./libft/

@@ -62,7 +62,8 @@ static int	minishell(t_list *env)
 			add_history(user_input_line);
 			ast = parse(arena, user_input_line, env);
 			ft_printf("\n");
-			print_ast(ast, 0);
+			if (DEBUG)
+				print_ast(ast, 0);
 			execute_ast(ast, env, arena);
 		}
 		arena_dispose(&arena);

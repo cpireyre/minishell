@@ -20,6 +20,10 @@
 # include "libft.h"
 # include "ast.h"
 
+# ifndef DEBUG
+#  define DEBUG 0
+# endif
+
 # define NAME "minishell"
 # define MINISHELL_PROMPT "λ> "
 # define TRUE 1

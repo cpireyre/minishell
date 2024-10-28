@@ -19,8 +19,10 @@ typedef struct s_command
 {
 	char	*path;
 	char	**args;
-	int		infile;
-	int		outfile;
+	char	*infile;
+	char	*outfile;
+	int		infile_fd;
+	int		outfile_fd;
 
 }	t_command;
 

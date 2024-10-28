@@ -96,9 +96,10 @@ int handle_redir(t_command *cmd, t_ast_node *ast)
 		return (-1);
 	if (ast->token.type == TOK_REDIRECT_IN)
 	{
-		close_fd_if_open(&cmd->infile);
-		cmd->infile = open(ast->children[0]->token.value, O_RDONLY);
-		if (cmd->infile < 0)
+		close_fd_if_open(&cmd->infile_fd);
+		cmd->infile = (char *)ast->children[0]->token.value;
+		cmd->infile_fd = open(ast->children[0]->token.value, O_RDONLY);
+		if (cmd->infile_fd < 0)
 		{
 			perror(NAME);
 			return (-1);
@@ -106,9 +107,10 @@ int handle_redir(t_command *cmd, t_ast_node *ast)
 	}
 	else if (ast->token.type == TOK_REDIRECT_OUT)
 	{
-		close_fd_if_open(&cmd->infile);
-		cmd->outfile = open(ast->children[0]->token.value, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-		if (cmd->outfile < 0)
+		close_fd_if_open(&cmd->infile_fd);
+		cmd->outfile = (char *)ast->children[0]->token.value;
+		cmd->outfile_fd = open(ast->children[0]->token.value, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+		if (cmd->outfile_fd < 0)
 		{
 			perror(NAME);
 			return (-1);
@@ -116,11 +118,11 @@ int handle_redir(t_command *cmd, t_ast_node *ast)
 	}
 	else if (ast->token.type == TOK_APPEND)
 	{
-		close_fd_if_open(&cmd->infile);
-		cmd->outfile = open(ast->children[0]->token.value, O_WRONLY | O_CREAT, 0644);
+		close_fd_if_open(&cmd->infile_fd);
+		cmd->outfile_fd = open(ast->children[0]->token.value, O_WRONLY | O_CREAT, 0644);
 		{
 			perror(NAME);
-			if (cmd->outfile < 0)
+			if (cmd->outfile_fd < 0)
 				return (-1);
 		}
 	}
@@ -164,24 +166,6 @@ static int parse_children(t_command *cmd, t_ast_node *ast, t_list *env, t_arena 
 	return (0);
 }
 
-static void	print_cmd(t_command *cmd)
-{
-	size_t i;
-
-	ft_printf("Command: %s\nArgs: ", cmd->path);
-	i = 0;
-	while (cmd->args[i])
-	{
-		ft_printf("%s, ", cmd->args[i]);
-		i++;
-	}
-	ft_printf("\n");
-	if (cmd->infile > -1)
-		ft_printf("Infile opened on fd: %d\n", cmd->infile);
-	if (cmd->outfile > -1)
-		ft_printf("Outfile opened on fd: %d\n", cmd->outfile);
-}
-
 int	make_command(t_command *cmd, t_ast_node *ast, t_list *env, t_arena arena)
 {
 	if (ast->type != AST_COMMAND)
@@ -189,15 +173,16 @@ int	make_command(t_command *cmd, t_ast_node *ast, t_list *env, t_arena arena)
 		ft_dprintf(2, "Error: Wrong AST type\n");
 		return (-1);
 	}
-	cmd->infile = -1;
-	cmd->outfile = -1;
+	cmd->infile_fd = -1;
+	cmd->outfile_fd = -1;
 	cmd->path = NULL;
+	cmd->infile = NULL;
+	cmd->outfile = NULL;
 	cmd->args = arena_calloc(arena, count_cmd_args(ast) + 1, sizeof(char *));
 	if (!cmd->args)
 		return (-1);
 	if (parse_children(cmd, ast, env, arena) < 0)
 		return (-1);
-	print_cmd(cmd);
 	// TODO
 	// Read heredoc
 	return (0);

@@ -107,6 +107,24 @@ static	int	execute_single_command(t_ast_node *ast, t_list *env, t_arena arena)
 	return (status);
 }
 
+static void	print_command(t_command *cmd)
+{
+	int	i;
+
+	ft_dprintf(2, "[%s]:", cmd->path);
+	i = 0;
+	while (cmd->args && cmd->args[i])
+	{
+		ft_dprintf(2, " (%d: %s)", i, cmd->args[i]);
+		i++;
+	}
+	if (cmd->infile)
+		ft_dprintf(2, " (< %s)", cmd->infile);
+	if (cmd->outfile)
+		ft_dprintf(2, " (> %s)", cmd->outfile);
+	ft_dprintf(2, "\n");
+}
+
 static int	execute_cmd(t_command_context *con, t_arena arena)
 {
 	t_command	cmd;	
@@ -117,15 +135,17 @@ static int	execute_cmd(t_command_context *con, t_arena arena)
 		return (1);
 	}
 	if (con->pipes && con->cur_child > 0)
-		cmd.infile = con->pipes[con->cur_child - 1][0];
+		cmd.infile_fd = con->pipes[con->cur_child - 1][0];
 	if (con->pipes && con->cur_child != con->n_children - 1)
-		cmd.outfile = con->pipes[con->cur_child][1];
-	if (cmd.infile > -1)
-		dup2(cmd.infile, STDIN_FILENO);
-	if (cmd.outfile > -1)
-		dup2(cmd.outfile, STDOUT_FILENO);
+		cmd.outfile_fd = con->pipes[con->cur_child][1];
+	if (cmd.infile_fd > -1)
+		dup2(cmd.infile_fd, STDIN_FILENO);
+	if (cmd.outfile_fd > -1)
+		dup2(cmd.outfile_fd, STDOUT_FILENO);
 	if (con->pipes)
 		close_pipes(con->pipes, con->n_children - 1);
+	if (DEBUG)
+		print_command(&cmd);
 	if (is_builtin(cmd.path))
 		run_builtin(cmd.path, cmd.args, &con->env);
 	execve(cmd.path, (char **)cmd.args, make_raw_env_array(con->env, arena));
