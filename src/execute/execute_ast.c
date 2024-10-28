@@ -17,11 +17,13 @@
 #include "ast.h"
 #include "execute.h"
 #include "minishell.h"
+#include "tokenize.h"
 
 static int	execute_cmd(t_command_context *con, t_arena arena);
 static int	wait_for_children(int *pid, size_t n_forks);
 static	int	execute_single_command(t_ast_node *ast, t_list *env, t_arena arena);
 static	int	execute_pipeline(t_ast_node *ast, t_list *env, t_arena arena);
+static int	execute_logicals(t_ast_node *ast, t_list *env, t_arena arena);
 
 /**
  * @brief Executes the AST and returns the exit code
@@ -38,10 +40,7 @@ int	execute_ast(t_ast_node *ast, t_list	*env, t_arena arena)
 	else if (ast->type == AST_PIPELINE)
 		status = execute_pipeline(ast, env, arena);
 	else if (ast->type == AST_LOGICAL)
-	{
-		ft_dprintf(2, "Error: Logical operators are not yet supported\n");
-		status = 0;	
-	}
+		status = execute_logicals(ast, env, arena);
 	else
 	{
 		status = 1;
@@ -50,7 +49,37 @@ int	execute_ast(t_ast_node *ast, t_list	*env, t_arena arena)
 	return (status);
 }
 
-static	int	execute_pipeline(t_ast_node *ast, t_list *env, t_arena arena)
+static int	execute_logicals(t_ast_node *ast, t_list *env, t_arena arena)
+{
+	t_ast_node	*cur;
+	int	s;
+	
+	cur = ast;
+	s = execute_ast(cur->children[0], env, arena);
+	while (cur->type == AST_LOGICAL)
+	{
+		if (cur->token.type == TOK_LOGICAL_AND)
+		{
+			if (cur->children[1]->type == AST_LOGICAL)
+				s = !((s == 0) && (execute_ast(cur->children[1]->children[0], env, arena) == 0));
+			else
+				s = !((s == 0) && (execute_ast(cur->children[1], env, arena) == 0));
+		}
+		if (cur->token.type == TOK_LOGICAL_OR)
+		{
+			if (cur->children[1]->type == AST_LOGICAL)
+				s = !((s == 0) || (execute_ast(cur->children[1]->children[0], env, arena) == 0));
+			else
+				s = !((s == 0) || (execute_ast(cur->children[1], env, arena) == 0));
+		}
+		if (!s)
+			break ;
+		cur = cur->children[1];
+	}
+	return (s);
+}
+
+static int	execute_pipeline(t_ast_node *ast, t_list *env, t_arena arena)
 {
 	t_command_context	con;
 	pid_t	*child_pids;
