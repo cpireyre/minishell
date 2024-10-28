@@ -6,7 +6,7 @@
 /*   By: pleander <pleander@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 11:09:05 by pleander          #+#    #+#             */
-/*   Updated: 2024/10/10 17:22:46 by pleander         ###   ########.fr       */
+/*   Updated: 2024/10/28 10:50:21 by pleander         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,17 +61,20 @@ static char	*find_path(const char *command, t_list *env, t_arena arena)
 	char	*path;
 	char	*exec_path;
 
-	exec_path = get_env("PATH", &env);
-	while (exec_path)
+	if (!is_builtin(command))
 	{
-		if (*exec_path == ':')
-			exec_path++;
-		path = build_path(exec_path, command, arena);
-		if (!path)
-			return (NULL);
-		if (access(path, F_OK) == 0)
-			return (path);
-		exec_path = ft_strchr(exec_path, ':');
+		exec_path = get_env("PATH", &env);
+		while (exec_path)
+		{
+			if (*exec_path == ':')
+				exec_path++;
+			path = build_path(exec_path, command, arena);
+			if (!path)
+				return (NULL);
+			if (access(path, F_OK) == 0)
+				return (path);
+			exec_path = ft_strchr(exec_path, ':');
+		}
 	}
 	path = ft_arena_strndup(arena, command, ft_strlen(command) + 1);
 	if (!path)
@@ -148,7 +151,7 @@ static int parse_children(t_command *cmd, t_ast_node *ast, t_list *env, t_arena 
 				cmd->args[arg_i] = cmd->path;
 			}
 			else
-				cmd->args[arg_i] = ast->children[i]->token.value;
+				cmd->args[arg_i] = (char *)ast->children[i]->token.value;
 			arg_i++;
 		}
 		else if (ast->children[i]->type == AST_REDIR)

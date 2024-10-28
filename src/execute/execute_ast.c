@@ -6,7 +6,7 @@
 /*   By: pleander <pleander@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/08 20:51:52 by pleander          #+#    #+#             */
-/*   Updated: 2024/10/10 14:18:31 by pleander         ###   ########.fr       */
+/*   Updated: 2024/10/28 10:49:26 by pleander         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,7 +127,9 @@ static int	execute_cmd(t_command_context *con, t_arena arena)
 		dup2(cmd.outfile, STDOUT_FILENO);
 	if (con->pipes)
 		close_pipes(con->pipes, con->n_children - 1);
-	execve(cmd.path, (char *const *)cmd.args, make_raw_env_array(con->env, arena));
+	if (is_builtin(cmd.path))
+		run_builtin(cmd.path, cmd.args, &con->env);
+	execve(cmd.path, (char **)cmd.args, make_raw_env_array(con->env, arena));
 	perror(NAME);
 	exit(1);
 }

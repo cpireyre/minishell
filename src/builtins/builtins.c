@@ -1,32 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   builtin_env.c                                      :+:      :+:    :+:   */
+/*   builtins.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: pleander <pleander@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/09/03 15:17:24 by pleander          #+#    #+#             */
-/*   Updated: 2024/10/28 10:32:53 by pleander         ###   ########.fr       */
+/*   Created: 2024/10/28 09:32:16 by pleander          #+#    #+#             */
+/*   Updated: 2024/10/28 09:58:43 by pleander         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
-#include "minishell.h"
 
-int	printenv(t_list **env)
+size_t	is_builtin(const char *name)
 {
-	t_list	*tmp;
-
-	tmp = *env;
-	if (!env)
+	if (ft_streq(name, "env") || ft_streq(name, "export") || ft_streq(name, "unset"))
 		return (1);
-	while (tmp)
-	{
-		if ((tmp)->next)
-			ft_printf("%s\n", (char *)(tmp)->content);
-		else
-			ft_printf("%s%s\n", (char *)(tmp)->content, ANSI_RESET);
-		tmp = (tmp)->next;
-	}
 	return (0);
 }

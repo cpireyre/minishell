@@ -6,7 +6,7 @@
 /*   By: copireyr <copireyr@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/27 12:29:36 by copireyr          #+#    #+#             */
-/*   Updated: 2024/10/10 14:01:12 by pleander         ###   ########.fr       */
+/*   Updated: 2024/10/28 09:58:58 by pleander         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,25 +27,6 @@
 # define ANSI_RESET "\x1B[0m"
 
 typedef uint8_t	t_bool;
-
-// typedef struct s_command
-// {
-// 	size_t	i;
-// 	char	*path;
-// 	char	**args;
-// 	char	*infile;
-// 	char	*outfile;
-// 	char	*hdoc_delim;
-// 	t_bool	*of_append;
-// 	int		exit_code;
-// }	t_command;
-//
-// typedef struct s_pipeline
-// {
-// 	t_command	*cmds;
-// 	size_t		n_cmds;
-// }	t_pipeline;
-
 
 typedef struct s_children
 {
@@ -68,10 +49,9 @@ int		set_env(char *var, char *val, t_list **env);
 char	**make_raw_env_array(t_list *env, t_arena arena);
 int		**create_pipes(size_t n_pipes);
 void	delete_pipes(int **pipes);
-//int		pipeline(t_pipeline *pipeline, char **env);
-//void	spawn_child(t_command *cmd, int **pipes, char **env);
 t_list	*get_env_list_location(char *var, t_list **env);
 void	unset(char *var, t_list **env);
+size_t	is_builtin(const char *name);
 
 int		set_signal_handler(void);
 

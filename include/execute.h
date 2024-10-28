@@ -6,7 +6,7 @@
 /*   By: pleander <pleander@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 11:03:23 by pleander          #+#    #+#             */
-/*   Updated: 2024/10/10 14:05:19 by pleander         ###   ########.fr       */
+/*   Updated: 2024/10/28 10:47:47 by pleander         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 typedef struct s_command
 {
 	char	*path;
-	const char	**args;
+	char	**args;
 	int		infile;
 	int		outfile;
 
@@ -38,5 +38,6 @@ int		make_command(t_command *cmd, t_ast_node *ast, t_list *env, t_arena arena);
 int		**make_pipes(int n_pipes, t_arena arena);
 void	close_pipes(int **pipes, int n_pipes);
 size_t	calculate_n_pipes(t_ast_node *ast);
+void	run_builtin(char *builtin, char **args, t_list **env);
 
 #endif
