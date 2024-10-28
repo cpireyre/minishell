@@ -6,60 +6,57 @@
 /*   By: copireyr <copireyr@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/26 14:51:54 by copireyr          #+#    #+#             */
-/*   Updated: 2024/10/07 18:55:18 by copireyr         ###   ########.fr       */
+/*   Updated: 2024/10/14 10:27:41 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "tokenize.h"
 
-static enum e_tok_type	token_get_type(char c);
-static t_token			*realloc_token_vector_if_needed(t_arena arena,
-							t_token *xs, size_t *capacity, size_t count);
-static enum e_tok_type	get_operator(t_token token);
-static t_token	token_next(t_arena arena, const char *str);
+static bool				get_operators(
+							t_arena arena, t_token input, t_token_vec *vec);
+static t_token			token_next(t_arena arena, const char *str);
+static bool				token_vec_grow(t_arena arena, t_token_vec *vec);
 
 t_token	*tokenize(t_arena arena, const char *str)
 {
-	t_token			*xs;
-	const char		*ptr = str;
-	const long		len = ft_strlen(str);
-	size_t			i;
-	size_t			capacity;
+	t_token_vec		vec;
+	t_token			next;
 
-	i = 0;
-	capacity = 0;
-	xs = NULL;
-	while (str - ptr <= len && i < INT_MAX)
+	ft_bzero(&vec, sizeof(vec));
+	while (1)
 	{
-		xs = realloc_token_vector_if_needed(arena, xs, &capacity, i);
-		if (!xs)
-			return (NULL);
 		while (ft_isspace(*str))
 			str++;
-		xs[i] = token_next(arena, str);
-		if (xs[i].type == TOK_META)
-			xs[i].type = get_operator(xs[i]);
-		str += xs[i].size;
-		if (xs[i++].type == TOK_END)
+		next = token_next(arena, str);
+		if (next.type == TOK_META)
+			get_operators(arena, next, &vec);
+		else
+		{
+			if (!token_vec_grow(arena, &vec))
+				return (NULL);
+			vec.data[vec.len++] = next;
+		}
+		if (next.type == TOK_END)
 			break ;
+		str += next.size;
 	}
-	return (xs);
+	return (vec.data);
 }
 
-static t_token	*realloc_token_vector_if_needed(t_arena arena, t_token *xs,
-		size_t *capacity, size_t count)
+static bool	token_vec_grow(t_arena arena, t_token_vec *vec)
 {
 	t_token		*tmp;
 
-	if (count < *capacity)
-		return (xs);
-	*capacity = 2 * *capacity + 1;
-	tmp = arena_alloc(arena, sizeof(t_token) * *capacity);
+	if (vec->len < vec->capacity)
+		return (true);
+	vec->capacity = 2 * vec->capacity + 1;
+	tmp = arena_alloc(arena, sizeof(t_token) * vec->capacity);
 	if (!tmp)
-		return (NULL);
-	if (xs)
-		ft_memcpy(tmp, xs, sizeof(*xs) * count);
-	return (tmp);
+		return (false);
+	if (vec->data)
+		ft_memcpy(tmp, vec->data, sizeof(t_token) * vec->len);
+	vec->data = tmp;
+	return (true);
 }
 
 static t_token	token_next(t_arena arena, const char *str)
@@ -87,46 +84,51 @@ static t_token	token_next(t_arena arena, const char *str)
 	result.size = str - result.value;
 	result.value = ft_arena_strndup(arena, result.value, result.size);
 	if (!result.value)
-	    result.type = TOK_ERROR;
+		result.type = TOK_ERROR;
 	return (result);
 }
 
-static enum e_tok_type	get_operator(t_token token)
+static t_token	match_operator(t_arena arena, const char *str, size_t remaining)
 {
-	if (token.type != TOK_META)
-		return (token.type);
-	else if (token.size == 2 && !ft_memcmp(token.value, ">>", 2))
-		return (TOK_APPEND);
-	else if (token.size == 2 && !ft_memcmp(token.value, "<<", 2))
-		return (TOK_HEREDOC);
-	else if (token.size == 2 && !ft_memcmp(token.value, "||", 2))
-		return (TOK_LOGICAL_OR);
-	else if (token.size == 2 && !ft_memcmp(token.value, "&&", 2))
-		return (TOK_LOGICAL_AND);
-	else if (token.size == 1 && !ft_memcmp(token.value, ">", 1))
-		return (TOK_REDIRECT_OUT);
-	else if (token.size == 1 && !ft_memcmp(token.value, "<", 1))
-		return (TOK_REDIRECT_IN);
-	else if (token.size == 1 && !ft_memcmp(token.value, "|", 1))
-		return (TOK_PIPE);
-	else if (token.size == 1 && !ft_memcmp(token.value, "(", 1))
-		return (TOK_OPEN_PAREN);
-	else if (token.size == 1 && !ft_memcmp(token.value, ")", 1))
-		return (TOK_CLOSE_PAREN);
-	else
-		return (TOK_ERROR);
+	static const struct s_operator	operators[] = {
+	{">>",	2, TOK_APPEND}, {"<<",	2, TOK_HEREDOC},
+	{"||",	2, TOK_LOGICAL_OR}, {"&&",	2, TOK_LOGICAL_AND},
+	{">",	1, TOK_REDIRECT_OUT}, {"<",	1, TOK_REDIRECT_IN},
+	{"|",	1, TOK_PIPE},
+	{"(",	1, TOK_OPEN_PAREN}, {")",	1, TOK_CLOSE_PAREN},
+	{"&",	1, TOK_ERROR}, {NULL,	0, TOK_ERROR}
+	};
+	int								i;
+
+	i = 0;
+	while (operators[i].str)
+	{
+		if (remaining >= operators[i].len
+			&& !ft_strncmp(str, operators[i].str, operators[i].len))
+			return ((t_token){
+				.value = ft_arena_strndup(arena, str, operators[i].len),
+				.size = operators[i].len, .type = operators[i].type});
+		i++;
+	}
+	return ((t_token){.type = TOK_ERROR});
 }
 
-static enum e_tok_type	token_get_type(char c)
+static bool	get_operators(t_arena arena, t_token input, t_token_vec *vec)
 {
-	if (c == '<' || c == '>'
-		|| c == '&' || c == '|'
-		|| c == '(' || c == ')')
-		return (TOK_META);
-	else if (ft_isspace(c))
-		return (TOK_TOKENIZE_SPACE);
-	else if (c == '\0')
-		return (TOK_END);
-	else
-		return (TOK_WORD);
+	const char	*str;
+	size_t		remaining;
+	t_token		tok;
+
+	str = input.value;
+	remaining = input.size;
+	while (remaining > 0)
+	{
+		if (!token_vec_grow(arena, vec))
+			return (false);
+		tok = match_operator(arena, str, remaining);
+		vec->data[vec->len++] = tok;
+		str += tok.size;
+		remaining -= tok.size;
+	}
+	return (true);
 }

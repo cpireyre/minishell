@@ -1,25 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strlen.c                                        :+:      :+:    :+:   */
+/*   expand.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: copireyr <copireyr@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/04/15 12:27:07 by copireyr          #+#    #+#             */
-/*   Updated: 2024/10/14 10:26:24 by copireyr         ###   ########.fr       */
+/*   Created: 2024/10/11 10:03:17 by copireyr          #+#    #+#             */
+/*   Updated: 2024/10/14 10:24:51 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stddef.h>
+#ifndef EXPAND_H
+# define EXPAND_H
 
-size_t	ft_strlen(const char *s)
+# include "libft.h"
+# include "ast.h"
+
+typedef struct s_string_vector
 {
-	size_t	i;
+	char	**strings;
+	int		count;
+	int		capacity;
+}	t_string_vector;
 
-	if (!s)
-		return (0);
-	i = 0;
-	while (s[i])
-		i++;
-	return (i);
-}
+extern void				expand(t_ast_node *ast, t_arena arena, t_list *env);
+extern t_string_vector	realloc_maybe(t_arena arena, t_string_vector vec);
+
+#endif /* EXPAND_H */

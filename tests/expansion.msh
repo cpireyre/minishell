@@ -1,0 +1,26 @@
+echo $HOME
+echo $USER$SHELL
+echo "$HOME"
+echo '$HOME'
+echo "'$HOME'"
+echo '"$HOME"'
+echo ''''$HOME"$USER"""""'$SHLVL'"'$HOME'"
+echo "$USER"_dir
+echo $USER"_dir"
+echo '$USER'_dir
+echo $USER $HOME $SHELL
+echo "$USER $HOME $SHELL"
+$SHELL -c 'echo Hello'
+"$SHELL" -c 'echo Hello'
+echo Hello > $USER.txt
+echo Hello > "$USER".txt
+echo $UNDEFINED_VARIABLE
+echo hello$USER
+echo "hello$USER"
+EMPTY=""
+echo $EMPTY
+echo "$EMPTY"
+echo $EMPTY$USER
+echo $SPACE_VAR
+echo "$SPACE_VAR"
+exit

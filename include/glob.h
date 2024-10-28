@@ -1,25 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strlen.c                                        :+:      :+:    :+:   */
+/*   glob.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: copireyr <copireyr@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/04/15 12:27:07 by copireyr          #+#    #+#             */
-/*   Updated: 2024/10/14 10:26:24 by copireyr         ###   ########.fr       */
+/*   Created: 2024/10/10 20:08:57 by copireyr          #+#    #+#             */
+/*   Updated: 2024/10/14 10:00:11 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stddef.h>
+#ifndef GLOB_H
+# define GLOB_H
 
-size_t	ft_strlen(const char *s)
-{
-	size_t	i;
+extern void	glob(t_arena arena, t_ast_node *ast);
 
-	if (!s)
-		return (0);
-	i = 0;
-	while (s[i])
-		i++;
-	return (i);
-}
+#endif /* GLOB_H */

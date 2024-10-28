@@ -6,12 +6,14 @@
 /*   By: copireyr <copireyr@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 11:57:35 by copireyr          #+#    #+#             */
-/*   Updated: 2024/10/04 15:13:55 by copireyr         ###   ########.fr       */
+/*   Updated: 2024/10/28 11:54:49 by pleander         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 #include "ast.h"
+#include "glob.h"
+#include "expand.h"
 
 static char	*get_ast_type(enum e_ast_type t);
 
@@ -25,10 +27,12 @@ t_ast_node	*parse(t_arena arena, char *user_input_line, t_list *env)
 	xs = tokenize(arena, user_input_line);
 	if (xs)
 	{
+		tokenize_show_tokens(xs);
 		ft_bzero(range, sizeof(range));
 		range[1] = count_toks(xs) - 1; // remove end token
 		ast = create_ast(xs, ast, range, arena);
 		expand(ast, arena, env);
+		glob(arena, ast);
 	}
 	return (ast);
 }
