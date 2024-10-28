@@ -6,7 +6,7 @@
 /*   By: pleander <pleander@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/08 20:51:52 by pleander          #+#    #+#             */
-/*   Updated: 2024/10/28 10:49:26 by pleander         ###   ########.fr       */
+/*   Updated: 2024/10/28 11:49:38 by pleander         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,9 +39,8 @@ int	execute_ast(t_ast_node *ast, t_list	*env, t_arena arena)
 		status = execute_pipeline(ast, env, arena);
 	else if (ast->type == AST_LOGICAL)
 	{
-		//fork()
-		//execute_ast(ast->children[cur_child], env, arena, NULL);
-		status = 0;
+		ft_dprintf(2, "Error: Logical operators are not yet supported\n");
+		status = 0;	
 	}
 	else
 	{
