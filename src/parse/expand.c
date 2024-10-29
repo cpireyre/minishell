@@ -85,9 +85,9 @@ static char *get_exit_code_as_cstr(t_arena arena, int exit_code)
 	if (!code)
 		return (NULL);
 	ret = ft_arena_strndup(arena, code, ft_strlen(code) + 1);
+	free(code);
 	if (!ret)
 		return (NULL);
-	free(code);
 	return (ret);
 }
 
