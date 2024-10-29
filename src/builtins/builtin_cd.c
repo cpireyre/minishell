@@ -1,22 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   builtins.c                                         :+:      :+:    :+:   */
+/*   builtin_cd.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: pleander <pleander@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/28 09:32:16 by pleander          #+#    #+#             */
-/*   Updated: 2024/10/29 13:35:52 by pleander         ###   ########.fr       */
+/*   Created: 2024/10/29 13:28:45 by pleander          #+#    #+#             */
+/*   Updated: 2024/10/29 13:38:42 by pleander         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
+#include <unistd.h>
 
-size_t	is_builtin(const char *name)
+int	cd(char	*path)
 {
-	if (ft_streq(name, "env") || ft_streq(name, "export") 
-		|| ft_streq(name, "unset") || ft_streq(name, "pwd")
-		|| ft_streq(name, "cd"))
-		return (1);
-	return (0);
+	int ret;
+
+	ft_printf("Attempting to cd to %s\n", path);
+	ret = chdir(path);
+	return (ret);
 }

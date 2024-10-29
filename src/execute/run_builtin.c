@@ -6,7 +6,7 @@
 /*   By: pleander <pleander@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/28 10:14:24 by pleander          #+#    #+#             */
-/*   Updated: 2024/10/29 12:44:53 by pleander         ###   ########.fr       */
+/*   Updated: 2024/10/29 13:39:02 by pleander         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,16 @@ static	void run_builtin_unset(char	**args, t_list **env)
 	exit(0);
 }
 
+static void	run_builtin_cd(char **args)
+{
+	int ret;
+
+	ret = cd(args[1]);
+	if (ret)
+		perror(NAME);
+	exit(ret);
+}
+
 void	run_builtin(char *builtin, char **args, t_list **env)
 {
 	if (ft_streq(builtin, "env"))
@@ -60,6 +70,8 @@ void	run_builtin(char *builtin, char **args, t_list **env)
 		run_builtin_unset(args, env);
 	if (ft_streq(builtin, "pwd"))
 		run_builtin_pwd();
+	if (ft_streq(builtin, "cd"))
+		run_builtin_cd(args);
 	ft_dprintf(2, "%s", "Error: No such builtin");
 	exit(1);
 }
