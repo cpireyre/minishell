@@ -6,7 +6,7 @@
 /*   By: copireyr <copireyr@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/27 12:29:36 by copireyr          #+#    #+#             */
-/*   Updated: 2024/10/28 09:58:58 by pleander         ###   ########.fr       */
+/*   Updated: 2024/10/29 12:44:01 by pleander         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,7 @@ int		**create_pipes(size_t n_pipes);
 void	delete_pipes(int **pipes);
 t_list	*get_env_list_location(char *var, t_list **env);
 void	unset(char *var, t_list **env);
+int		pwd();
 size_t	is_builtin(const char *name);
 
 int		set_signal_handler(void);

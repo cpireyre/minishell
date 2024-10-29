@@ -6,12 +6,20 @@
 /*   By: pleander <pleander@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/28 10:14:24 by pleander          #+#    #+#             */
-/*   Updated: 2024/10/28 10:48:57 by pleander         ###   ########.fr       */
+/*   Updated: 2024/10/29 12:44:53 by pleander         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 #include "minishell.h"
+
+static void run_builtin_pwd()
+{
+	int	ret;
+
+	ret = pwd();
+	exit(ret);
+}
 
 static void	run_builtin_env(t_list **env)
 {
@@ -50,6 +58,8 @@ void	run_builtin(char *builtin, char **args, t_list **env)
 		run_builtin_export(args, env);
 	if (ft_streq(builtin, "unset"))
 		run_builtin_unset(args, env);
+	if (ft_streq(builtin, "pwd"))
+		run_builtin_pwd();
 	ft_dprintf(2, "%s", "Error: No such builtin");
 	exit(1);
 }
