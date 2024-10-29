@@ -6,38 +6,38 @@
 /*   By: pleander <pleander@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/28 10:14:24 by pleander          #+#    #+#             */
-/*   Updated: 2024/10/29 13:39:02 by pleander         ###   ########.fr       */
+/*   Updated: 2024/10/29 15:36:33 by pleander         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 #include "minishell.h"
 
-static void run_builtin_pwd()
+static int run_builtin_pwd()
 {
 	int	ret;
 
 	ret = pwd();
-	exit(ret);
+	return (ret);
 }
 
-static void	run_builtin_env(t_list **env)
+static int	run_builtin_env(t_list **env)
 {
 	int ret;
 
 	ret = printenv(env);
-	exit(ret);
+	return (ret);
 }
 
-static void	run_builtin_export(char **args, t_list **env)
+static int	run_builtin_export(char **args, t_list **env)
 {
 	int ret;
 
 	ret = export(args[0], env); // Should we check that there's only one argument?
-	exit(ret);
+	return (ret);
 }
 
-static	void run_builtin_unset(char	**args, t_list **env)
+static	int run_builtin_unset(char	**args, t_list **env)
 {
 	size_t	i;
 	
@@ -47,31 +47,31 @@ static	void run_builtin_unset(char	**args, t_list **env)
 		unset(args[i], env); // can it fail?
 		i++;
 	}
-	exit(0);
+	return (0);
 }
 
-static void	run_builtin_cd(char **args)
+static int	run_builtin_cd(char **args)
 {
 	int ret;
 
 	ret = cd(args[1]);
 	if (ret)
 		perror(NAME);
-	exit(ret);
+	return (ret);
 }
 
-void	run_builtin(char *builtin, char **args, t_list **env)
+int	run_builtin(char *builtin, char **args, t_list **env)
 {
 	if (ft_streq(builtin, "env"))
-		run_builtin_env(env);
+		return (run_builtin_env(env));
 	if (ft_streq(builtin, "export"))
-		run_builtin_export(args, env);
+		return(run_builtin_export(args, env));
 	if (ft_streq(builtin, "unset"))
-		run_builtin_unset(args, env);
+		return(run_builtin_unset(args, env));
 	if (ft_streq(builtin, "pwd"))
-		run_builtin_pwd();
+		return(run_builtin_pwd());
 	if (ft_streq(builtin, "cd"))
-		run_builtin_cd(args);
+		return(run_builtin_cd(args));
 	ft_dprintf(2, "%s", "Error: No such builtin");
-	exit(1);
+	return (1);
 }
