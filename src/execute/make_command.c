@@ -210,7 +210,5 @@ int	make_command(t_command *cmd, t_ast_node *ast, t_list *env, t_arena arena)
 		return (-1);
 	if (parse_children(cmd, ast, env, arena) < 0)
 		return (-1);
-	// TODO
-	// Read heredoc
 	return (0);
 }
