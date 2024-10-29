@@ -18,7 +18,7 @@
 
 static char	*get_ast_type(enum e_ast_type t);
 
-t_ast_node	*parse(t_arena arena, char *user_input_line, t_list *env)
+t_ast_node	*parse(t_arena arena, char *user_input_line, t_list *env, int exit_code)
 {
 	t_token		*xs;
 	t_ast_node	*ast;
@@ -33,7 +33,7 @@ t_ast_node	*parse(t_arena arena, char *user_input_line, t_list *env)
 		ft_bzero(range, sizeof(range));
 		range[1] = count_toks(xs) - 1; // remove end token
 		ast = create_ast(xs, ast, range, arena);
-		expand(ast, arena, env);
+		expand(ast, arena, env, exit_code);
 		//glob(arena, ast);
 	}
 	return (ast);

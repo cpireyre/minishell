@@ -48,7 +48,9 @@ static int	minishell(t_list *env)
 	bool		should_exit_shell;
 	t_ast_node	*ast;
 	t_arena		arena;
+	int			exit_code;
 
+	exit_code = 0;
 	should_exit_shell = false;
 	while (!should_exit_shell)
 	{
@@ -60,11 +62,11 @@ static int	minishell(t_list *env)
 		if (!should_exit_shell && *user_input_line)
 		{
 			add_history(user_input_line);
-			ast = parse(arena, user_input_line, env);
+			ast = parse(arena, user_input_line, env, exit_code);
 			//ft_printf("\n");
 			if (DEBUG)
 				print_ast(ast, 0);
-			execute_ast(ast, env, arena);
+			exit_code = execute_ast(ast, env, arena);
 		}
 		arena_dispose(&arena);
 	}
