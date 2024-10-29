@@ -105,6 +105,33 @@ int handle_redir(t_command *cmd, t_ast_node *ast)
 			return (-1);
 		}
 	}
+	else if	(ast->token.type == TOK_HEREDOC)
+	{
+		int		hdoc_pipe[2];
+		char	*line;
+
+		close_fd_if_open(&cmd->infile_fd);
+		cmd->infile = (char *)ast->children[0]->token.value;
+		if (pipe(hdoc_pipe) < 0)
+		{
+			perror(NAME);
+			return (-1);
+		}
+		line = get_next_line(STDIN_FILENO);
+		if (!line)
+			return (-1);
+		while (ft_strncmp(line, cmd->infile, ft_strlen(line) - 1))
+		{
+			ft_dprintf(hdoc_pipe[1], line);
+			free(line);
+			line = get_next_line(STDIN_FILENO);
+			if (!line)
+				return (-1);
+		}
+		close(hdoc_pipe[1]);
+		cmd->infile_fd = hdoc_pipe[0];
+	}
+
 	else if (ast->token.type == TOK_REDIRECT_OUT)
 	{
 		close_fd_if_open(&cmd->infile_fd);
