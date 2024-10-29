@@ -72,7 +72,7 @@ static int	execute_logicals(t_ast_node *ast, t_list *env, t_arena arena)
 			else
 				s = !((s == 0) || (execute_ast(cur->children[1], env, arena) == 0));
 		}
-		if (!s)
+		if (s != 0)
 			break ;
 		cur = cur->children[1];
 	}
