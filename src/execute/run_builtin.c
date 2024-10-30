@@ -6,7 +6,7 @@
 /*   By: pleander <pleander@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/28 10:14:24 by pleander          #+#    #+#             */
-/*   Updated: 2024/10/30 12:49:51 by pleander         ###   ########.fr       */
+/*   Updated: 2024/10/30 14:55:11 by pleander         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ static int	run_builtin_export(char **args, t_list **env)
 {
 	int ret;
 
-	ret = export(args[0], env); // Should we check that there's only one argument?
+	ret = export(args[1], env); // Should we check that there's only one argument?
 	return (ret);
 }
 
