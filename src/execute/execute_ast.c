@@ -132,6 +132,8 @@ static	int	execute_single_command(t_ast_node *ast, t_list *env, t_arena arena)
 	con.pipes = NULL;
 	con.cur_child = 0;
 	con.n_children = 1;
+	if (is_builtin(con.ast->children[0]->token.value))
+		return (execute_builtin_cmd(&con, arena));
 	child_pids = arena_alloc(arena, (con.n_children) * sizeof(pid_t));
 	if (!child_pids)
 		return (-1);
@@ -215,8 +217,6 @@ static int	execute_builtin_cmd(t_command_context *con, t_arena arena)
 		orig_fds[1] = dup(STDOUT_FILENO);
 		dup2(cmd.outfile_fd, STDOUT_FILENO);
 	}
-	// if (con->pipes)
-	// 	close_pipes(con->pipes, con->n_children - 1);
 	if (DEBUG)
 		print_command(&cmd);
 	exit_code = run_builtin(cmd.path, cmd.args, &con->env);

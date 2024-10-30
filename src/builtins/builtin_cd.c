@@ -10,14 +10,12 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
 #include <unistd.h>
 
 int	cd(char	*path)
 {
 	int ret;
 
-	ft_printf("Attempting to cd to %s\n", path);
 	ret = chdir(path);
 	return (ret);
 }

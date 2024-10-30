@@ -72,6 +72,5 @@ int	run_builtin(char *builtin, char **args, t_list **env)
 		return(run_builtin_pwd());
 	if (ft_streq(builtin, "cd"))
 		return(run_builtin_cd(args));
-	ft_dprintf(2, "%s", "Error: No such builtin");
 	return (1);
 }
