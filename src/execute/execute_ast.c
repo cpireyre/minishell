@@ -99,18 +99,11 @@ static int	execute_pipeline(t_ast_node *ast, t_list *env, t_arena arena)
 			con.ast = ast->children[0]; //left child i.e command
 		else if (ast->type == AST_COMMAND)
 			con.ast = ast;
-		if (is_builtin(con.ast->token.value))
-		{
-			execute_builtin_cmd(&con, arena);
-		}
-		else
-		{
-			child_pids[con.cur_child] = fork();
-			if (child_pids[con.cur_child] == 0)
-				execute_cmd(&con, arena);
-			if (child_pids[con.cur_child] == -1)
-				return (-1); // Error exit
-		}
+		child_pids[con.cur_child] = fork();
+		if (child_pids[con.cur_child] == 0)
+			execute_cmd(&con, arena);
+		if (child_pids[con.cur_child] == -1)
+			return (-1); // Error exit
 		if (ast->type == AST_COMMAND)
 			break ;
 		ast = ast->children[1]; // next pipe opreator
