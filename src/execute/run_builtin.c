@@ -50,11 +50,11 @@ static	int run_builtin_unset(char	**args, t_list **env)
 	return (0);
 }
 
-static int	run_builtin_cd(char **args)
+static int	run_builtin_cd(char **args, t_list **env)
 {
 	int ret;
 
-	ret = cd(args[1]);
+	ret = cd(args[1], env);
 	if (ret)
 		perror(NAME);
 	return (ret);
@@ -62,6 +62,8 @@ static int	run_builtin_cd(char **args)
 
 int	run_builtin(char *builtin, char **args, t_list **env)
 {
+	if (DEBUG)
+		ft_printf("Running builtin %s\n", builtin);
 	if (ft_streq(builtin, "env"))
 		return (run_builtin_env(env));
 	if (ft_streq(builtin, "export"))
@@ -71,6 +73,6 @@ int	run_builtin(char *builtin, char **args, t_list **env)
 	if (ft_streq(builtin, "pwd"))
 		return(run_builtin_pwd());
 	if (ft_streq(builtin, "cd"))
-		return(run_builtin_cd(args));
+		return(run_builtin_cd(args, env));
 	return (1);
 }

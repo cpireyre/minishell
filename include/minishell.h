@@ -55,9 +55,10 @@ int		**create_pipes(size_t n_pipes);
 void	delete_pipes(int **pipes);
 t_list	*get_env_list_location(char *var, t_list **env);
 void	unset(char *var, t_list **env);
+char	*get_working_dir(void);
 int		pwd(void);
 size_t	is_builtin(const char *name);
-int		cd(char	*path);
+int		cd(char	*path, t_list **env);
 
 int		set_signal_handler(void);
 

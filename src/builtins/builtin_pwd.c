@@ -13,7 +13,7 @@
 #include "unistd.h"
 #include "libft.h"
 
-int	pwd(void)
+char	*get_working_dir(void)
 {
 	size_t	buf_size;
 	char	*buf;
@@ -21,7 +21,7 @@ int	pwd(void)
 	buf_size = 255;
 	buf = malloc(buf_size);
 	if (!buf)
-		return (1);
+		return (NULL);
 	getcwd(buf, buf_size);
 	while (!buf)
 	{
@@ -29,9 +29,19 @@ int	pwd(void)
 		buf_size += 255;
 		buf = malloc(buf_size);
 		if (!buf)
-			return (1);
+			return (NULL);
 		getcwd(buf, buf_size);
 	}
+	return (buf);
+}
+	
+int	pwd(void)
+{
+	char	*buf;
+
+	buf = get_working_dir();
+	if (!buf)
+		return (1);
 	ft_printf("%s\n", buf);
 	free(buf);
 	return (0);
