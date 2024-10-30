@@ -6,7 +6,7 @@
 /*   By: pleander <pleander@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/08 20:51:52 by pleander          #+#    #+#             */
-/*   Updated: 2024/10/29 14:45:15 by pleander         ###   ########.fr       */
+/*   Updated: 2024/10/29 15:39:46 by pleander         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ static int	wait_for_children(int *pid, size_t n_forks);
 static	int	execute_single_command(t_ast_node *ast, t_list *env, t_arena arena);
 static	int	execute_pipeline(t_ast_node *ast, t_list *env, t_arena arena);
 static int	execute_logicals(t_ast_node *ast, t_list *env, t_arena arena);
+static int	execute_builtin_cmd(t_command_context *con, t_arena arena);
 
 /**
  * @brief Executes the AST and returns the exit code
@@ -124,6 +125,8 @@ static	int	execute_single_command(t_ast_node *ast, t_list *env, t_arena arena)
 	con.pipes = NULL;
 	con.cur_child = 0;
 	con.n_children = 1;
+	if (is_builtin(con.ast->children[0]->token.value))
+		return (execute_builtin_cmd(&con, arena));
 	child_pids = arena_alloc(arena, (con.n_children) * sizeof(pid_t));
 	if (!child_pids)
 		return (-1);
@@ -175,11 +178,55 @@ static int	execute_cmd(t_command_context *con, t_arena arena)
 		close_pipes(con->pipes, con->n_children - 1);
 	if (DEBUG)
 		print_command(&cmd);
-	if (is_builtin(cmd.path))
-		run_builtin(cmd.path, cmd.args, &con->env);
 	execve(cmd.path, (char **)cmd.args, make_raw_env_array(con->env, arena));
 	perror(NAME);
 	exit(1);
+}
+
+static int	execute_builtin_cmd(t_command_context *con, t_arena arena)
+{
+	t_command	cmd;	
+	int			exit_code;
+	int			orig_fds[2];
+	
+	orig_fds[0] = -1;
+	orig_fds[1] = -1;
+	if (make_command(&cmd, con->ast, con->env, arena) < 0)
+	{
+		ft_dprintf(2, "Error making command\n");
+		return (1);
+	}
+	if (con->pipes && con->cur_child > 0)
+		cmd.infile_fd = con->pipes[con->cur_child - 1][0];
+	if (con->pipes && con->cur_child != con->n_children - 1)
+		cmd.outfile_fd = con->pipes[con->cur_child][1];
+	if (cmd.infile_fd > -1)
+	{
+		orig_fds[0] = dup(STDIN_FILENO);
+		dup2(cmd.infile_fd, STDIN_FILENO);
+	}
+	if (cmd.outfile_fd > -1)
+	{
+		orig_fds[1] = dup(STDOUT_FILENO);
+		dup2(cmd.outfile_fd, STDOUT_FILENO);
+	}
+	if (DEBUG)
+		print_command(&cmd);
+	exit_code = run_builtin(cmd.path, cmd.args, &con->env);
+	// Restore original fds
+	if (orig_fds[0] > -1)
+	{
+		close(STDIN_FILENO);
+		dup2(orig_fds[0], STDIN_FILENO);
+		close(orig_fds[0]);
+	}
+	if (orig_fds[1] > -1)
+	{
+		close(STDOUT_FILENO);
+		dup2(orig_fds[1], STDOUT_FILENO);
+		close(orig_fds[1]);
+	}
+	return (exit_code);
 }
 
 static int	wait_for_children(int *pid, size_t n_forks)
