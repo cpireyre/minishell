@@ -6,14 +6,14 @@
 /*   By: pleander <pleander@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/28 10:14:24 by pleander          #+#    #+#             */
-/*   Updated: 2024/10/30 11:31:16 by pleander         ###   ########.fr       */
+/*   Updated: 2024/10/30 12:37:24 by pleander         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 #include "minishell.h"
 
-static int run_builtin_pwd()
+static int run_builtin_pwd(void)
 {
 	int	ret;
 
