@@ -178,6 +178,8 @@ static int	execute_cmd(t_command_context *con, t_arena arena)
 		close_pipes(con->pipes, con->n_children - 1);
 	if (DEBUG)
 		print_command(&cmd);
+	if (is_builtin(cmd.path))
+		exit(run_builtin(cmd.path, cmd.args, &con->env));
 	execve(cmd.path, (char **)cmd.args, make_raw_env_array(con->env, arena));
 	perror(NAME);
 	exit(1);
