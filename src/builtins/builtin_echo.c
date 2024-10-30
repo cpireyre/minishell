@@ -1,22 +1,36 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   builtins.c                                         :+:      :+:    :+:   */
+/*   builtin_echo.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: pleander <pleander@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/28 09:32:16 by pleander          #+#    #+#             */
-/*   Updated: 2024/10/30 11:29:57 by pleander         ###   ########.fr       */
+/*   Created: 2024/10/30 11:22:27 by pleander          #+#    #+#             */
+/*   Updated: 2024/10/30 11:34:02 by pleander         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-size_t	is_builtin(const char *name)
+int	echo(char **args)
 {
-	if (ft_streq(name, "env") || ft_streq(name, "export") 
-		|| ft_streq(name, "unset") || ft_streq(name, "pwd")
-		|| ft_streq(name, "cd") || ft_streq(name, "echo"))
-		return (1);
+	int	nl;
+	int i;
+
+	nl = 1;
+	if (args && (args[1]))
+	{
+		i = 1;
+		if (ft_streq(args[i], "-n"))
+		{
+			nl = 0;
+			i++;
+		}
+		while (args[i + 1])
+			ft_printf("%s ", args[i++]);
+		ft_printf("%s", args[i]);
+	}
+	if (nl)
+		ft_printf("%s", "\n");
 	return (0);
 }

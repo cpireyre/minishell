@@ -6,7 +6,7 @@
 /*   By: pleander <pleander@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/28 10:14:24 by pleander          #+#    #+#             */
-/*   Updated: 2024/10/29 15:36:33 by pleander         ###   ########.fr       */
+/*   Updated: 2024/10/30 11:31:16 by pleander         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,14 @@ static int	run_builtin_cd(char **args, t_list **env)
 	return (ret);
 }
 
+static int	run_builtin_echo(char **args)
+{
+	int	ret;
+
+	ret = echo(args);
+	return (ret);
+}
+
 int	run_builtin(char *builtin, char **args, t_list **env)
 {
 	if (DEBUG)
@@ -74,5 +82,7 @@ int	run_builtin(char *builtin, char **args, t_list **env)
 		return(run_builtin_pwd());
 	if (ft_streq(builtin, "cd"))
 		return(run_builtin_cd(args, env));
+	if (ft_streq(builtin, "echo"))
+		return(run_builtin_echo(args));
 	return (1);
 }

@@ -6,7 +6,7 @@
 /*   By: copireyr <copireyr@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/27 12:29:36 by copireyr          #+#    #+#             */
-/*   Updated: 2024/10/29 13:35:11 by pleander         ###   ########.fr       */
+/*   Updated: 2024/10/30 11:28:04 by pleander         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,7 @@ char	*get_working_dir(void);
 int		pwd(void);
 size_t	is_builtin(const char *name);
 int		cd(char	*path, t_list **env);
+int		echo(char **args);
 
 int		set_signal_handler(void);
 
