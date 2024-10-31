@@ -35,6 +35,7 @@ t_ast_node	*parse(t_arena arena, char *user_input_line, t_list *env)
 		expand(ast, arena, env);
 		glob(arena, ast);
 		split_words(arena, ast);
+		remove_quotes(arena, ast);
 	}
 	return (ast);
 }

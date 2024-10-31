@@ -23,7 +23,15 @@ typedef struct s_string_vector
 	int		capacity;
 }	t_string_vector;
 
+typedef struct s_ast_vec
+{
+	t_ast_node	**data;
+	size_t		size;
+	size_t		capacity;
+}	t_ast_vec;
+
 extern void				expand(t_ast_node *ast, t_arena arena, t_list *env);
 extern t_string_vector	realloc_maybe(t_arena arena, t_string_vector vec);
+t_ast_vec	*ast_push(t_arena arena, t_ast_vec *vec, t_ast_node *node);
 
 #endif /* EXPAND_H */

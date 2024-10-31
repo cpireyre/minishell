@@ -51,6 +51,7 @@ typedef struct s_token
 	enum e_tok_type	type;
 	const char		*value;
 	size_t			size;
+	bool			is_globbed;
 }	t_token;
 
 extern t_token		*tokenize(t_arena arena, const char *str);

@@ -16,7 +16,7 @@ CC := cc
 CPPFLAGS := -I./include/ -I./libft/include
 LDFLAGS := -lreadline -L./libft/ -lft
 CFLAGS := -Wall -Wextra -MMD -MP -g3
-asan := -fsanitize=address,undefined,leak
+asan := -fsanitize=address,undefined#,leak
 CFLAGS += $(asan)
 LDFLAGS += $(asan)
 NAME := minishell
@@ -28,7 +28,7 @@ endif
 src := ./src/main.c ./src/environment.c ./src/signals.c
 
 parse := $(addprefix ./src/parse/, ast.c parse.c tokenize.c tokenize_utils.c \
-		 expand.c glob.c split_words.c remove_quotes.c)
+		 expand.c glob.c split_words.c remove_quotes.c glob_quotes.c)
 builtins := $(addprefix ./src/builtins/, builtin_env.c builtin_export.c builtin_unset.c)
 src += $(parse) $(builtins)
 
