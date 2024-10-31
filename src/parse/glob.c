@@ -6,7 +6,7 @@
 /*   By: copireyr <copireyr@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 20:02:19 by copireyr          #+#    #+#             */
-/*   Updated: 2024/10/14 14:32:15 by copireyr         ###   ########.fr       */
+/*   Updated: 2024/10/31 13:40:24 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,15 +20,15 @@
 static bool			match(const t_quote *pattern, const char *candidate);
 static const char	**get_cwd_entries(t_arena arena);
 
-static t_glob_result glob_pattern(t_arena arena, const char **entries, const char *str)
+static const char	**glob_pattern(t_arena arena, const char **entries, const char *str)
 {
-    const t_quote   *glob_pattern = quotes_lift(arena, str);
-    t_glob_result   result = {0};
-    char            **matches;
-    size_t          count = 0;
+    const t_quote	*glob_pattern = quotes_lift(arena, str);
+    const char	**result = {0};
+    const char		**matches;
+    size_t			count = 0;
 
     if (!entries || !glob_pattern)
-        return result;
+        return (result);
     const char **curr = entries;
     while (*curr)
     {
@@ -43,7 +43,7 @@ static t_glob_result glob_pattern(t_arena arena, const char **entries, const cha
             return result;
         matches[0] = (char *)str;
         matches[1] = NULL;
-        return ((t_glob_result){matches, 1});
+        return (matches);
     }
     matches = arena_calloc(arena, count + 1, sizeof(char *));
     if (!matches)
@@ -51,10 +51,10 @@ static t_glob_result glob_pattern(t_arena arena, const char **entries, const cha
     while (*entries)
     {
         if ((str[0] == '.' || **entries != '.') && match(glob_pattern, *entries))
-            *matches++ = ft_arena_strndup(arena, *entries, ft_strlen(*entries));
+            *matches++ = *entries;
         entries++;
     }
-    return ((t_glob_result){matches - count, count});
+	return (matches - count);
 }
 
 static t_ast_node *create_word_node(t_arena arena, const char *value,
@@ -78,7 +78,7 @@ void    glob(t_arena arena, t_ast_node *ast)
     const char      **entries = get_cwd_entries(arena);
     t_ast_vec       new_children = {0};
     t_ast_node      *new_child;
-    t_glob_result   result;
+    const char		**result;
     size_t          i;
 
     if (!ast || !entries)
@@ -90,11 +90,11 @@ void    glob(t_arena arena, t_ast_node *ast)
             && ft_strchr(ast->children[i]->token.value, '*'))
         {
             result = glob_pattern(arena, entries, ast->children[i]->token.value);
-            if (result.count > 0)
+            if (*result)
             {
-                for (size_t j = 0; j < result.count; j++)
+                for (size_t j = 0; result[j]; j++)
                 {
-                    new_child = create_word_node(arena, result.matches[j],
+                    new_child = create_word_node(arena, result[j],
                                 ast->children[i]->token.type, true);
                     if (!new_child || !ast_push(arena, &new_children, new_child))
                         return ;
@@ -109,7 +109,6 @@ void    glob(t_arena arena, t_ast_node *ast)
     }
     ast->children = new_children.data;
     ast->n_children = new_children.size;
-
     for (i = 0; i < ast->n_children; i++)
         glob(arena, ast->children[i]);
 }
