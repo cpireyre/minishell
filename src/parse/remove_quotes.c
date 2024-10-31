@@ -6,7 +6,7 @@
 /*   By: copireyr <copireyr@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/17 09:48:17 by copireyr          #+#    #+#             */
-/*   Updated: 2024/10/17 10:05:45 by copireyr         ###   ########.fr       */
+/*   Updated: 2024/10/31 13:53:03 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ char	*remove_quotes_from_str(t_arena arena, const char *str)
 	char	quote;
 
 	if (!ft_strchr(str, '"') && !ft_strchr(str, '\''))
-		return ((char*)str);
+		return ((char *)str);
 	result = arena_alloc(arena, ft_strlen(str) + 1);
 	if (!result)
 		return (NULL);
@@ -51,7 +51,7 @@ void	remove_quotes(t_arena arena, t_ast_node *ast)
 	while (i < ast->n_children)
 	{
 		if (ast->children[i]->type == AST_WORD
-		&& ast->children[i]->token.is_globbed == false)
+			&& ast->children[i]->token.is_globbed == false)
 		{
 			str = remove_quotes_from_str(arena, ast->children[i]->token.value);
 			ast->children[i]->token.value = str;

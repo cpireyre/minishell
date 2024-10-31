@@ -6,7 +6,7 @@
 /*   By: copireyr <copireyr@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 20:02:19 by copireyr          #+#    #+#             */
-/*   Updated: 2024/10/31 13:40:24 by copireyr         ###   ########.fr       */
+/*   Updated: 2024/10/31 13:46:22 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,18 +90,13 @@ void    glob(t_arena arena, t_ast_node *ast)
             && ft_strchr(ast->children[i]->token.value, '*'))
         {
             result = glob_pattern(arena, entries, ast->children[i]->token.value);
-            if (*result)
+			while (*result)
             {
-                for (size_t j = 0; result[j]; j++)
-                {
-                    new_child = create_word_node(arena, result[j],
-                                ast->children[i]->token.type, true);
-                    if (!new_child || !ast_push(arena, &new_children, new_child))
-                        return ;
-                }
+				new_child = create_word_node(arena, *result++,
+							ast->children[i]->token.type, true);
+				if (!new_child || !ast_push(arena, &new_children, new_child))
+					return ;
             }
-            else if (!ast_push(arena, &new_children, ast->children[i]))
-                return ;
         }
         else if (!ast_push(arena, &new_children, ast->children[i]))
             return ;
@@ -109,8 +104,9 @@ void    glob(t_arena arena, t_ast_node *ast)
     }
     ast->children = new_children.data;
     ast->n_children = new_children.size;
-    for (i = 0; i < ast->n_children; i++)
-        glob(arena, ast->children[i]);
+	i = 0;
+    while (i < ast->n_children)
+        glob(arena, ast->children[i++]);
 }
 
 static bool	match(const t_quote *pattern, const char *candidate)
