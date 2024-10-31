@@ -1,11 +1,24 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   glob_quotes.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: copireyr <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/10/31 13:53:50 by copireyr          #+#    #+#             */
+/*   Updated: 2024/10/31 13:56:45 by copireyr         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "glob.h"
 
-t_quote *quotes_lift(t_arena arena, const char *str)
+static bool	should_toggle_quote(char c, char current_quote);
+
+t_quote	*quotes_lift(t_arena arena, const char *str)
 {
 	t_quote	*result;
 	int		j;
 	char	current_quote;
-	bool	should_toggle_quote;
 
 	if (!str)
 		return (NULL);
@@ -16,9 +29,7 @@ t_quote *quotes_lift(t_arena arena, const char *str)
 	current_quote = 0;
 	while (*str)
 	{
-		should_toggle_quote = (*str == '\'' || *str == '\"')
-			&& (current_quote == 0 || *str == current_quote);
-		if (should_toggle_quote)
+		if (should_toggle_quote(*str, current_quote))
 			current_quote = !current_quote * *str;
 		else
 			result[j++] = *str | (!!current_quote * QUOTED_BIT);
@@ -41,4 +52,10 @@ char	*quotes_lower(t_arena arena, const t_quote *str)
 		*result++ = *str++ & CHAR_MASK;
 	*result++ = '\0';
 	return (result - len);
+}
+
+static bool	should_toggle_quote(char c, char current_quote)
+{
+	return ((c == '\'' || c == '\"')
+		&& (current_quote == 0 || c == current_quote));
 }
