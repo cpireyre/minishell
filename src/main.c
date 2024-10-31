@@ -67,6 +67,7 @@ static int	minishell(t_list *env)
 			if (DEBUG)
 				print_ast(ast, 0);
 			exit_code = execute_ast(ast, env, arena);
+			exit_code = 0;
 		}
 		arena_dispose(&arena);
 	}

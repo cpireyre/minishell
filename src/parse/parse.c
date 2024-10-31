@@ -89,7 +89,9 @@ void	print_ast(t_ast_node *root, size_t level)
 
 static char	*get_ast_type(enum e_ast_type t)
 {
-	if (t == AST_LOGICAL)
+	if (t == AST_PAREN)
+		return ("AST_PAREN");
+	else if (t == AST_LOGICAL)
 		return ("AST_LOGICAL");
 	else if (t == AST_PIPELINE)
 		return ("AST_PIPELINE");

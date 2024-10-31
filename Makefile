@@ -6,7 +6,7 @@
 #    By: copireyr <copireyr@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/08/27 12:07:56 by copireyr          #+#    #+#              #
-#    Updated: 2024/10/30 11:29:24 by pleander         ###   ########.fr        #
+#    Updated: 2024/11/06 09:21:19 by pleander         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -30,7 +30,7 @@ src := ./src/main.c ./src/environment.c ./src/signals.c
 
 parse := $(addprefix ./src/parse/, ast.c parse.c tokenize.c tokenize_utils.c expand.c)
 builtins := $(addprefix ./src/builtins/, builtins.c builtin_env.c builtin_export.c builtin_unset.c builtin_pwd.c builtin_cd.c builtin_echo.c)
-execute := $(addprefix ./src/execute/, execute_ast.c make_command.c pipe.c run_builtin.c)
+execute := $(addprefix ./src/execute/, execute_ast.c make_command.c pipe.c run_builtin.c logicals.c )
 src += $(parse) $(builtins) $(execute)
 
 obj := $(src:./src/%.c=./obj/%.o)

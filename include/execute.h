@@ -6,7 +6,7 @@
 /*   By: pleander <pleander@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 11:03:23 by pleander          #+#    #+#             */
-/*   Updated: 2024/10/29 15:08:06 by pleander         ###   ########.fr       */
+/*   Updated: 2024/11/06 09:20:57 by pleander         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,5 +41,6 @@ int		**make_pipes(int n_pipes, t_arena arena);
 void	close_pipes(int **pipes, int n_pipes);
 size_t	calculate_n_pipes(t_ast_node *ast);
 int		run_builtin(char *builtin, char **args, t_list **env);
+int		execute_logicals(t_ast_node *ast, t_list *env, t_arena arena);
 
 #endif

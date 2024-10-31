@@ -6,7 +6,7 @@
 /*   By: pleander <pleander@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/08 20:51:52 by pleander          #+#    #+#             */
-/*   Updated: 2024/10/29 15:39:46 by pleander         ###   ########.fr       */
+/*   Updated: 2024/11/06 12:10:30 by pleander         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,6 @@ static int	execute_cmd(t_command_context *con, t_arena arena);
 static int	wait_for_children(int *pid, size_t n_forks);
 static	int	execute_single_command(t_ast_node *ast, t_list *env, t_arena arena);
 static	int	execute_pipeline(t_ast_node *ast, t_list *env, t_arena arena);
-static int	execute_logicals(t_ast_node *ast, t_list *env, t_arena arena);
 static int	execute_builtin_cmd(t_command_context *con, t_arena arena);
 
 /**
@@ -42,6 +41,8 @@ int	execute_ast(t_ast_node *ast, t_list	*env, t_arena arena)
 		status = execute_pipeline(ast, env, arena);
 	else if (ast->type == AST_LOGICAL)
 		status = execute_logicals(ast, env, arena);
+	else if (ast->type == AST_PAREN)
+		status = execute_ast(ast->children[0], env, arena);
 	else
 	{
 		status = 1;
@@ -50,35 +51,6 @@ int	execute_ast(t_ast_node *ast, t_list	*env, t_arena arena)
 	return (status);
 }
 
-static int	execute_logicals(t_ast_node *ast, t_list *env, t_arena arena)
-{
-	t_ast_node	*cur;
-	int	s;
-	
-	cur = ast;
-	s = execute_ast(cur->children[0], env, arena);
-	while (cur->type == AST_LOGICAL)
-	{
-		if (cur->token.type == TOK_LOGICAL_AND)
-		{
-			if (cur->children[1]->type == AST_LOGICAL)
-				s = !((s == 0) && (execute_ast(cur->children[1]->children[0], env, arena) == 0));
-			else
-				s = !((s == 0) && (execute_ast(cur->children[1], env, arena) == 0));
-		}
-		if (cur->token.type == TOK_LOGICAL_OR)
-		{
-			if (cur->children[1]->type == AST_LOGICAL)
-				s = !((s == 0) || (execute_ast(cur->children[1]->children[0], env, arena) == 0));
-			else
-				s = !((s == 0) || (execute_ast(cur->children[1], env, arena) == 0));
-		}
-		if (s != 0)
-			break ;
-		cur = cur->children[1];
-	}
-	return (s);
-}
 
 static int	execute_pipeline(t_ast_node *ast, t_list *env, t_arena arena)
 {

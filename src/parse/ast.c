@@ -6,7 +6,7 @@
 /*   By: pleander <pleander@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/01 14:07:01 by pleander          #+#    #+#             */
-/*   Updated: 2024/10/07 19:09:05 by copireyr         ###   ########.fr       */
+/*   Updated: 2024/11/06 12:11:33 by pleander         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,16 +51,62 @@ size_t	count_logicals(t_token *xs, size_t range[2])
 	return (tokens);
 }
 
+static int	is_parenthesis(t_token x)
+{
+	if (x.type == TOK_OPEN_PAREN || x.type == TOK_CLOSE_PAREN)
+		return (1);
+	return (0);
+}
+
 static enum e_ast_type get_highest_ast_type(t_token *xs, size_t range[2])
 {
-	if (count_tokens(xs, TOK_LOGICAL_OR, range) +
-		count_tokens(xs, TOK_LOGICAL_AND, range) > 0)
-		return (AST_LOGICAL);
-	else if (count_tokens(xs, TOK_PIPE, range) > 0)
-		return (AST_PIPELINE);
-	else 
-		return (AST_COMMAND);
+	enum e_ast_type max_ast;
+	size_t			i;
+	int				open_paren;
+	
+	open_paren = 0;
+	i = range[0];
+	max_ast = AST_NONE;
+	while (i < range[1])
+	{
+		if (open_paren == 0)
+		{
+			if ((xs[i].type == TOK_LOGICAL_OR || xs[i].type == TOK_LOGICAL_AND) && (int)AST_LOGICAL < (int)max_ast)
+					max_ast = AST_LOGICAL;
+			else if (xs[i].type == TOK_OPEN_PAREN
+				&& ((int)max_ast > (int)AST_PAREN))
+				max_ast = AST_PAREN;
+			else if (xs[i].type == TOK_PIPE
+				&& ((int)max_ast > (int)AST_PIPELINE))
+					max_ast = AST_PIPELINE;
+			else if (xs[i].type == TOK_WORD
+				&& ((int)max_ast > (int)AST_COMMAND))
+					max_ast = AST_COMMAND;
+		}
+		if (is_parenthesis(xs[i]))
+		{
+			if (xs[i].type == TOK_OPEN_PAREN)
+				open_paren++;
+			else if (xs[i].type == TOK_CLOSE_PAREN)
+				open_paren--;
+		}
+		i++;
+	}
+	return (max_ast);
 }
+
+// static enum e_ast_type get_highest_ast_type(t_token *xs, size_t range[2])
+// {
+// 	if (count_tokens(xs, TOK_LOGICAL_OR, range) +
+// 		count_tokens(xs, TOK_LOGICAL_AND, range) > 0)
+// 		return (AST_LOGICAL);
+// 	else if (count_tokens(xs, TOK_OPEN_PAREN, range) > 0)
+// 			return (AST_PAREN);
+// 	else if (count_tokens(xs, TOK_PIPE, range) > 0)
+// 		return (AST_PIPELINE);
+// 	else 
+// 		return (AST_COMMAND);
+// }
 
 static int	find_next_token_of_type(t_token *xs, enum e_tok_type type, size_t range[2])
 {
@@ -78,23 +124,47 @@ static int	find_next_token_of_type(t_token *xs, enum e_tok_type type, size_t ran
 	return (-1);
 }
 
+static int	is_logical_token(t_token x)
+{
+	if (x.type == TOK_LOGICAL_OR || x.type == TOK_LOGICAL_AND)
+		return (1);
+	return (0);
+}
+
+
+/**
+ * @brief Finds the next logical token. Does not search inside parentheses.
+ *
+ * @param xs token array
+ * @param range search range
+ * @return index of next logical token
+ */
 static int	find_next_logical_token(t_token *xs, size_t range[2])
 {
-	int	or_ind;
-	int	and_ind;
+	size_t	i;
+	int		open_paren;
 
-	or_ind = find_next_token_of_type(xs, TOK_LOGICAL_OR, range);
-	and_ind = find_next_token_of_type(xs, TOK_LOGICAL_AND, range);
-	if (or_ind < 0 && and_ind < 0)
-		return (find_next_token_of_type(xs, TOK_END, range));
-	if (or_ind < 0 && and_ind >= 0)
-		return (and_ind);
-	if (and_ind < 0 && or_ind >= 0)
-		return (or_ind);
-	if (and_ind > or_ind)
-		return (and_ind);
-	else
-		return (or_ind);
+	open_paren = 0;
+	i = range[0];
+	while (i < range[1])
+	{
+		if (is_parenthesis(xs[i]))
+		{
+			if (xs[i].type == TOK_OPEN_PAREN)
+				open_paren++;
+			if (xs[i].type == TOK_CLOSE_PAREN)
+				open_paren--;
+		}
+		if (open_paren == 0)
+		{
+			if (is_logical_token(xs[i]))
+				return (i);
+		}
+		i++;
+	}
+	if (open_paren != 0) // Syntax error
+		return (-1);
+	return (find_next_token_of_type(xs, TOK_END, range));
 }
 
 static size_t	count_redirs(t_token *xs, size_t range[2])
@@ -167,9 +237,9 @@ static	char	*concat_token_values(t_token *xs, size_t range[2], t_arena arena)
 	return (str);
 }
 
-static	t_ast_node	*syntax_error(void)
+static	t_ast_node	*syntax_error(char *msg)
 {
-	ft_dprintf(2, "Syntax error\n");
+	ft_dprintf(2, "Syntax error while %s\n", msg);
 	return (NULL);
 }
 
@@ -190,7 +260,7 @@ static t_ast_node	*create_command_node(t_token *xs, t_ast_node *parent, size_t r
 	cmd_node->token.type = TOK_COMMAND;
 	cmd_node->n_children = word_count; // Redirs add a redir but also remove a word
 	if (word_count < count_redirs(xs, range))
-		return (syntax_error());
+		return (syntax_error("creating command node"));
 	cmd_node->children = arena_calloc(arena, cmd_node->n_children, sizeof(t_ast_node *));
 	if (!cmd_node->children)
 		return (NULL);
@@ -207,7 +277,7 @@ static t_ast_node	*create_command_node(t_token *xs, t_ast_node *parent, size_t r
 		{
 			cmd_node->children[i]->type = AST_REDIR;
 			if (xs[range[0] + 1].type != TOK_WORD)
-				return (syntax_error());
+				return (syntax_error("creating command node"));
 			if (range[0] + 1 < range[1] && xs[range[0]].type != TOK_END)
 			{
 				cmd_node->children[i]->children = arena_calloc(arena, 1, sizeof(t_ast_node *));
@@ -221,7 +291,7 @@ static t_ast_node	*create_command_node(t_token *xs, t_ast_node *parent, size_t r
 				range[0]++;
 			}
 			else 
-				return (syntax_error());
+				return (syntax_error("creating command node"));
 		}
 		range[0]++;
 		i++;
@@ -236,17 +306,13 @@ t_ast_node	*create_ast(t_token *xs, t_ast_node *parent, size_t range[2], t_arena
 	size_t	new_range[2];
 	t_ast_node	*node;
 
-	if (range[1] - range[0] < 1)
-		return (NULL);
 	node = NULL;
-	// ft_printf("Parsing following token array: ");
-	// show_token_range(xs, range);
 	max_type = get_highest_ast_type(xs, range);
 	if (max_type == AST_LOGICAL)
 	{
 		ltoken = find_next_logical_token(xs, range);
 		node = arena_calloc(arena, 1, sizeof(t_ast_node));
-		if (!node)
+		  if (!node)
 			return (NULL);
 		node->token = xs[ltoken];
 		node->type = AST_LOGICAL;
@@ -254,9 +320,22 @@ t_ast_node	*create_ast(t_token *xs, t_ast_node *parent, size_t range[2], t_arena
 		new_range[1] = (size_t)ltoken;
 		range[0] = (size_t)ltoken + 1;
 		if (add_node_to_parent(node, create_ast(xs, node, new_range, arena), arena) < 0)
-			return (syntax_error());
+			return (syntax_error("parsing logical node"));
 		if (add_node_to_parent(node, create_ast(xs, node, range, arena), arena) < 0)
-			return (syntax_error());
+			return (syntax_error("parsing logical node"));
+	}
+	else if (max_type == AST_PAREN)
+	{
+		node = arena_calloc(arena, 1, sizeof(t_ast_node));
+		if (!node)
+			return (NULL);
+		node->token = xs[range[0]];
+		node->type = AST_PAREN;
+		range[0]++; //Remove parentheses from range
+		range[1]--;
+		//node = create_ast(xs, parent, range, arena);
+		if (add_node_to_parent(node, create_ast(xs, node, range, arena), arena) < 0)
+			return (syntax_error("parsing parenthesis node"));
 	}
 	else if (max_type == AST_PIPELINE)
 	{
@@ -270,16 +349,16 @@ t_ast_node	*create_ast(t_token *xs, t_ast_node *parent, size_t range[2], t_arena
 		new_range[1] = (size_t)ltoken;
 		range[0] = (size_t)ltoken + 1;
 		if (add_node_to_parent(node, create_ast(xs, node, new_range, arena), arena) < 0)
-			return (syntax_error());
+			return (syntax_error("while parsping pipeline"));
 		if (add_node_to_parent(node, create_ast(xs, node, range, arena), arena) < 0)
-			return (syntax_error());
+			return (syntax_error("while parsing pipeline"));
 	}
 	else if (max_type == AST_COMMAND)
 	{
 		
 		node = create_command_node(xs, parent, range, arena);
 		if (!node)
-			return (syntax_error());
+			return (syntax_error("while parsing command"));
 	}
 	else
 		ft_printf("ERROR\n");
