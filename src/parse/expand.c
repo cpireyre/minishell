@@ -6,7 +6,7 @@
 /*   By: copireyr <copireyr@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 10:00:45 by copireyr          #+#    #+#             */
-/*   Updated: 2024/10/14 10:00:50 by copireyr         ###   ########.fr       */
+/*   Updated: 2024/10/31 12:54:23 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,6 +112,8 @@ static char	*val(t_list *env, const char *key, size_t length_key)
 	char	*curr;
 	size_t	i;
 
+	if (!*key)
+		return ("$");
 	while (env && length_key)
 	{
 		i = 0;
