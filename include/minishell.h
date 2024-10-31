@@ -58,7 +58,7 @@ void	unset(char *var, t_list **env);
 char	*get_working_dir(void);
 int		pwd(void);
 size_t	is_builtin(const char *name);
-int		cd(char	*path, t_list **env);
+int		cd(int argc, char **args, t_list **env);
 int		echo(char **args);
 
 int		set_signal_handler(void);

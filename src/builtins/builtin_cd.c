@@ -80,21 +80,30 @@ static int	handle_no_args(t_list **env)
 	return (0);
 }
 
-int	cd(char	*path, t_list **env)
+int	cd(int argc, char **args, t_list **env)
 {
 	int		ret;
 	
-	if (!path)
+	if (argc > 2)
+	{
+		ft_dprintf(2, "%s: cd: too many arguments\n", NAME);
+		return (1);
+	}
+	ret = 1;
+	if (argc == 1)
 		ret = handle_no_args(env);
-	else if (path[0] == '~')
-		ret = handle_tilde(path, env);
-	else if (ft_streq(path, "-"))
+	else if (args[1][0] == '~')
+		ret = handle_tilde(args[1], env);
+	else if (ft_streq(args[1], "-"))
 		ret = handle_dash(env);
 	else
 	{
 		if (set_working_dir("OLDPWD", env) < 0)
 			return (1);
-		ret = chdir(path);
+		if (chdir(args[1]) < 0)
+			perror(NAME);
+		else
+			ret = 0;
 	}
 	if (set_working_dir("PWD", env) < 0)
 		return (1);

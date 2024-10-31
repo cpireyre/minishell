@@ -50,13 +50,16 @@ static	int run_builtin_unset(char	**args, t_list **env)
 	return (0);
 }
 
-static int	run_builtin_cd(char **args, t_list **env)
+static int	run_builtin_cd(int argc, char **args, t_list **env)
 {
 	int ret;
 
-	ret = cd(args[1], env);
-	if (ret)
-		perror(NAME);
+	if (argc > 2)
+	{
+		ft_dprintf(2, "%s: cd: too many arguments\n", NAME);
+		return (1);
+	}
+	ret = cd(argc, args, env);
 	return (ret);
 }
 
@@ -66,6 +69,16 @@ static int	run_builtin_echo(char **args)
 
 	ret = echo(args);
 	return (ret);
+}
+
+static int count_args(char **args)
+{
+	int	c;
+
+	c = 0;
+	while (args[c])
+		c++;
+	return (c);
 }
 
 int	run_builtin(char *builtin, char **args, t_list **env)
@@ -81,7 +94,7 @@ int	run_builtin(char *builtin, char **args, t_list **env)
 	if (ft_streq(builtin, "pwd"))
 		return(run_builtin_pwd());
 	if (ft_streq(builtin, "cd"))
-		return(run_builtin_cd(args, env));
+		return(run_builtin_cd(count_args(args), args, env));
 	if (ft_streq(builtin, "echo"))
 		return(run_builtin_echo(args));
 	if (ft_streq(builtin, "exit"))
