@@ -13,7 +13,7 @@
 #include "libft.h"
 #include "minishell.h"
 
-static int	is_numerical_id(char	*id)
+static int	is_numerical(char *id)
 {
 	int	i;
 
@@ -27,20 +27,29 @@ static int	is_numerical_id(char	*id)
 	return (1);
 }
 
+static int	check_character_invalid(char c)
+{
+	if (ft_isalnum(c) || c == '_')
+		return (0);
+	return (1);
+}
+
 static int	check_identifier(char *id)
 {
 	int	i;
 
 	i = 0;
+	if (ft_isdigit(id[i]))
+		return (-1);
 	while (id[i])
 	{
 		if ((i > 0 && id[i] == '='))
 			break ;
-		if (!ft_isalnum(id[i]))
+		if (check_character_invalid(id[i]))
 			return (-1);
 		i++;
 	}
-	if (is_numerical_id(id))
+	if (is_numerical(id))
 		return (-1);
 	return (0);
 }
