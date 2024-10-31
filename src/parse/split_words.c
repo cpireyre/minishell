@@ -6,7 +6,7 @@
 /*   By: copireyr <copireyr@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 12:54:15 by copireyr          #+#    #+#             */
-/*   Updated: 2024/10/16 09:55:11 by copireyr         ###   ########.fr       */
+/*   Updated: 2024/10/31 14:03:08 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,7 +110,6 @@ void	split_words(t_arena arena, t_ast_node *ast)
 {
 	t_ast_vec	new_children;
 	size_t		i;
-	const char	*str;
 
 	if (!ast || !ast->children)
 		return ;
@@ -119,10 +118,10 @@ void	split_words(t_arena arena, t_ast_node *ast)
 	while (i < ast->n_children)
 	{
 		if (ast->children[i]->type == AST_WORD
-		&& ast->children[i]->token.is_globbed == false)
+			&& ast->children[i]->token.is_globbed == false)
 		{
-			str = ast->children[i]->token.value;
-			if (!expand_children(arena, str, &new_children))
+			if (!expand_children(arena,
+					ast->children[i]->token.value, &new_children))
 				return ;
 		}
 		else if (!ast_push(arena, &new_children, ast->children[i]))
