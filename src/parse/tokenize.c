@@ -63,7 +63,7 @@ static t_token	token_next(t_arena arena, const char *str)
 {
 	t_token	result;
 
-	result = (t_token){.value = str, .type = token_get_type(*str), .size = 0};
+	result = (t_token){token_get_type(*str), str, 0, false};
 	while (result.type != TOK_END && token_get_type(*str) == result.type)
 	{
 		if (result.type == TOK_WORD && *str == '"')

@@ -6,7 +6,7 @@
 #    By: copireyr <copireyr@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/08/27 12:07:56 by copireyr          #+#    #+#              #
-#    Updated: 2024/10/30 11:29:24 by pleander         ###   ########.fr        #
+#    Updated: 2024/10/31 13:42:20 by copireyr         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -28,7 +28,8 @@ endif
 
 src := ./src/main.c ./src/environment.c ./src/signals.c
 
-parse := $(addprefix ./src/parse/, ast.c parse.c tokenize.c tokenize_utils.c expand.c)
+parse := $(addprefix ./src/parse/, ast.c parse.c tokenize.c tokenize_utils.c \
+		 expand.c glob.c split_words.c remove_quotes.c glob_quotes.c)
 builtins := $(addprefix ./src/builtins/, builtins.c builtin_env.c builtin_export.c builtin_unset.c builtin_pwd.c builtin_cd.c builtin_echo.c)
 execute := $(addprefix ./src/execute/, execute_ast.c make_command.c pipe.c run_builtin.c)
 src += $(parse) $(builtins) $(execute)
@@ -70,11 +71,12 @@ run: $(NAME)
 
 .PHONY: val
 val: $(NAME)
-	valgrind --leak-check=full --show-leak-kinds=all --track-fds=yes --suppressions=valgrind_readline_suppressions.supp ./$(NAME) < tests/test.txt
+	valgrind --suppressions=readline.supp -s ./$(NAME)
 
 
 .PHONY: test
 test: $(NAME)
 	# SPACE_VAR="hello world" EMPTY="" ./$< < tests/expansion.msh
-	./$< < tests/glob.msh
+	# ./$< < tests/glob.msh
+	./$< < tests/quotes.msh
 -include $(obj:.o=.d)

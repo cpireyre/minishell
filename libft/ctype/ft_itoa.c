@@ -6,9 +6,10 @@
 /*   By: pleander <pleander@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 13:05:52 by pleander          #+#    #+#             */
-/*   Updated: 2024/04/25 13:30:50 by pleander         ###   ########.fr       */
+/*   Updated: 2024/10/31 14:06:47 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 #include "libft.h"
 
 static void	convert(int n, char *str, int sign)

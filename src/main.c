@@ -6,7 +6,7 @@
 /*   By: copireyr <copireyr@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/27 12:08:02 by copireyr          #+#    #+#             */
-/*   Updated: 2024/10/30 13:16:45 by pleander         ###   ########.fr       */
+/*   Updated: 2024/10/31 12:58:11 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,7 @@ static int	minishell(t_list *env)
 		}
 		arena_dispose(&arena);
 	}
+	rl_clear_history();
 	return (0);
 }
 

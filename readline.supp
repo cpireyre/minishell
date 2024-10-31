@@ -1,5 +1,5 @@
 {
-   <Readline leaks>
+   <readline>
    Memcheck:Leak
    match-leak-kinds: reachable
    fun:malloc
@@ -9,7 +9,7 @@
    fun:main
 }
 {
-   <Readline leaks>
+   <readline>
    Memcheck:Leak
    match-leak-kinds: reachable
    fun:malloc
@@ -21,7 +21,7 @@
    fun:main
 }
 {
-   <Readline leaks>
+   <readline>
    Memcheck:Leak
    match-leak-kinds: reachable
    fun:malloc
@@ -34,7 +34,7 @@
    fun:main
 }
 {
-   <Readline leaks>
+   <readline>
    Memcheck:Leak
    match-leak-kinds: reachable
    fun:realloc
@@ -46,7 +46,7 @@
    fun:main
 }
 {
-   <Readline leaks>
+   <readline>
    Memcheck:Leak
    match-leak-kinds: reachable
    fun:malloc
@@ -57,7 +57,7 @@
    fun:main
 }
 {
-   <Readline leaks>
+   <readline>
    Memcheck:Leak
    match-leak-kinds: reachable
    fun:realloc
@@ -72,7 +72,7 @@
    fun:main
 }
 {
-   <Readline leaks>
+   <readline>
    Memcheck:Leak
    match-leak-kinds: reachable
    fun:malloc
@@ -89,7 +89,7 @@
    fun:main
 }
 {
-   <Readline leaks>
+   <readline>
    Memcheck:Leak
    match-leak-kinds: reachable
    fun:malloc
@@ -102,7 +102,7 @@
    fun:main
 }
 {
-   <Readline leaks>
+   <readline>
    Memcheck:Leak
    match-leak-kinds: reachable
    fun:malloc
@@ -111,7 +111,7 @@
    fun:main
 }
 {
-   <Readline leaks>
+   <readline>
    Memcheck:Leak
    match-leak-kinds: reachable
    fun:malloc
@@ -124,7 +124,7 @@
    fun:main
 }
 {
-   <Readline leaks>
+   <readline>
    Memcheck:Leak
    match-leak-kinds: reachable
    fun:malloc
@@ -140,7 +140,7 @@
    fun:main
 }
 {
-   <Readline leaks>
+   <readline>
    Memcheck:Leak
    match-leak-kinds: reachable
    fun:malloc
@@ -156,7 +156,7 @@
    fun:main
 }
 {
-   <Readline leaks>
+   <readline>
    Memcheck:Leak
    match-leak-kinds: reachable
    fun:realloc
@@ -173,7 +173,7 @@
    fun:readline
 }
 {
-   <Readline leaks>
+   <readline>
    Memcheck:Leak
    match-leak-kinds: reachable
    fun:malloc
@@ -186,7 +186,7 @@
    fun:main
 }
 {
-   <Readline leaks>
+   <readline>
    Memcheck:Leak
    match-leak-kinds: reachable
    fun:malloc
@@ -199,7 +199,7 @@
    fun:main
 }
 {
-   <Readline leaks>
+   <readline>
    Memcheck:Leak
    match-leak-kinds: reachable
    fun:malloc
@@ -215,7 +215,7 @@
    fun:main
 }
 {
-   <Readline leaks>
+   <readline>
    Memcheck:Leak
    match-leak-kinds: reachable
    fun:malloc
@@ -231,7 +231,7 @@
    fun:main
 }
 {
-   <Readline leaks>
+   <readline>
    Memcheck:Leak
    match-leak-kinds: reachable
    fun:realloc
@@ -248,7 +248,7 @@
    fun:readline
 }
 {
-   <Readline leaks>
+   <readline>
    Memcheck:Leak
    match-leak-kinds: reachable
    fun:calloc
@@ -263,7 +263,7 @@
    fun:main
 }
 {
-   <Readline leaks>
+   <readline>
    Memcheck:Leak
    match-leak-kinds: reachable
    fun:malloc
@@ -273,7 +273,7 @@
    fun:main
 }
 {
-   <Readline leaks>
+   <readline>
    Memcheck:Leak
    match-leak-kinds: reachable
    fun:calloc
@@ -290,7 +290,7 @@
    fun:main
 }
 {
-   <Readline leaks>
+   <readline>
    Memcheck:Leak
    match-leak-kinds: reachable
    fun:malloc
@@ -303,7 +303,7 @@
    fun:main
 }
 {
-   <Readline leaks>
+   <readline>
    Memcheck:Leak
    match-leak-kinds: reachable
    fun:calloc
@@ -315,7 +315,7 @@
    fun:main
 }
 {
-   <Readline leaks>
+   <readline>
    Memcheck:Leak
    match-leak-kinds: reachable
    fun:malloc
@@ -332,7 +332,7 @@
    fun:main
 }
 {
-   <Readline leaks>
+   <readline>
    Memcheck:Leak
    match-leak-kinds: reachable
    fun:malloc
@@ -345,7 +345,7 @@
    fun:main
 }
 {
-   <Readline leaks>
+   <readline>
    Memcheck:Leak
    match-leak-kinds: reachable
    fun:malloc
@@ -358,7 +358,7 @@
    fun:main
 }
 {
-   <Readline leaks>
+   <readline>
    Memcheck:Leak
    match-leak-kinds: reachable
    fun:malloc
@@ -371,7 +371,7 @@
    fun:main
 }
 {
-   <Readline leaks>
+   <readline>
    Memcheck:Leak
    match-leak-kinds: reachable
    fun:malloc
@@ -384,7 +384,7 @@
    fun:main
 }
 {
-   <Readline leaks>
+   <readline>
    Memcheck:Leak
    match-leak-kinds: reachable
    fun:malloc
@@ -396,7 +396,7 @@
    fun:main
 }
 {
-   <Readline leaks>
+   <readline>
    Memcheck:Leak
    match-leak-kinds: reachable
    fun:malloc
@@ -408,7 +408,7 @@
    fun:main
 }
 {
-   <Readline leaks>
+   <readline>
    Memcheck:Leak
    match-leak-kinds: reachable
    fun:malloc
@@ -420,7 +420,7 @@
    fun:main
 }
 {
-   <Readline leaks>
+   <readline>
    Memcheck:Leak
    match-leak-kinds: reachable
    fun:malloc
@@ -432,7 +432,7 @@
    fun:main
 }
 {
-   <Readline leaks>
+   <readline>
    Memcheck:Leak
    match-leak-kinds: reachable
    fun:realloc
@@ -444,7 +444,7 @@
    fun:main
 }
 {
-   <Readline leaks>
+   <readline>
    Memcheck:Leak
    match-leak-kinds: reachable
    fun:malloc
@@ -461,7 +461,7 @@
    fun:main
 }
 {
-   <Readline leaks>
+   <readline>
    Memcheck:Leak
    match-leak-kinds: reachable
    fun:malloc
@@ -472,7 +472,7 @@
    fun:main
 }
 {
-   <Readline leaks>
+   <readline>
    Memcheck:Leak
    match-leak-kinds: reachable
    fun:malloc
@@ -484,7 +484,7 @@
    fun:main
 }
 {
-   <Readline leaks>
+   <readline>
    Memcheck:Leak
    match-leak-kinds: reachable
    fun:realloc
@@ -501,7 +501,7 @@
    fun:readline
 }
 {
-   <Readline leaks>
+   <readline>
    Memcheck:Leak
    match-leak-kinds: reachable
    fun:malloc
@@ -514,7 +514,7 @@
    fun:main
 }
 {
-   <Readline leaks>
+   <readline>
    Memcheck:Leak
    match-leak-kinds: reachable
    fun:malloc
@@ -525,22 +525,7 @@
    fun:main
 }
 {
-   <Readline leaks>
-   Memcheck:Leak
-   match-leak-kinds: reachable
-   fun:malloc
-   fun:xmalloc
-   fun:rl_make_bare_keymap
-   fun:rl_generic_bind
-   fun:rl_bind_keyseq_if_unbound_in_map
-   obj:/usr/lib/x86_64-linux-gnu/libreadline.so.8.1
-   fun:_rl_init_terminal_io
-   fun:rl_initialize
-   fun:readline
-   fun:main
-}
-{
-   <Readline leaks>
+   <readline>
    Memcheck:Leak
    match-leak-kinds: reachable
    fun:malloc
@@ -555,7 +540,7 @@
    fun:main
 }
 {
-   <Readline leaks>
+   <readline>
    Memcheck:Leak
    match-leak-kinds: reachable
    fun:malloc
@@ -570,7 +555,7 @@
    fun:main
 }
 {
-   <Readline leaks>
+   <readline>
    Memcheck:Leak
    match-leak-kinds: reachable
    fun:malloc
@@ -585,7 +570,22 @@
    fun:main
 }
 {
-   <Readline leaks>
+   <readline>
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:malloc
+   fun:xmalloc
+   fun:rl_make_bare_keymap
+   fun:rl_generic_bind
+   fun:rl_bind_keyseq_if_unbound_in_map
+   obj:/usr/lib/x86_64-linux-gnu/libreadline.so.8.1
+   fun:_rl_init_terminal_io
+   fun:rl_initialize
+   fun:readline
+   fun:main
+}
+{
+   <readline>
    Memcheck:Leak
    match-leak-kinds: reachable
    fun:malloc
@@ -599,7 +599,7 @@
    fun:main
 }
 {
-   <Readline leaks>
+   <readline>
    Memcheck:Leak
    match-leak-kinds: reachable
    fun:malloc
@@ -613,7 +613,7 @@
    fun:main
 }
 {
-   <Readline leaks>
+   <readline>
    Memcheck:Leak
    match-leak-kinds: reachable
    fun:malloc
@@ -627,7 +627,7 @@
    fun:main
 }
 {
-   <Readline leaks>
+   <readline>
    Memcheck:Leak
    match-leak-kinds: reachable
    fun:calloc
@@ -640,7 +640,7 @@
    fun:main
 }
 {
-   <Readline leaks>
+   <readline>
    Memcheck:Leak
    match-leak-kinds: reachable
    fun:malloc
@@ -655,7 +655,7 @@
    fun:main
 }
 {
-   <Readline leaks>
+   <readline>
    Memcheck:Leak
    match-leak-kinds: reachable
    fun:malloc
@@ -670,7 +670,7 @@
    fun:main
 }
 {
-   <Readline leaks>
+   <readline>
    Memcheck:Leak
    match-leak-kinds: reachable
    fun:malloc
@@ -685,7 +685,7 @@
    fun:main
 }
 {
-   <Readline leaks>
+   <readline>
    Memcheck:Leak
    match-leak-kinds: reachable
    fun:malloc
@@ -700,7 +700,7 @@
    fun:main
 }
 {
-   <Readline leaks>
+   <readline>
    Memcheck:Leak
    match-leak-kinds: reachable
    fun:malloc
@@ -715,7 +715,7 @@
    fun:main
 }
 {
-   <Readline leaks>
+   <readline>
    Memcheck:Leak
    match-leak-kinds: reachable
    fun:malloc
@@ -729,7 +729,7 @@
    fun:main
 }
 {
-   <Readline leaks>
+   <readline>
    Memcheck:Leak
    match-leak-kinds: reachable
    fun:malloc
@@ -743,7 +743,7 @@
    fun:main
 }
 {
-   <Readline leaks>
+   <readline>
    Memcheck:Leak
    match-leak-kinds: reachable
    fun:malloc
@@ -757,7 +757,7 @@
    fun:main
 }
 {
-   <Readline leaks>
+   <readline>
    Memcheck:Leak
    match-leak-kinds: reachable
    fun:malloc
@@ -770,7 +770,7 @@
    fun:main
 }
 {
-   <Readline leaks>
+   <readline>
    Memcheck:Leak
    match-leak-kinds: reachable
    fun:malloc
@@ -783,21 +783,7 @@
    fun:main
 }
 {
-   <Readline leaks>
-   Memcheck:Leak
-   match-leak-kinds: reachable
-   fun:malloc
-   fun:xmalloc
-   fun:rl_make_bare_keymap
-   fun:rl_generic_bind
-   fun:rl_bind_keyseq_if_unbound_in_map
-   obj:/usr/lib/x86_64-linux-gnu/libreadline.so.8.1
-   fun:rl_initialize
-   fun:readline
-   fun:main
-}
-{
-   <Readline leaks>
+   <readline>
    Memcheck:Leak
    match-leak-kinds: reachable
    fun:malloc
@@ -811,7 +797,21 @@
    fun:main
 }
 {
-   <Readline leaks>
+   <readline>
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:malloc
+   fun:xmalloc
+   fun:rl_make_bare_keymap
+   fun:rl_generic_bind
+   fun:rl_bind_keyseq_if_unbound_in_map
+   obj:/usr/lib/x86_64-linux-gnu/libreadline.so.8.1
+   fun:rl_initialize
+   fun:readline
+   fun:main
+}
+{
+   <readline>
    Memcheck:Leak
    match-leak-kinds: reachable
    fun:malloc
@@ -825,7 +825,7 @@
    fun:main
 }
 {
-   <Readline leak>
+   <readline>
    Memcheck:Leak
    match-leak-kinds: reachable
    fun:calloc
@@ -840,7 +840,7 @@
    fun:main
 }
 {
-   <Readline leak>
+   <readline>
    Memcheck:Leak
    match-leak-kinds: reachable
    fun:malloc
