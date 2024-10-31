@@ -84,11 +84,6 @@ int	cd(int argc, char **args, t_list **env)
 {
 	int		ret;
 	
-	if (argc > 2)
-	{
-		ft_dprintf(2, "%s: cd: too many arguments\n", NAME);
-		return (1);
-	}
 	ret = 1;
 	if (argc == 1)
 		ret = handle_no_args(env);
