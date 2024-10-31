@@ -6,7 +6,7 @@
 /*   By: copireyr <copireyr@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 09:41:44 by copireyr          #+#    #+#             */
-/*   Updated: 2024/10/02 12:16:01 by copireyr         ###   ########.fr       */
+/*   Updated: 2024/10/16 09:28:40 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@ int	set_signal_handler(void)
 {
 	struct sigaction	sa;
 
+	sa = (struct sigaction){0};
 	sa.sa_handler = SIG_IGN;
 	sigaction(SIGQUIT, &sa, 0);
 	sa.sa_handler = &catch_signal;
