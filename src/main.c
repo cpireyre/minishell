@@ -6,13 +6,14 @@
 /*   By: copireyr <copireyr@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/27 12:08:02 by copireyr          #+#    #+#             */
-/*   Updated: 2024/10/16 09:41:04 by copireyr         ###   ########.fr       */
+/*   Updated: 2024/10/31 12:58:11 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <sysexits.h>
 #include <errno.h>
 #include "minishell.h"
+#include "execute.h"
 
 static int	minishell(t_list *env);
 static char	*arena_readline(t_arena arena, const char *prompt);
@@ -28,7 +29,7 @@ int	main(int argc, char **argv, char **envp)
 		ft_dprintf(2, "Usage: %s", argv[0]);
 		return (EX_USAGE);
 	}
-	set_signal_handler();
+	//set_signal_handler();
 	env = init_env(envp);
 	if (!env)
 	{
@@ -47,7 +48,9 @@ static int	minishell(t_list *env)
 	bool		should_exit_shell;
 	t_ast_node	*ast;
 	t_arena		arena;
+	int			exit_code;
 
+	exit_code = 0;
 	should_exit_shell = false;
 	while (!should_exit_shell)
 	{
@@ -59,9 +62,11 @@ static int	minishell(t_list *env)
 		if (!should_exit_shell && *user_input_line)
 		{
 			add_history(user_input_line);
-			ast = parse(arena, user_input_line, env);
-			ft_printf("\n");
-			print_ast(ast, 0);
+			ast = parse(arena, user_input_line, env, exit_code);
+			//ft_printf("\n");
+			if (DEBUG)
+				print_ast(ast, 0);
+			exit_code = execute_ast(ast, env, arena);
 		}
 		arena_dispose(&arena);
 	}

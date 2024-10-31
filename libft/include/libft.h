@@ -72,6 +72,7 @@ int			ft_atoi(const char *str);
 long		ft_atol(const char *str);
 int			ft_parse_int(char *str, long *n);
 int			ft_isalnum(char c);
+char		*ft_itoa(int n);
 
 /* IO */
 

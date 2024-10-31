@@ -6,10 +6,11 @@
 /*   By: pleander <pleander@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/03 13:10:23 by pleander          #+#    #+#             */
-/*   Updated: 2024/09/25 10:54:06 by pleander         ###   ########.fr       */
+/*   Updated: 2024/10/31 13:19:51 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "arena.h"
 #include "libft.h"
 #include "minishell.h"
 #include <stdlib.h>
@@ -55,7 +56,7 @@ char	*get_env(char *var, t_list **env)
 	loc = get_env_list_location(var, env);
 	if (!loc)
 		return (NULL);
-	value = (*env)->content + ft_strlen(var) + 1;
+	value = loc->content + ft_strlen(var) + 1;
 	return (value);
 }
 
@@ -82,7 +83,7 @@ int	set_env(char *var, char *val, t_list **env)
 
 	env_str = make_env_str(var, val);
 	if (!env_str)
-		return (-1);
+		return (1);
 	loc = get_env_list_location(var, env);
 	if (!loc)
 	{
@@ -90,7 +91,7 @@ int	set_env(char *var, char *val, t_list **env)
 		if (!new)
 		{
 			free(env_str);
-			return (-1);
+			return (1);
 		}
 		ft_lstadd_back(env, new);
 	}
@@ -132,4 +133,23 @@ t_list	**init_env(char **envp)
 		envp++;
 	}
 	return (env);
+}
+
+char **make_raw_env_array(t_list *env, t_arena arena)
+{
+	char	**renv;
+	size_t	i;
+	const size_t	env_size = ft_lstsize(env);
+
+	renv = arena_calloc(arena, env_size + 1, sizeof(char *));
+	if (!renv)
+		return (NULL);
+	i = 0;
+	while (i < env_size)
+	{
+		renv[i] = env->content;
+		env = env->next;
+		i++;
+	}
+	return (renv);
 }
