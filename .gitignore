@@ -58,3 +58,6 @@ tags
 
 # Subject
 minishell.pdf
+
+# Other
+.DS_Store
