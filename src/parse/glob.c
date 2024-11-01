@@ -6,7 +6,7 @@
 /*   By: copireyr <copireyr@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 20:02:19 by copireyr          #+#    #+#             */
-/*   Updated: 2024/11/01 10:00:39 by copireyr         ###   ########.fr       */
+/*   Updated: 2024/11/01 11:26:32 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,35 +24,27 @@ static const char	**glob_pattern(t_arena arena,
 		const char **entries, const char *str)
 {
 	const t_quote	*glob_pattern = quotes_lift(arena, str);
-	const char		**result = {0};
 	const char		**matches;
-	size_t			count = 0;
+	size_t			count;
+	const char		**curr = entries;
 
 	if (!entries || !glob_pattern)
-		return (result);
-	const char	**curr = entries;
+		return (NULL);
+	count = 0;
 	while (*curr)
 	{
 		if ((str[0] == '.' || **curr != '.') && match(glob_pattern, *curr))
 			count++;
 		curr++;
 	}
-	if (!count)
-	{
-		matches = arena_alloc(arena, 2 * sizeof(char *));
-		if (!matches)
-			return (result);
-		matches[0] = (char *)str;
-		matches[1] = NULL;
-		return (matches);
-	}
-	matches = arena_calloc(arena, count + 1, sizeof(char *));
+	matches = arena_calloc(arena, count + !count + 1, sizeof(char *));
 	if (!matches)
-		return (result);
-	while (*entries)
+		return (NULL);
+	if (!count)
+		matches[0] = (char *)str;
+	while (*entries && count)
 	{
-		if ((str[0] == '.' || **entries != '.')
-			&& match(glob_pattern, *entries))
+		if ((*str == '.' || **entries != '.') && match(glob_pattern, *entries))
 			*matches++ = *entries;
 		entries++;
 	}
