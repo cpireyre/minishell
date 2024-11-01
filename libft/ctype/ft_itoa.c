@@ -6,7 +6,7 @@
 /*   By: pleander <pleander@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 13:05:52 by pleander          #+#    #+#             */
-/*   Updated: 2024/10/31 14:06:47 by copireyr         ###   ########.fr       */
+/*   Updated: 2024/11/01 09:10:29 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,25 @@ char	*ft_itoa(int n)
 		sign = -1;
 	size = count(n, sign) + 1;
 	str = ft_calloc(size, sizeof(char));
+	if (!str)
+		return (NULL);
+	if (sign < 0)
+		str[0] = '-';
+	convert((long)n, str, sign);
+	return (str);
+}
+
+char	*ft_arena_itoa(t_arena arena, int n)
+{
+	char	*str;
+	size_t	size;
+	int		sign;
+
+	sign = 1;
+	if (n < 0)
+		sign = -1;
+	size = count(n, sign) + 1;
+	str = arena_calloc(arena, size, sizeof(char));
 	if (!str)
 		return (NULL);
 	if (sign < 0)
