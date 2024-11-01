@@ -6,23 +6,26 @@
 /*   By: copireyr <copireyr@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 10:00:45 by copireyr          #+#    #+#             */
-/*   Updated: 2024/10/31 14:07:59 by copireyr         ###   ########.fr       */
+/*   Updated: 2024/11/01 09:53:37 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "expand.h"
 #include "libft.h"
 
-static char			*expand_str(t_arena arena, t_list *env, const char *end, int exit_code);
-static int			find_next_expandable(const char *str);
-static char			*val(t_list *env, const char *key, size_t length_key);
+static char	*expand_str(t_arena arena, t_list *env,
+				const char *end, const char *exit_code);
+static int	find_next_expandable(const char *str);
+static char	*val(t_list *env, const char *key, size_t length_key,
+				const char *exit_code_str);
 
 /*TODO: Check return values for ENOMEM*/
 void	expand(t_ast_node *ast, t_arena arena, t_list *env, int exit_code)
 {
-	size_t	i;
+	size_t		i;
+	const char	*exit_code_str = ft_arena_itoa(arena, exit_code);
 
-	if (!ast)
+	if (!ast || !exit_code_str)
 		return ;
 	i = 0;
 	while (i < ast->n_children)
@@ -30,7 +33,7 @@ void	expand(t_ast_node *ast, t_arena arena, t_list *env, int exit_code)
 		if (ast->children[i]->type == AST_WORD)
 		{
 			ast->children[i]->token.value = expand_str(
-					arena, env, ast->children[i]->token.value, exit_code);
+					arena, env, ast->children[i]->token.value, exit_code_str);
 			ast->children[i]->token.size = ft_strlen(
 					ast->children[i]->token.value);
 		}
@@ -39,7 +42,8 @@ void	expand(t_ast_node *ast, t_arena arena, t_list *env, int exit_code)
 	}
 }
 
-static char	*expand_str(t_arena arena, t_list *env, const char *end, int exit_code)
+static char	*expand_str(t_arena arena, t_list *env,
+		const char *end, const char *exit_code)
 {
 	t_string_vector	vec;
 	const char		*start;
@@ -59,16 +63,10 @@ static char	*expand_str(t_arena arena, t_list *env, const char *end, int exit_co
 		{
 			start = ++end;
 			if (*start == '?')
-			{
-				vec.strings[vec.count++] = ft_arena_itoa(arena, exit_code);
-				if (!vec.strings[vec.count - 1])
-					return (NULL);
 				end++;
-				continue ;
-			}
-			while (ft_isalnum(*end) || *end == '_')
+			while (*start != '?' && (ft_isalnum(*end) || *end == '_'))
 				end++;
-			vec.strings[vec.count++] = val(env, start, end - start);
+			vec.strings[vec.count++] = val(env, start, end - start, exit_code);
 		}
 	}
 	return (ft_arena_strjoin(arena, vec.strings, vec.count));
@@ -115,11 +113,14 @@ static int	find_next_expandable(const char *str)
 	return (i);
 }
 
-static char	*val(t_list *env, const char *key, size_t length_key)
+static char	*val(t_list *env, const char *key, size_t length_key,
+			const char *exit_code_str)
 {
 	char	*curr;
 	size_t	i;
 
+	if (*key == '?' && length_key == 1)
+		return ((char *)exit_code_str);
 	if (!*key)
 		return ("$");
 	while (env && length_key)
