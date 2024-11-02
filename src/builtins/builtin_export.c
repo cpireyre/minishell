@@ -53,6 +53,7 @@ static int	check_identifier(char *id)
 		return (-1);
 	return (0);
 }
+
 int	export(char *export_str, t_list **env)
 {
 	char	*eq;

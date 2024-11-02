@@ -88,15 +88,15 @@ int	run_builtin(char *builtin, char **args, t_list **env)
 	if (ft_streq(builtin, "env"))
 		return (run_builtin_env(env));
 	if (ft_streq(builtin, "export"))
-		return(run_builtin_export(args, env));
+		return (run_builtin_export(args, env));
 	if (ft_streq(builtin, "unset"))
-		return(run_builtin_unset(args, env));
+		return (run_builtin_unset(args, env));
 	if (ft_streq(builtin, "pwd"))
-		return(run_builtin_pwd());
+		return (run_builtin_pwd());
 	if (ft_streq(builtin, "cd"))
-		return(run_builtin_cd(count_args(args), args, env));
+		return (run_builtin_cd(count_args(args), args, env));
 	if (ft_streq(builtin, "echo"))
-		return(run_builtin_echo(args));
+		return (run_builtin_echo(args));
 	if (ft_streq(builtin, "exit"))
 		return(0);
 	return (1);
