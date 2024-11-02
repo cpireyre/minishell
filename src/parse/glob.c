@@ -79,7 +79,8 @@ void	glob(t_arena arena, t_ast_node *ast)
 	const char	**entries = get_cwd_entries(arena);
 	t_ast_vec	new_children;
 	size_t		i;
-	bool		should_expand;
+	bool		has_glob;
+	t_ast_node	*node;
 
 	if (!ast || !entries)
 		return ;
@@ -87,14 +88,11 @@ void	glob(t_arena arena, t_ast_node *ast)
 	ft_bzero(&new_children, sizeof(new_children));
 	while (i < ast->n_children)
 	{
-		should_expand = ast->children[i]->type == AST_WORD
-			&& ft_strchr(ast->children[i]->token.value, '*');
-		if (should_expand)
-		{
-			if (!expand_glob_node(arena, entries, ast->children[i], &new_children))
-				return ;
-		}
-		else if (!ast_push(arena, &new_children, ast->children[i]))
+		node = ast->children[i];
+		has_glob = node->type == AST_WORD && ft_strchr(node->token.value, '*');
+		if (has_glob && !expand_glob_node(arena, entries, node, &new_children))
+			return ;
+		if (!has_glob && !ast_push(arena, &new_children, node))
 			return ;
 		i++;
 	}
