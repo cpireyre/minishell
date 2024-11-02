@@ -6,7 +6,7 @@
 /*   By: copireyr <copireyr@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 20:02:19 by copireyr          #+#    #+#             */
-/*   Updated: 2024/10/31 13:46:22 by copireyr         ###   ########.fr       */
+/*   Updated: 2024/11/01 11:26:32 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,93 +20,87 @@
 static bool			match(const t_quote *pattern, const char *candidate);
 static const char	**get_cwd_entries(t_arena arena);
 
-static const char	**glob_pattern(t_arena arena, const char **entries, const char *str)
+static const char	**glob_pattern(t_arena arena,
+		const char **entries, const char *str)
 {
-    const t_quote	*glob_pattern = quotes_lift(arena, str);
-    const char	**result = {0};
-    const char		**matches;
-    size_t			count = 0;
+	const t_quote	*glob_pattern = quotes_lift(arena, str);
+	const char		**matches;
+	size_t			count;
+	const char		**curr = entries - 1;
 
-    if (!entries || !glob_pattern)
-        return (result);
-    const char **curr = entries;
-    while (*curr)
-    {
-        if ((str[0] == '.' || **curr != '.') && match(glob_pattern, *curr))
-            count++;
-        curr++;
-    }
-    if (!count)
-    {
-        matches = arena_alloc(arena, 2 * sizeof(char *));
-        if (!matches)
-            return result;
-        matches[0] = (char *)str;
-        matches[1] = NULL;
-        return (matches);
-    }
-    matches = arena_calloc(arena, count + 1, sizeof(char *));
-    if (!matches)
-        return result;
-    while (*entries)
-    {
-        if ((str[0] == '.' || **entries != '.') && match(glob_pattern, *entries))
-            *matches++ = *entries;
-        entries++;
-    }
+	if (!entries || !glob_pattern)
+		return (NULL);
+	count = 0;
+	while (*++curr)
+	{
+		if ((str[0] == '.' || **curr != '.') && match(glob_pattern, *curr))
+			count++;
+	}
+	matches = arena_calloc(arena, count + !count + 1, sizeof(char *));
+	if (!matches)
+		return (NULL);
+	if (!count)
+		matches[0] = quotes_lower(arena, glob_pattern);
+	while (*entries && count)
+	{
+		if ((*str == '.' || **entries != '.') && match(glob_pattern, *entries))
+			*matches++ = *entries;
+		entries++;
+	}
 	return (matches - count);
 }
 
-static t_ast_node *create_word_node(t_arena arena, const char *value,
-                                  enum e_tok_type type, bool is_globbed)
+static bool	expand_glob_node(t_arena arena, const char **entries,
+	t_ast_node *node, t_ast_vec *new_children)
 {
-    t_ast_node *node;
+	const char	**result;
+	t_ast_node	*new_node;
 
-    node = arena_calloc(arena, 1, sizeof(*node));
-    if (!node)
-        return (NULL);
-    node->type = AST_WORD;
-    node->token.type = type;
-    node->token.value = value;
-    node->token.size = ft_strlen(value);
-    node->token.is_globbed = is_globbed;
-    return (node);
+	result = glob_pattern(arena, entries, node->token.value);
+	while (*result)
+	{
+		new_node = arena_calloc(arena, 1, sizeof(*new_node));
+		if (!new_node)
+			return (false);
+		new_node->type = AST_WORD;
+		new_node->token.type = node->token.type;
+		new_node->token.value = *result;
+		new_node->token.size = ft_strlen(*result);
+		new_node->token.is_globbed = true;
+		if (!ast_push(arena, new_children, new_node))
+			return (false);
+		result++;
+	}
+	return (true);
 }
 
-void    glob(t_arena arena, t_ast_node *ast)
+void	glob(t_arena arena, t_ast_node *ast)
 {
-    const char      **entries = get_cwd_entries(arena);
-    t_ast_vec       new_children = {0};
-    t_ast_node      *new_child;
-    const char		**result;
-    size_t          i;
+	const char	**entries = get_cwd_entries(arena);
+	t_ast_vec	new_children;
+	size_t		i;
+	bool		has_glob;
+	t_ast_node	*node;
 
-    if (!ast || !entries)
-        return ;
-    i = 0;
-    while (i < ast->n_children)
-    {
-        if (ast->children[i]->type == AST_WORD
-            && ft_strchr(ast->children[i]->token.value, '*'))
-        {
-            result = glob_pattern(arena, entries, ast->children[i]->token.value);
-			while (*result)
-            {
-				new_child = create_word_node(arena, *result++,
-							ast->children[i]->token.type, true);
-				if (!new_child || !ast_push(arena, &new_children, new_child))
-					return ;
-            }
-        }
-        else if (!ast_push(arena, &new_children, ast->children[i]))
-            return ;
-        i++;
-    }
-    ast->children = new_children.data;
-    ast->n_children = new_children.size;
+	if (!ast || !entries)
+		return ;
 	i = 0;
-    while (i < ast->n_children)
-        glob(arena, ast->children[i++]);
+	ft_bzero(&new_children, sizeof(new_children));
+	while (i < ast->n_children)
+	{
+		node = ast->children[i];
+		has_glob = node->type == AST_WORD && ft_strchr(node->token.value, '*');
+		if (has_glob && !expand_glob_node(arena, entries, node, &new_children))
+			return ;
+		if (!has_glob && !ast_push(arena, &new_children, node))
+			return ;
+		i++;
+	}
+	ast->children = new_children.data;
+	ast->n_children = new_children.size;
+	i = 0;
+	while (i < ast->n_children)
+		glob(arena, ast->children[i++]);
 }
 
 static bool	match(const t_quote *pattern, const char *candidate)

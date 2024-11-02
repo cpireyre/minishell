@@ -6,7 +6,7 @@
 /*   By: copireyr <copireyr@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 11:57:35 by copireyr          #+#    #+#             */
-/*   Updated: 2024/10/31 13:00:24 by copireyr         ###   ########.fr       */
+/*   Updated: 2024/11/01 09:56:14 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,8 @@ static char	*get_ast_type(enum e_ast_type t);
 void		split_words(t_arena arena, t_ast_node *ast);
 void		remove_quotes(t_arena arena, t_ast_node *ast);
 
-t_ast_node	*parse(t_arena arena, char *user_input_line, t_list *env, int exit_code)
+t_ast_node	*parse(t_arena arena, char *user_input_line,
+			t_list *env, int exit_code)
 {
 	t_token		*xs;
 	t_ast_node	*ast;
@@ -53,7 +54,8 @@ void	print_ast(t_ast_node *root, size_t level)
 	pad = 0;
 	while (pad++ < level * 2)
 		ft_printf(" ");
-	ft_printf("%s [%s (%s)]\n", get_ast_type(root->type), ast_show_type(root->token.type), root->token.value);
+	ft_printf("%s [%s (%s)]\n", get_ast_type(root->type),
+		ast_show_type(root->token.type), root->token.value);
 	level++;
 	i = 0;
 	while (i < root->n_children)

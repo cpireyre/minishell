@@ -6,22 +6,22 @@
 /*   By: pleander <pleander@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 13:05:52 by pleander          #+#    #+#             */
-/*   Updated: 2024/11/01 09:10:29 by copireyr         ###   ########.fr       */
+/*   Updated: 2024/11/01 09:40:29 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-static void	convert(int n, char *str, int sign)
+static void	ft_itoa_convert(int n, char *str, int sign)
 {
 	char	c;
 
 	if (sign < 0)
 		if (n < (9 / sign))
-			convert(n / 10, str, sign);
+			ft_itoa_convert(n / 10, str, sign);
 	if (sign > 0)
 		if (n > (9 / sign))
-			convert(n / 10, str, sign);
+			ft_itoa_convert(n / 10, str, sign);
 	c = (n % 10) * sign + '0';
 	str[ft_strlen(str)] = c;
 }
@@ -56,7 +56,7 @@ char	*ft_itoa(int n)
 		return (NULL);
 	if (sign < 0)
 		str[0] = '-';
-	convert((long)n, str, sign);
+	ft_itoa_convert((long)n, str, sign);
 	return (str);
 }
 
@@ -75,6 +75,6 @@ char	*ft_arena_itoa(t_arena arena, int n)
 		return (NULL);
 	if (sign < 0)
 		str[0] = '-';
-	convert((long)n, str, sign);
+	ft_itoa_convert((long)n, str, sign);
 	return (str);
 }
