@@ -64,11 +64,8 @@ static char	*expand_str(t_arena arena, t_list *env,
 			start = ++end;
 			if (*start == '?')
 				end++;
-			else if (!ft_isalnum(*start) && *start != '_')
-				end = start;  // This is the key change - don't advance end if not valid identifier
-			else
-				while (ft_isalnum(*end) || *end == '_')
-					end++;
+			while (*start != '?' && (ft_isalnum(*end) || *end == '_'))
+				end++;
 			vec.strings[vec.count++] = val(env, start, end - start, exit_code);
 		}
 	}
