@@ -12,6 +12,8 @@
 
 #include "libft.h"
 
+static bool	is_n_flag(const char *arg);
+
 int	echo(char **args)
 {
 	int	nl;
@@ -21,18 +23,28 @@ int	echo(char **args)
 	if (args && (args[1]))
 	{
 		i = 1;
-		if (ft_streq(args[i], "-n"))
+		while (args[i] && is_n_flag(args[i]))
 		{
 			nl = 0;
 			i++;
 		}
-		while (args[i + 1])
+		while (args[i])
 		{
-			ft_printf("%s ", args[i++]);
+			ft_printf("%s", args[i++]);
+			if (args[i])
+				ft_printf(" ");
 		}
-		ft_printf("%s", args[i]);
 	}
 	if (nl)
 		ft_printf("%s", "\n");
 	return (0);
+}
+
+static bool	is_n_flag(const char *arg)
+{
+	if (!arg || arg[0] != '-' || !arg[1])
+		return (false);
+	while (*++arg == 'n')
+		;
+	return (!*arg);
 }
