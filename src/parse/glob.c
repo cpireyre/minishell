@@ -40,7 +40,7 @@ static const char	**glob_pattern(t_arena arena,
 	if (!matches)
 		return (NULL);
 	if (!count)
-		matches[0] = (char *)str;
+		matches[0] = quotes_lower(arena, glob_pattern);
 	while (*entries && count)
 	{
 		if ((*str == '.' || **entries != '.') && match(glob_pattern, *entries))
@@ -89,9 +89,11 @@ void	glob(t_arena arena, t_ast_node *ast)
 	{
 		should_expand = ast->children[i]->type == AST_WORD
 			&& ft_strchr(ast->children[i]->token.value, '*');
-		if (should_expand && !expand_glob_node(
-				arena, entries, ast->children[i], &new_children))
-			return ;
+		if (should_expand)
+		{
+			if (!expand_glob_node(arena, entries, ast->children[i], &new_children))
+				return ;
+		}
 		else if (!ast_push(arena, &new_children, ast->children[i]))
 			return ;
 		i++;
