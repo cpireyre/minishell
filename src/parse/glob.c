@@ -26,16 +26,15 @@ static const char	**glob_pattern(t_arena arena,
 	const t_quote	*glob_pattern = quotes_lift(arena, str);
 	const char		**matches;
 	size_t			count;
-	const char		**curr = entries;
+	const char		**curr = entries - 1;
 
 	if (!entries || !glob_pattern)
 		return (NULL);
 	count = 0;
-	while (*curr)
+	while (*++curr)
 	{
 		if ((str[0] == '.' || **curr != '.') && match(glob_pattern, *curr))
 			count++;
-		curr++;
 	}
 	matches = arena_calloc(arena, count + !count + 1, sizeof(char *));
 	if (!matches)
@@ -51,48 +50,48 @@ static const char	**glob_pattern(t_arena arena,
 	return (matches - count);
 }
 
-static t_ast_node	*create_word_node(t_arena arena, const char *value,
-		enum e_tok_type type, bool is_globbed)
+static bool	expand_glob_node(t_arena arena, const char **entries,
+	t_ast_node *node, t_ast_vec *new_children)
 {
-	t_ast_node	*node;
+	const char	**result;
+	t_ast_node	*new_node;
 
-	node = arena_calloc(arena, 1, sizeof(*node));
-	if (!node)
-		return (NULL);
-	node->type = AST_WORD;
-	node->token.type = type;
-	node->token.value = value;
-	node->token.size = ft_strlen(value);
-	node->token.is_globbed = is_globbed;
-	return (node);
+	result = glob_pattern(arena, entries, node->token.value);
+	while (*result)
+	{
+		new_node = arena_calloc(arena, 1, sizeof(*new_node));
+		if (!new_node)
+			return (false);
+		new_node->type = AST_WORD;
+		new_node->token.type = node->token.type;
+		new_node->token.value = *result;
+		new_node->token.size = ft_strlen(*result);
+		new_node->token.is_globbed = true;
+		if (!ast_push(arena, new_children, new_node))
+			return (false);
+		result++;
+	}
+	return (true);
 }
 
 void	glob(t_arena arena, t_ast_node *ast)
 {
 	const char	**entries = get_cwd_entries(arena);
-	t_ast_vec	new_children = {0};
-	t_ast_node	*new_child;
-	const char	**result;
+	t_ast_vec	new_children;
 	size_t		i;
+	bool		should_expand;
 
 	if (!ast || !entries)
 		return ;
 	i = 0;
+	ft_bzero(&new_children, sizeof(new_children));
 	while (i < ast->n_children)
 	{
-		if (ast->children[i]->type == AST_WORD
-			&& ft_strchr(ast->children[i]->token.value, '*'))
-		{
-			result = glob_pattern(arena, entries,
-					ast->children[i]->token.value);
-			while (*result)
-			{
-				new_child = create_word_node(arena, *result++,
-						ast->children[i]->token.type, true);
-				if (!new_child || !ast_push(arena, &new_children, new_child))
-					return ;
-			}
-		}
+		should_expand = ast->children[i]->type == AST_WORD
+			&& ft_strchr(ast->children[i]->token.value, '*');
+		if (should_expand && !expand_glob_node(
+				arena, entries, ast->children[i], &new_children))
+			return ;
 		else if (!ast_push(arena, &new_children, ast->children[i]))
 			return ;
 		i++;
