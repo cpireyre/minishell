@@ -98,6 +98,6 @@ int	run_builtin(char *builtin, char **args, t_list **env)
 	if (ft_streq(builtin, "echo"))
 		return (run_builtin_echo(args));
 	if (ft_streq(builtin, "exit"))
-		return(0);
+		return (builtin_exit(args));
 	return (1);
 }

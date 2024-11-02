@@ -62,5 +62,6 @@ int		cd(int argc, char **args, t_list **env);
 int		echo(char **args);
 
 int		set_signal_handler(void);
+int		builtin_exit(char **args);
 
 #endif /* MINISHELL_H */
