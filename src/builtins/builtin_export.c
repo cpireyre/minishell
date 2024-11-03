@@ -6,7 +6,7 @@
 /*   By: pleander <pleander@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/24 11:15:09 by pleander          #+#    #+#             */
-/*   Updated: 2024/10/30 15:07:48 by pleander         ###   ########.fr       */
+/*   Updated: 2024/11/03 10:20:55 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,7 @@ static int	check_identifier(char *id)
 		return (-1);
 	return (0);
 }
+
 int	export(char *export_str, t_list **env)
 {
 	char	*eq;

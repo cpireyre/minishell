@@ -6,7 +6,7 @@
 /*   By: pleander <pleander@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 12:31:14 by pleander          #+#    #+#             */
-/*   Updated: 2024/11/03 10:16:51 by copireyr         ###   ########.fr       */
+/*   Updated: 2024/11/03 10:20:24 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ char	*get_working_dir(void)
 	}
 	return (buf);
 }
-	
+
 int	pwd(t_list **env)
 {
 	const char	*pwd_value = get_env("PWD", env);
