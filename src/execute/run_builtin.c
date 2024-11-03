@@ -6,18 +6,18 @@
 /*   By: pleander <pleander@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/28 10:14:24 by pleander          #+#    #+#             */
-/*   Updated: 2024/10/30 14:55:11 by pleander         ###   ########.fr       */
+/*   Updated: 2024/11/03 10:16:25 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 #include "minishell.h"
 
-static int run_builtin_pwd(void)
+static int run_builtin_pwd(t_list **env)
 {
 	int	ret;
 
-	ret = pwd();
+	ret = pwd(env);
 	return (ret);
 }
 
@@ -92,7 +92,7 @@ int	run_builtin(char *builtin, char **args, t_list **env)
 	if (ft_streq(builtin, "unset"))
 		return(run_builtin_unset(args, env));
 	if (ft_streq(builtin, "pwd"))
-		return(run_builtin_pwd());
+		return(run_builtin_pwd(env));
 	if (ft_streq(builtin, "cd"))
 		return(run_builtin_cd(count_args(args), args, env));
 	if (ft_streq(builtin, "echo"))

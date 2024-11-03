@@ -6,12 +6,13 @@
 /*   By: pleander <pleander@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 12:31:14 by pleander          #+#    #+#             */
-/*   Updated: 2024/10/29 12:46:13 by pleander         ###   ########.fr       */
+/*   Updated: 2024/11/03 10:16:51 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "unistd.h"
+#include <unistd.h>
 #include "libft.h"
+#include "minishell.h"
 
 char	*get_working_dir(void)
 {
@@ -35,14 +36,12 @@ char	*get_working_dir(void)
 	return (buf);
 }
 	
-int	pwd(void)
+int	pwd(t_list **env)
 {
-	char	*buf;
+	const char	*pwd_value = get_env("PWD", env);
 
-	buf = get_working_dir();
-	if (!buf)
+	if (!pwd_value)
 		return (1);
-	ft_printf("%s\n", buf);
-	free(buf);
+	ft_printf("%s\n", pwd_value);
 	return (0);
 }
