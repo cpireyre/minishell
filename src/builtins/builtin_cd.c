@@ -6,7 +6,7 @@
 /*   By: pleander <pleander@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 13:28:45 by pleander          #+#    #+#             */
-/*   Updated: 2024/10/29 13:38:42 by pleander         ###   ########.fr       */
+/*   Updated: 2024/11/03 10:21:18 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 #include "libft.h"
 #include "minishell.h"
 
-static	int set_working_dir(char *var, t_list **env)
+static int	set_working_dir(char *var, t_list **env)
 {
 	char	*temp;
 	int		ret;
@@ -83,7 +83,7 @@ static int	handle_no_args(t_list **env)
 int	cd(int argc, char **args, t_list **env)
 {
 	int		ret;
-	
+
 	ret = 1;
 	if (argc == 1)
 		ret = handle_no_args(env);
