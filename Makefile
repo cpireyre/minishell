@@ -6,7 +6,7 @@
 #    By: copireyr <copireyr@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/08/27 12:07:56 by copireyr          #+#    #+#              #
-#    Updated: 2024/10/31 13:42:20 by copireyr         ###   ########.fr        #
+#    Updated: 2024/11/05 20:49:45 by copireyr         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,7 +17,7 @@ DEBUG := 0
 CPPFLAGS := -I./include/ -I./libft/include
 LDFLAGS := -lreadline -L./libft/ -lft
 CFLAGS := -Wall -Wextra -MMD -MP -g
-asan := -fsanitize=address,undefined,leak
+asan := -fsanitize=address,undefined#,leak
 CFLAGS += $(asan)
 LDFLAGS += $(asan)
 NAME := minishell
@@ -30,7 +30,7 @@ src := ./src/main.c ./src/environment.c ./src/signals.c
 
 parse := $(addprefix ./src/parse/, ast.c parse.c tokenize.c tokenize_utils.c \
 		 expand.c glob.c split_words.c remove_quotes.c glob_quotes.c)
-builtins := $(addprefix ./src/builtins/, builtins.c builtin_env.c builtin_export.c builtin_unset.c builtin_pwd.c builtin_cd.c builtin_echo.c)
+builtins := $(addprefix ./src/builtins/, builtins.c builtin_env.c builtin_export.c builtin_unset.c builtin_pwd.c builtin_cd.c builtin_echo.c builtin_exit.c)
 execute := $(addprefix ./src/execute/, execute_ast.c make_command.c pipe.c run_builtin.c)
 src += $(parse) $(builtins) $(execute)
 
@@ -76,7 +76,5 @@ val: $(NAME)
 
 .PHONY: test
 test: $(NAME)
-	# SPACE_VAR="hello world" EMPTY="" ./$< < tests/expansion.msh
-	# ./$< < tests/glob.msh
-	./$< < tests/quotes.msh
+	cd minishell_tester/ && ./tester
 -include $(obj:.o=.d)
