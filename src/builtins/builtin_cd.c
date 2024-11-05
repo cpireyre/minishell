@@ -6,7 +6,7 @@
 /*   By: pleander <pleander@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 13:28:45 by pleander          #+#    #+#             */
-/*   Updated: 2024/11/05 20:44:07 by copireyr         ###   ########.fr       */
+/*   Updated: 2024/11/05 20:47:45 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,7 +96,10 @@ int	cd(int argc, char **args, t_list **env)
 		if (set_working_dir("OLDPWD", env) < 0)
 			return (1);
 		if (chdir(args[1]) < 0)
-			perror(NAME ": cd");
+		{
+			ft_dprintf(2, "%s", NAME ": cd: ");
+			perror(args[1]);
+		}
 		else
 			ret = 0;
 	}
