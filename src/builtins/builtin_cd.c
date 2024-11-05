@@ -6,7 +6,7 @@
 /*   By: pleander <pleander@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 13:28:45 by pleander          #+#    #+#             */
-/*   Updated: 2024/11/05 20:47:45 by copireyr         ###   ########.fr       */
+/*   Updated: 2024/11/05 21:07:18 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,13 @@ static int	handle_tilde(char *path, t_list **env)
 		return (1);
 	if (set_working_dir("OLDPWD", env) < 0)
 		return (1);
-	ret = chdir(expanded_path);
+	if (chdir(expanded_path) < 0)
+	{
+		ft_dprintf(2, "%s: cd: ", NAME);
+		perror(expanded_path);
+		free(expanded_path);
+		return (1);
+	}
 	free(expanded_path);
 	return (0);
 }
