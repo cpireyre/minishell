@@ -6,7 +6,7 @@
 /*   By: pleander <pleander@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/28 10:14:24 by pleander          #+#    #+#             */
-/*   Updated: 2024/11/03 10:16:25 by copireyr         ###   ########.fr       */
+/*   Updated: 2024/11/03 10:46:52 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,16 +88,16 @@ int	run_builtin(char *builtin, char **args, t_list **env)
 	if (ft_streq(builtin, "env"))
 		return (run_builtin_env(env));
 	if (ft_streq(builtin, "export"))
-		return(run_builtin_export(args, env));
+		return (run_builtin_export(args, env));
 	if (ft_streq(builtin, "unset"))
-		return(run_builtin_unset(args, env));
+		return (run_builtin_unset(args, env));
 	if (ft_streq(builtin, "pwd"))
-		return(run_builtin_pwd(env));
+		return (run_builtin_pwd(env));
 	if (ft_streq(builtin, "cd"))
-		return(run_builtin_cd(count_args(args), args, env));
+		return (run_builtin_cd(count_args(args), args, env));
 	if (ft_streq(builtin, "echo"))
-		return(run_builtin_echo(args));
+		return (run_builtin_echo(args));
 	if (ft_streq(builtin, "exit"))
-		return(0);
+		return (builtin_exit(args));
 	return (1);
 }

@@ -58,7 +58,7 @@ static int	minishell(t_list *env)
 		if (!arena)
 			break ;
 		user_input_line = arena_readline(arena, MINISHELL_PROMPT);
-		should_exit_shell = !user_input_line || ft_streq(user_input_line, "exit");
+		should_exit_shell = !user_input_line;
 		if (!should_exit_shell && *user_input_line)
 		{
 			add_history(user_input_line);
