@@ -6,7 +6,7 @@
 /*   By: pleander <pleander@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/28 10:14:24 by pleander          #+#    #+#             */
-/*   Updated: 2024/11/03 10:46:52 by copireyr         ###   ########.fr       */
+/*   Updated: 2024/11/05 20:46:27 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,11 +54,6 @@ static int	run_builtin_cd(int argc, char **args, t_list **env)
 {
 	int ret;
 
-	if (argc > 2)
-	{
-		ft_dprintf(2, "%s: cd: too many arguments\n", NAME);
-		return (1);
-	}
 	ret = cd(argc, args, env);
 	return (ret);
 }
