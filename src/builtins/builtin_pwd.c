@@ -6,13 +6,28 @@
 /*   By: pleander <pleander@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 12:31:14 by pleander          #+#    #+#             */
-/*   Updated: 2024/11/03 10:20:24 by copireyr         ###   ########.fr       */
+/*   Updated: 2024/11/05 21:47:30 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <unistd.h>
 #include "libft.h"
 #include "minishell.h"
+
+int	set_working_dir(char *var, t_list **env)
+{
+	char	*temp;
+	int		ret;
+
+	temp = get_working_dir();
+	if (!temp)
+		return (-1);
+	ret = set_env(var, temp, env);
+	free(temp);
+	if (ret < 0)
+		return (-1);
+	return (0);
+}
 
 char	*get_working_dir(void)
 {
