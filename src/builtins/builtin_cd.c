@@ -6,7 +6,7 @@
 /*   By: pleander <pleander@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 13:28:45 by pleander          #+#    #+#             */
-/*   Updated: 2024/11/06 09:50:02 by copireyr         ###   ########.fr       */
+/*   Updated: 2024/11/06 11:37:50 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,7 @@ static int	handle_no_args(t_list **env)
 	return (0);
 }
 
-static int handle_path(char *path)
+static int	handle_path(char *path)
 {
 	if (chdir(path) < 0)
 	{
@@ -121,12 +121,9 @@ int	cd(char **args, t_list **env)
 		ret = handle_path(args[1]);
 	if (ret == 0)
 		ret = set_env("OLDPWD", old_dir, env) < 0
-			|| set_working_dir("PWD", env) < 0;
+			| set_working_dir("PWD", env) < 0;
 	free(old_dir);
 	if (argc > 2)
-	{
-		ft_dprintf(2, "%s: cd: too many arguments", NAME);
-		return (1);
-	}
+		return (!!ft_dprintf(2, "%s: cd: too many arguments\n", NAME));
 	return (!!ret);
 }
