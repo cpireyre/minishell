@@ -6,7 +6,7 @@
 /*   By: pleander <pleander@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/08 20:51:52 by pleander          #+#    #+#             */
-/*   Updated: 2024/11/06 09:38:33 by copireyr         ###   ########.fr       */
+/*   Updated: 2024/11/06 10:30:12 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -193,7 +193,8 @@ static int	execute_cmd(t_command_context *con, t_arena arena, int prev_exit)
 	
 	if (make_command(&cmd, con->ast, con->env, arena) < 0)
 	{
-		ft_dprintf(2, "Error making command\n");
+		if (DEBUG)
+			ft_dprintf(2, "Error making command\n");
 		return (1);
 	}
 	if (con->pipes && con->cur_child > 0)
@@ -227,7 +228,8 @@ static t_shell_status	execute_builtin_cmd(
 	orig_fds[1] = -1;
 	if (make_command(&cmd, con->ast, con->env, arena) < 0)
 	{
-		ft_dprintf(2, "Error making command\n");
+		if (DEBUG)
+			ft_dprintf(2, "Error making command\n");
 		return ((t_shell_status){.exit_code = 1});
 	}
 	if (con->pipes && con->cur_child > 0)
