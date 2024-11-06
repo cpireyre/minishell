@@ -6,7 +6,7 @@
 /*   By: copireyr <copireyr@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/27 12:08:02 by copireyr          #+#    #+#             */
-/*   Updated: 2024/11/06 11:13:11 by copireyr         ###   ########.fr       */
+/*   Updated: 2024/11/06 11:54:01 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ int	main(int argc, char **argv, char **envp)
 		ft_dprintf(2, "Usage: %s", argv[0]);
 		return (EX_USAGE);
 	}
-	set_signal_handler();
+	/* set_signal_handler(); */
 	env = init_env(envp);
 	if (!env)
 	{
