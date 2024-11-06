@@ -6,7 +6,7 @@
 /*   By: copireyr <copireyr@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 22:04:13 by copireyr          #+#    #+#             */
-/*   Updated: 2024/11/05 22:15:06 by copireyr         ###   ########.fr       */
+/*   Updated: 2024/11/06 09:44:06 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ t_shell_status	builtin_exit(char **args, int prev_exit)
 	if (!ok)
 	{
 		ft_dprintf(2, NAME ": %s: numeric argument required\n", builtin_name);
-		return ((t_shell_status){.exit_code = 255, .should_exit = true});
+		return ((t_shell_status){.exit_code = 2, .should_exit = true});
 	}
 	if (DEBUG)
 		ft_printf("Exit code: %d\n", (uint8_t)user_input);

@@ -6,7 +6,7 @@
 /*   By: pleander <pleander@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 11:03:23 by pleander          #+#    #+#             */
-/*   Updated: 2024/10/29 15:08:06 by pleander         ###   ########.fr       */
+/*   Updated: 2024/11/06 09:13:54 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,11 +35,19 @@ typedef struct	s_command_context
 	size_t		n_children;
 }	t_command_context;
 
-int		execute_ast(t_ast_node *ast, t_list	*env, t_arena arena);
+typedef struct	s_shell_status
+{
+	bool	should_exit;
+	int		exit_code;
+}	t_shell_status;
+
+t_shell_status	execute_ast(t_ast_node *ast, t_list	*env, t_arena arena, int prev_exit);
 int		make_command(t_command *cmd, t_ast_node *ast, t_list *env, t_arena arena);
 int		**make_pipes(int n_pipes, t_arena arena);
 void	close_pipes(int **pipes, int n_pipes);
 size_t	calculate_n_pipes(t_ast_node *ast);
-int		run_builtin(char *builtin, char **args, t_list **env);
+t_shell_status	run_builtin(
+		char *builtin, char **args, t_list **env, int prev_exit);
+t_shell_status	builtin_exit(char **args, int prev_exit);
 
 #endif

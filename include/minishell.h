@@ -6,7 +6,7 @@
 /*   By: copireyr <copireyr@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/27 12:29:36 by copireyr          #+#    #+#             */
-/*   Updated: 2024/11/05 22:15:19 by copireyr         ###   ########.fr       */
+/*   Updated: 2024/11/06 09:10:19 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 # include <readline/history.h>
 # include "libft.h"
 # include "ast.h"
+# include "execute.h"
 
 # ifndef DEBUG
 #  define DEBUG 0
@@ -45,12 +46,6 @@ typedef struct s_fds
 	int		*heredoc_pipe;
 }	t_fds;
 
-typedef struct	s_shell_status
-{
-	bool	should_exit;
-	int		exit_code;
-}	t_shell_status;
-
 t_list	**init_env(char **envp);
 int		export(char *export_str, t_list **env);
 int		printenv(t_list **env);
@@ -69,6 +64,5 @@ int		cd(char **args, t_list **env);
 int		echo(char **args);
 int		set_signal_handler(void);
 
-t_shell_status	builtin_exit(char **args, int prev_exit);
 
 #endif /* MINISHELL_H */
