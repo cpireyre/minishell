@@ -6,7 +6,7 @@
 /*   By: pleander <pleander@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 13:28:45 by pleander          #+#    #+#             */
-/*   Updated: 2024/11/05 21:48:53 by copireyr         ###   ########.fr       */
+/*   Updated: 2024/11/05 22:13:07 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,14 +99,18 @@ static int handle_path(char *path)
 	return (0);
 }
 
-int	cd(int argc, char **args, t_list **env)
+int	cd(char **args, t_list **env)
 {
 	int		ret;
 	char	*old_dir;
+	int		argc;
 
 	old_dir = get_working_dir();
 	if (!old_dir)
 		return (1);
+	argc = 0;
+	while (args[argc++])
+		;
 	if (argc == 1)
 		ret = handle_no_args(env);
 	else if (args[1][0] == '~')

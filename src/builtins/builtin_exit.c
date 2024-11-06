@@ -1,22 +1,16 @@
-#include "libft.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   builtin_exit.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: copireyr <copireyr@student.hive.fi>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/11/05 22:04:13 by copireyr          #+#    #+#             */
+/*   Updated: 2024/11/05 22:15:06 by copireyr         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
-/* exit [n] */
-/*               Cause the shell to exit with a status of n.  If n is omitted, the  exit  status  is */
-/*               that  of  the  last  command executed.  A trap on EXIT is executed before the shell */
-/*               terminates. */
-/* [...] */
-
-/* bash-3.2$ exit 1 2 */
-/* exit */
-/* bash: exit: too many arguments */
-/* echo $? */
-/* 1 */
-
-/* bash-3.2$ exit a */
-/* exit */
-/* bash: exit: a: numeric argument required */
-/* colin与Granville向~/1/c/minishell說: echo $status                                                              一五:五二 */
-/* 255 */
+#include "minishell.h"
 
 int	ft_parse_long(char *str, int64_t *n)
 {
@@ -40,26 +34,27 @@ int	ft_parse_long(char *str, int64_t *n)
 	return (1);
 }
 
-int	builtin_exit(char **args)
+t_shell_status	builtin_exit(char **args, int prev_exit)
 {
-	int		ok;
-	int64_t	user_input;
-	const char	*builtin_name = *args++;
+	int				ok;
+	int64_t			user_input;
+	const char		*builtin_name = *args++;
 
 	if (!args || !*args)
-		return (0); // should return previous exit code
+		return ((t_shell_status){.exit_code = prev_exit, .should_exit = true});
 	ok = ft_parse_long(*args++, &user_input);
 	if (*args)
 	{
-		ft_dprintf(2, "minishell: %s: too many arguments\n", builtin_name);
-		return (1);
+		ft_dprintf(2, NAME ": %s: too many arguments\n", builtin_name);
+		return ((t_shell_status){.exit_code = 1, .should_exit = false});
 	}
 	if (!ok)
 	{
-		ft_dprintf(2, "minishell: %s: numeric argument required\n", builtin_name);
-		return (255);
+		ft_dprintf(2, NAME ": %s: numeric argument required\n", builtin_name);
+		return ((t_shell_status){.exit_code = 255, .should_exit = true});
 	}
 	if (DEBUG)
 		ft_printf("Exit code: %d\n", (uint8_t)user_input);
-	return ((uint8_t) user_input);
+	return ((t_shell_status){
+		.exit_code = (uint8_t) user_input, .should_exit = true});
 }

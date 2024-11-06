@@ -6,7 +6,7 @@
 /*   By: copireyr <copireyr@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/27 12:29:36 by copireyr          #+#    #+#             */
-/*   Updated: 2024/11/05 21:47:44 by copireyr         ###   ########.fr       */
+/*   Updated: 2024/11/05 22:15:19 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,12 @@ typedef struct s_fds
 	int		*heredoc_pipe;
 }	t_fds;
 
+typedef struct	s_shell_status
+{
+	bool	should_exit;
+	int		exit_code;
+}	t_shell_status;
+
 t_list	**init_env(char **envp);
 int		export(char *export_str, t_list **env);
 int		printenv(t_list **env);
@@ -59,10 +65,10 @@ int		set_working_dir(char *var, t_list **env);
 char	*get_working_dir(void);
 int		pwd(t_list **env);
 size_t	is_builtin(const char *name);
-int		cd(int argc, char **args, t_list **env);
+int		cd(char **args, t_list **env);
 int		echo(char **args);
-
 int		set_signal_handler(void);
-int		builtin_exit(char **args);
+
+t_shell_status	builtin_exit(char **args, int prev_exit);
 
 #endif /* MINISHELL_H */
