@@ -6,7 +6,7 @@
 /*   By: pleander <pleander@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/08 20:51:52 by pleander          #+#    #+#             */
-/*   Updated: 2024/11/06 10:30:12 by copireyr         ###   ########.fr       */
+/*   Updated: 2024/11/06 10:41:50 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,11 +29,6 @@ static t_shell_status	execute_builtin_cmd(
 		t_command_context *con, t_arena arena, int prev_exit);
 static int	wait_for_children(int *pid, size_t n_forks);
 static int	execute_cmd(t_command_context *con, t_arena arena, int prev_exit);
-
-void	show_shell_status(t_shell_status status)
-{
-	ft_printf("Exit code: %d\nShould exit: %d\n", status.exit_code, status.should_exit);
-}
 
 /**
  * @brief Executes the AST and returns the exit code
