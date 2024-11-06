@@ -6,7 +6,7 @@
 /*   By: copireyr <copireyr@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 20:02:19 by copireyr          #+#    #+#             */
-/*   Updated: 2024/11/01 11:26:32 by copireyr         ###   ########.fr       */
+/*   Updated: 2024/11/06 11:43:47 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,28 +78,28 @@ void	glob(t_arena arena, t_ast_node *ast)
 {
 	const char	**entries = get_cwd_entries(arena);
 	t_ast_vec	new_children;
-	size_t		i;
+	int			i;
 	bool		has_glob;
 	t_ast_node	*node;
 
 	if (!ast || !entries)
 		return ;
-	i = 0;
+	i = -1;
 	ft_bzero(&new_children, sizeof(new_children));
-	while (i < ast->n_children)
+	while (++i < (int)ast->n_children)
 	{
 		node = ast->children[i];
-		has_glob = node->type == AST_WORD && ft_strchr(node->token.value, '*');
-		if (has_glob && !expand_glob_node(arena, entries, node, &new_children))
+		has_glob = ft_strchr(node->token.value, '*') != NULL;
+		if (has_glob && node->type == AST_WORD
+			&& !expand_glob_node(arena, entries, node, &new_children))
 			return ;
 		if (!has_glob && !ast_push(arena, &new_children, node))
 			return ;
-		i++;
 	}
 	ast->children = new_children.data;
 	ast->n_children = new_children.size;
 	i = 0;
-	while (i < ast->n_children)
+	while ((size_t)i < ast->n_children)
 		glob(arena, ast->children[i++]);
 }
 

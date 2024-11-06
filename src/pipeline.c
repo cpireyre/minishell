@@ -6,7 +6,7 @@
 /*   By: pleander <pleander@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/02 14:50:55 by pleander          #+#    #+#             */
-/*   Updated: 2024/09/16 11:54:30 by pleander         ###   ########.fr       */
+/*   Updated: 2024/11/06 11:10:35 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ static int	wait_for_children(int *pid, size_t n_forks);
  */
 int	pipeline(t_pipeline *pipeline, char **env)
 {
-	int retval;
+	int	retval;
 	int	**pipes;
 
 	pipes = create_pipes(pipeline->n_cmds - 1);

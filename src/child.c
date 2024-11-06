@@ -6,7 +6,7 @@
 /*   By: pleander <pleander@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/16 11:46:51 by pleander          #+#    #+#             */
-/*   Updated: 2024/09/16 11:58:15 by pleander         ###   ########.fr       */
+/*   Updated: 2024/11/06 11:09:34 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,6 @@ void	spawn_child(t_command *cmd, int **pipes, char **env)
 	else
 		if (dup2(pipes[cmd->i][1], STDOUT_FILENO) < 0)
 			err_exit();
-
 	delete_pipes(pipes);
 	execve(cmd->path, cmd->args, env);
 	err_exit();
