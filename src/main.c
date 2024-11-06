@@ -6,7 +6,7 @@
 /*   By: copireyr <copireyr@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/27 12:08:02 by copireyr          #+#    #+#             */
-/*   Updated: 2024/10/31 12:58:11 by copireyr         ###   ########.fr       */
+/*   Updated: 2024/11/06 09:30:29 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,33 +45,31 @@ int	main(int argc, char **argv, char **envp)
 static int	minishell(t_list *env)
 {
 	char		*user_input_line;
-	bool		should_exit_shell;
+	t_shell_status	status;
 	t_ast_node	*ast;
 	t_arena		arena;
-	int			exit_code;
 
-	exit_code = 0;
-	should_exit_shell = false;
-	while (!should_exit_shell)
+	ft_bzero(&status, sizeof(status));
+	while (!status.should_exit)
 	{
 		arena = arena_new();
 		if (!arena)
 			break ;
 		user_input_line = arena_readline(arena, MINISHELL_PROMPT);
-		should_exit_shell = !user_input_line;
-		if (!should_exit_shell && *user_input_line)
+		status.should_exit = !user_input_line;
+		if (!status.should_exit && *user_input_line)
 		{
 			add_history(user_input_line);
-			ast = parse(arena, user_input_line, env, exit_code);
+			ast = parse(arena, user_input_line, env, status.exit_code);
 			//ft_printf("\n");
 			if (DEBUG)
 				print_ast(ast, 0);
-			exit_code = execute_ast(ast, env, arena);
+			status = execute_ast(ast, env, arena, status.exit_code);
 		}
 		arena_dispose(&arena);
 	}
 	rl_clear_history();
-	return (0);
+	return (status.exit_code);
 }
 
 static char	*arena_readline(t_arena arena, const char *prompt)

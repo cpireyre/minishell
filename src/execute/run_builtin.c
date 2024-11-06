@@ -6,14 +6,14 @@
 /*   By: pleander <pleander@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/28 10:14:24 by pleander          #+#    #+#             */
-/*   Updated: 2024/11/05 20:46:27 by copireyr         ###   ########.fr       */
+/*   Updated: 2024/11/05 22:14:31 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 #include "minishell.h"
 
-static int run_builtin_pwd(t_list **env)
+static int	run_builtin_pwd(t_list **env)
 {
 	int	ret;
 
@@ -23,76 +23,53 @@ static int run_builtin_pwd(t_list **env)
 
 static int	run_builtin_env(t_list **env)
 {
-	int ret;
+	int	ret;
 
 	ret = printenv(env);
 	return (ret);
 }
 
+/* Should we check that there's only one argument? */
 static int	run_builtin_export(char **args, t_list **env)
 {
-	int ret;
+	int	ret;
 
-	ret = export(args[1], env); // Should we check that there's only one argument?
+	ret = export(args[1], env);
 	return (ret);
 }
 
-static	int run_builtin_unset(char	**args, t_list **env)
+/* Can unset fail? */
+static int	run_builtin_unset(char	**args, t_list **env)
 {
 	size_t	i;
-	
+
 	i = 0;
 	while (args[i])
 	{
-		unset(args[i], env); // can it fail?
+		unset(args[i], env);
 		i++;
 	}
 	return (0);
 }
 
-static int	run_builtin_cd(int argc, char **args, t_list **env)
-{
-	int ret;
-
-	ret = cd(argc, args, env);
-	return (ret);
-}
-
-static int	run_builtin_echo(char **args)
-{
-	int	ret;
-
-	ret = echo(args);
-	return (ret);
-}
-
-static int count_args(char **args)
-{
-	int	c;
-
-	c = 0;
-	while (args[c])
-		c++;
-	return (c);
-}
-
-int	run_builtin(char *builtin, char **args, t_list **env)
+t_shell_status	run_builtin(
+		char *builtin, char **args, t_list **env, int prev_exit)
 {
 	if (DEBUG)
 		ft_printf("Running builtin %s\n", builtin);
 	if (ft_streq(builtin, "env"))
-		return (run_builtin_env(env));
+		return ((t_shell_status){.exit_code = run_builtin_env(env)});
 	if (ft_streq(builtin, "export"))
-		return (run_builtin_export(args, env));
+		return ((t_shell_status){.exit_code = run_builtin_export(args, env)});
 	if (ft_streq(builtin, "unset"))
-		return (run_builtin_unset(args, env));
+		return ((t_shell_status){.exit_code = run_builtin_unset(args, env)});
 	if (ft_streq(builtin, "pwd"))
-		return (run_builtin_pwd(env));
+		return ((t_shell_status){.exit_code = run_builtin_pwd(env)});
 	if (ft_streq(builtin, "cd"))
-		return (run_builtin_cd(count_args(args), args, env));
+		return ((t_shell_status){.exit_code = cd(args, env)});
 	if (ft_streq(builtin, "echo"))
-		return (run_builtin_echo(args));
+		return ((t_shell_status){.exit_code = echo(args)});
 	if (ft_streq(builtin, "exit"))
-		return (builtin_exit(args));
-	return (1);
+		return (builtin_exit(args, prev_exit));
+	return ((t_shell_status){.exit_code = 1});
 }

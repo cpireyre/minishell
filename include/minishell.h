@@ -6,7 +6,7 @@
 /*   By: copireyr <copireyr@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/27 12:29:36 by copireyr          #+#    #+#             */
-/*   Updated: 2024/11/05 21:47:44 by copireyr         ###   ########.fr       */
+/*   Updated: 2024/11/06 09:10:19 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 # include <readline/history.h>
 # include "libft.h"
 # include "ast.h"
+# include "execute.h"
 
 # ifndef DEBUG
 #  define DEBUG 0
@@ -59,10 +60,9 @@ int		set_working_dir(char *var, t_list **env);
 char	*get_working_dir(void);
 int		pwd(t_list **env);
 size_t	is_builtin(const char *name);
-int		cd(int argc, char **args, t_list **env);
+int		cd(char **args, t_list **env);
 int		echo(char **args);
-
 int		set_signal_handler(void);
-int		builtin_exit(char **args);
+
 
 #endif /* MINISHELL_H */
