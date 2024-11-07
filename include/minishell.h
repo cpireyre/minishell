@@ -6,7 +6,7 @@
 /*   By: copireyr <copireyr@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/27 12:29:36 by copireyr          #+#    #+#             */
-/*   Updated: 2024/10/30 12:46:29 by pleander         ###   ########.fr       */
+/*   Updated: 2024/11/07 10:16:03 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 # include <readline/history.h>
 # include "libft.h"
 # include "ast.h"
+# include "execute.h"
 
 # ifndef DEBUG
 #  define DEBUG 0
@@ -29,6 +30,10 @@
 # define TRUE 1
 # define FALSE 0
 # define ANSI_RESET "\x1B[0m"
+
+#include <signal.h>
+
+void	set_status(t_shell_status *status);
 
 typedef uint8_t	t_bool;
 
@@ -55,12 +60,13 @@ int		**create_pipes(size_t n_pipes);
 void	delete_pipes(int **pipes);
 t_list	*get_env_list_location(char *var, t_list **env);
 void	unset(char *var, t_list **env);
+int		set_working_dir(char *var, t_list **env);
 char	*get_working_dir(void);
-int		pwd(void);
+int		pwd(t_list **env);
 size_t	is_builtin(const char *name);
-int		cd(int argc, char **args, t_list **env);
+int		cd(char **args, t_list **env);
 int		echo(char **args);
-
 int		set_signal_handler(void);
+
 
 #endif /* MINISHELL_H */

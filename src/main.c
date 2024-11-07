@@ -6,7 +6,7 @@
 /*   By: copireyr <copireyr@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/27 12:08:02 by copireyr          #+#    #+#             */
-/*   Updated: 2024/10/30 13:16:45 by pleander         ###   ########.fr       */
+/*   Updated: 2024/11/07 14:38:39 by pleander         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ int	main(int argc, char **argv, char **envp)
 		ft_dprintf(2, "Usage: %s", argv[0]);
 		return (EX_USAGE);
 	}
-	//set_signal_handler();
+	set_signal_handler();
 	env = init_env(envp);
 	if (!env)
 	{
@@ -44,34 +44,30 @@ int	main(int argc, char **argv, char **envp)
 
 static int	minishell(t_list *env)
 {
-	char		*user_input_line;
-	bool		should_exit_shell;
-	t_ast_node	*ast;
-	t_arena		arena;
-	int			exit_code;
+	char			*user_input_line;
+	t_shell_status	status;
+	t_ast_node		*ast;
+	t_arena			arena;
 
-	exit_code = 0;
-	should_exit_shell = false;
-	while (!should_exit_shell)
+	ft_bzero(&status, sizeof(status));
+	set_status(&status);
+	while (!status.should_exit)
 	{
 		arena = arena_new();
 		if (!arena)
 			break ;
 		user_input_line = arena_readline(arena, MINISHELL_PROMPT);
-		should_exit_shell = !user_input_line || ft_streq(user_input_line, "exit");
-		if (!should_exit_shell && *user_input_line)
+		status.should_exit = !user_input_line;
+		if (!status.should_exit && *user_input_line)
 		{
 			add_history(user_input_line);
-			ast = parse(arena, user_input_line, env, exit_code);
-			//ft_printf("\n");
-			if (DEBUG)
-				print_ast(ast, 0);
-			exit_code = execute_ast(ast, env, arena);
-			exit_code = 0;
+			ast = parse(arena, user_input_line, env, status.exit_code);
+			status = execute_ast(ast, env, arena, status.exit_code);
 		}
 		arena_dispose(&arena);
 	}
-	return (0);
+	rl_clear_history();
+	return (status.exit_code);
 }
 
 static char	*arena_readline(t_arena arena, const char *prompt)

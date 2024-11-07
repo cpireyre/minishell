@@ -6,7 +6,7 @@
 /*   By: pleander <pleander@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/03 13:10:23 by pleander          #+#    #+#             */
-/*   Updated: 2024/10/30 12:51:17 by pleander         ###   ########.fr       */
+/*   Updated: 2024/11/06 11:12:15 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,16 +135,17 @@ t_list	**init_env(char **envp)
 	return (env);
 }
 
-char **make_raw_env_array(t_list *env, t_arena arena)
+char	**make_raw_env_array(t_list *env, t_arena arena)
 {
-	char	**renv;
-	size_t	i;
+	char			**renv;
+	size_t			i;
+	const size_t	env_size = ft_lstsize(env);
 
-	renv = arena_calloc(arena, ft_lstsize(env) + 1, sizeof(char *));
-	if (renv)
+	renv = arena_calloc(arena, env_size + 1, sizeof(char *));
+	if (!renv)
 		return (NULL);
 	i = 0;
-	while (renv[i])
+	while (i < env_size)
 	{
 		renv[i] = env->content;
 		env = env->next;

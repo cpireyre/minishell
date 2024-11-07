@@ -6,7 +6,7 @@
 /*   By: pleander <pleander@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 09:17:20 by pleander          #+#    #+#             */
-/*   Updated: 2024/10/14 09:27:42 by pleander         ###   ########.fr       */
+/*   Updated: 2024/11/06 11:13:29 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,6 @@ size_t	calculate_n_pipes(t_ast_node *ast)
 {
 	if (ast->type != AST_PIPELINE)
 		return (0);
-
 	return (calculate_n_pipes(ast->children[1]) + 1);
 }
 

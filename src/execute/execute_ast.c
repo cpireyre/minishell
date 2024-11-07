@@ -6,7 +6,7 @@
 /*   By: pleander <pleander@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/08 20:51:52 by pleander          #+#    #+#             */
-/*   Updated: 2024/11/06 12:10:30 by pleander         ###   ########.fr       */
+/*   Updated: 2024/11/07 14:38:03 by pleander         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,51 +19,57 @@
 #include "minishell.h"
 #include "tokenize.h"
 
-static int	execute_cmd(t_command_context *con, t_arena arena);
+static t_shell_status	execute_pipeline(
+		t_ast_node *ast, t_list *env, t_arena arena, int prev_exit);
+static	t_shell_status	execute_single_command(
+		t_ast_node *ast, t_list *env, t_arena arena, int prev_exit);
+static t_shell_status	execute_builtin_cmd(
+		t_command_context *con, t_arena arena, int prev_exit);
 static int	wait_for_children(int *pid, size_t n_forks);
-static	int	execute_single_command(t_ast_node *ast, t_list *env, t_arena arena);
-static	int	execute_pipeline(t_ast_node *ast, t_list *env, t_arena arena);
-static int	execute_builtin_cmd(t_command_context *con, t_arena arena);
+static int	execute_cmd(t_command_context *con, t_arena arena, int prev_exit);
 
 /**
  * @brief Executes the AST and returns the exit code
  *
  * @param ast AST node
- * @return exit code
+ * @return shell status (exit code + should_exit flag)
  */
-int	execute_ast(t_ast_node *ast, t_list	*env, t_arena arena)
+t_shell_status	execute_ast(t_ast_node *ast, t_list	*env, t_arena arena, int prev_exit)
 {
-	int	status;
+	t_shell_status	status;
 
+	status.exit_code = 0;
+	status.should_exit = false;
 	if (ast->type == AST_COMMAND)
-		status = execute_single_command(ast, env, arena);
+		status = execute_single_command(ast, env, arena, prev_exit);
 	else if (ast->type == AST_PIPELINE)
-		status = execute_pipeline(ast, env, arena);
+		status = execute_pipeline(ast, env, arena, prev_exit);
 	else if (ast->type == AST_LOGICAL)
-		status = execute_logicals(ast, env, arena);
+		status = execute_logicals(ast, env, arena, prev_exit);
 	else if (ast->type == AST_PAREN)
-		status = execute_ast(ast->children[0], env, arena);
+		status = execute_ast(ast->children[0], env, arena, prev_exit);
 	else
 	{
-		status = 1;
-		ft_printf("We should not be here..\n");
+		status.exit_code = 1;
+		if (DEBUG)
+			ft_printf("We should not be here..\n");
 	}
 	return (status);
 }
 
-
-static int	execute_pipeline(t_ast_node *ast, t_list *env, t_arena arena)
+static t_shell_status	execute_pipeline(
+		t_ast_node *ast, t_list *env, t_arena arena, int prev_exit)
 {
 	t_command_context	con;
-	pid_t	*child_pids;
-	int		status;
+	pid_t				*child_pids;
+	t_shell_status		status;
 
 	con.env = env;
 	con.n_children = calculate_n_pipes(ast) + 1;
 	con.pipes = make_pipes(con.n_children - 1, arena);
 	child_pids = arena_alloc(arena, (con.n_children) * sizeof(pid_t));
 	if (!child_pids || !con.pipes)
-		return (-1);
+		return ((t_shell_status){.exit_code = -1});
 	con.cur_child = 0;
 	while (ast->type == AST_PIPELINE || ast->type == AST_COMMAND)
 	{
@@ -73,23 +79,25 @@ static int	execute_pipeline(t_ast_node *ast, t_list *env, t_arena arena)
 			con.ast = ast;
 		child_pids[con.cur_child] = fork();
 		if (child_pids[con.cur_child] == 0)
-			execute_cmd(&con, arena);
+			execute_cmd(&con, arena, prev_exit);
 		if (child_pids[con.cur_child] == -1)
-			return (-1); // Error exit
+			return ((t_shell_status){.exit_code = -1, .should_exit = true}); // Error exit
 		if (ast->type == AST_COMMAND)
 			break ;
 		ast = ast->children[1]; // next pipe opreator
 		con.cur_child++;
 	}
 	close_pipes(con.pipes, con.n_children - 1);
-	status = wait_for_children(child_pids, con.n_children);
+	status.exit_code = wait_for_children(child_pids, con.n_children);
+	status.should_exit = false;
 	return (status);
 }
 
-static	int	execute_single_command(t_ast_node *ast, t_list *env, t_arena arena)
+static	t_shell_status	execute_single_command(
+		t_ast_node *ast, t_list *env, t_arena arena, int prev_exit)
 {
 	t_command_context	con;
-	int					status;
+	t_shell_status		status;
 	pid_t				*child_pids;
 
 	con.ast = ast;
@@ -98,16 +106,17 @@ static	int	execute_single_command(t_ast_node *ast, t_list *env, t_arena arena)
 	con.cur_child = 0;
 	con.n_children = 1;
 	if (is_builtin(con.ast->children[0]->token.value))
-		return (execute_builtin_cmd(&con, arena));
+		return (execute_builtin_cmd(&con, arena, prev_exit));
 	child_pids = arena_alloc(arena, (con.n_children) * sizeof(pid_t));
 	if (!child_pids)
-		return (-1);
+		return ((t_shell_status){.exit_code = -1});
 	child_pids[0] = fork();
 	if (child_pids[0] == 0)
-		execute_cmd(&con, arena);
+		execute_cmd(&con, arena, prev_exit);
 	else if (child_pids[0] < 0)
-		return (-1);
-	status = wait_for_children(child_pids, con.n_children);
+		return ((t_shell_status){.exit_code = -1});
+	status.exit_code = wait_for_children(child_pids, con.n_children);
+	status.should_exit = false;
 	return (status);
 }
 
@@ -129,13 +138,14 @@ static void	print_command(t_command *cmd)
 	ft_dprintf(2, "\n");
 }
 
-static int	execute_cmd(t_command_context *con, t_arena arena)
+static int	execute_cmd(t_command_context *con, t_arena arena, int prev_exit)
 {
 	t_command	cmd;	
 	
 	if (make_command(&cmd, con->ast, con->env, arena) < 0)
 	{
-		ft_dprintf(2, "Error making command\n");
+		if (DEBUG)
+			ft_dprintf(2, "Error making command\n");
 		return (1);
 	}
 	if (con->pipes && con->cur_child > 0)
@@ -151,24 +161,27 @@ static int	execute_cmd(t_command_context *con, t_arena arena)
 	if (DEBUG)
 		print_command(&cmd);
 	if (is_builtin(cmd.path))
-		exit(run_builtin(cmd.path, cmd.args, &con->env));
-	execve(cmd.path, (char **)cmd.args, make_raw_env_array(con->env, arena));
+		exit(run_builtin(cmd.path, cmd.args, &con->env, prev_exit).exit_code);
+	char **env_array = make_raw_env_array(con->env, arena);
+	execve(cmd.path, (char **)cmd.args, env_array);
 	perror(NAME);
 	exit(1);
 }
 
-static int	execute_builtin_cmd(t_command_context *con, t_arena arena)
+static t_shell_status	execute_builtin_cmd(
+		t_command_context *con, t_arena arena, int prev_exit)
 {
-	t_command	cmd;	
-	int			exit_code;
-	int			orig_fds[2];
+	t_command		cmd;	
+	int				orig_fds[2];
+	t_shell_status	status;
 	
 	orig_fds[0] = -1;
 	orig_fds[1] = -1;
 	if (make_command(&cmd, con->ast, con->env, arena) < 0)
 	{
-		ft_dprintf(2, "Error making command\n");
-		return (1);
+		if (DEBUG)
+			ft_dprintf(2, "Error making command\n");
+		return ((t_shell_status){.exit_code = 1});
 	}
 	if (con->pipes && con->cur_child > 0)
 		cmd.infile_fd = con->pipes[con->cur_child - 1][0];
@@ -186,7 +199,7 @@ static int	execute_builtin_cmd(t_command_context *con, t_arena arena)
 	}
 	if (DEBUG)
 		print_command(&cmd);
-	exit_code = run_builtin(cmd.path, cmd.args, &con->env);
+	status = run_builtin(cmd.path, cmd.args, &con->env, prev_exit);
 	// Restore original fds
 	if (orig_fds[0] > -1)
 	{
@@ -200,7 +213,7 @@ static int	execute_builtin_cmd(t_command_context *con, t_arena arena)
 		dup2(orig_fds[1], STDOUT_FILENO);
 		close(orig_fds[1]);
 	}
-	return (exit_code);
+	return (status);
 }
 
 static int	wait_for_children(int *pid, size_t n_forks)
