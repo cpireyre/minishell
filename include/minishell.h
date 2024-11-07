@@ -6,7 +6,7 @@
 /*   By: copireyr <copireyr@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/27 12:29:36 by copireyr          #+#    #+#             */
-/*   Updated: 2024/11/06 09:10:19 by copireyr         ###   ########.fr       */
+/*   Updated: 2024/11/07 10:16:03 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,10 @@
 # define TRUE 1
 # define FALSE 0
 # define ANSI_RESET "\x1B[0m"
+
+#include <signal.h>
+
+void	set_status(t_shell_status *status);
 
 typedef uint8_t	t_bool;
 

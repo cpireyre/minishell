@@ -6,7 +6,7 @@
 /*   By: copireyr <copireyr@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/27 12:08:02 by copireyr          #+#    #+#             */
-/*   Updated: 2024/11/06 11:54:01 by copireyr         ###   ########.fr       */
+/*   Updated: 2024/11/07 10:33:05 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ int	main(int argc, char **argv, char **envp)
 		ft_dprintf(2, "Usage: %s", argv[0]);
 		return (EX_USAGE);
 	}
-	/* set_signal_handler(); */
+	set_signal_handler();
 	env = init_env(envp);
 	if (!env)
 	{
@@ -50,6 +50,7 @@ static int	minishell(t_list *env)
 	t_arena			arena;
 
 	ft_bzero(&status, sizeof(status));
+	set_status(&status);
 	while (!status.should_exit)
 	{
 		arena = arena_new();
@@ -61,8 +62,6 @@ static int	minishell(t_list *env)
 		{
 			add_history(user_input_line);
 			ast = parse(arena, user_input_line, env, status.exit_code);
-			if (DEBUG)
-				print_ast(ast, 0);
 			status = execute_ast(ast, env, arena, status.exit_code);
 		}
 		arena_dispose(&arena);
