@@ -6,7 +6,7 @@
 /*   By: pleander <pleander@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/01 12:58:29 by pleander          #+#    #+#             */
-/*   Updated: 2024/10/28 11:53:48 by pleander         ###   ########.fr       */
+/*   Updated: 2024/11/06 12:17:35 by pleander         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,11 +17,13 @@
 
 enum e_ast_type
 {
-	AST_LOGICAL,
-	AST_PIPELINE,
-	AST_COMMAND,
-	AST_WORD,
-	AST_REDIR,
+	AST_LOGICAL = 0,
+	AST_PAREN = 1,
+	AST_PIPELINE = 2,
+	AST_COMMAND = 3,
+	AST_WORD = 4,
+	AST_REDIR = 5,
+	AST_NONE = 6,
 };
 
 typedef struct s_ast_node
