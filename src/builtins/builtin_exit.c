@@ -6,13 +6,13 @@
 /*   By: copireyr <copireyr@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 22:04:13 by copireyr          #+#    #+#             */
-/*   Updated: 2024/11/06 09:44:06 by copireyr         ###   ########.fr       */
+/*   Updated: 2024/11/07 10:49:48 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	ft_parse_long(char *str, int64_t *n)
+int	ft_parse_long(const char *str, int64_t *n)
 {
 	int	i;
 	int	sign;
@@ -39,18 +39,19 @@ t_shell_status	builtin_exit(char **args, int prev_exit)
 	int				ok;
 	int64_t			user_input;
 	const char		*builtin_name = *args++;
+	const char		*argument = *args;
 
 	if (!args || !*args)
 		return ((t_shell_status){.exit_code = prev_exit, .should_exit = true});
-	ok = ft_parse_long(*args++, &user_input);
-	if (*args)
+	ok = ft_parse_long(argument, &user_input);
+	if (*++args)
 	{
 		ft_dprintf(2, NAME ": %s: too many arguments\n", builtin_name);
 		return ((t_shell_status){.exit_code = 1, .should_exit = false});
 	}
 	if (!ok)
 	{
-		ft_dprintf(2, NAME ": %s: numeric argument required\n", builtin_name);
+		ft_dprintf(2, NAME ": %s: %s: numeric argument required\n", builtin_name, argument);
 		return ((t_shell_status){.exit_code = 2, .should_exit = true});
 	}
 	if (DEBUG)
