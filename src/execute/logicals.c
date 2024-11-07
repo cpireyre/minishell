@@ -20,7 +20,6 @@ t_shell_status	execute_logicals(
 {
 	t_ast_node		*cur;
 	t_shell_status	status;
-	t_shell_status	curr_status;
 	
 	cur = ast;
 	status = execute_ast(cur->children[0], env, arena, prev_exit);
