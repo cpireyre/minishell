@@ -6,7 +6,7 @@
 /*   By: copireyr <copireyr@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/27 12:08:02 by copireyr          #+#    #+#             */
-/*   Updated: 2024/11/08 09:31:11 by copireyr         ###   ########.fr       */
+/*   Updated: 2024/11/08 12:25:23 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,10 @@ static int	minishell(t_list *env)
 		{
 			add_history(user_input_line);
 			ast = parse(arena, user_input_line, env, status.exit_code);
-			status = execute_ast(ast, env, arena, status.exit_code);
+			if (ast)
+				status = execute_ast(ast, env, arena, status.exit_code);
+			else
+				status.exit_code = 258;
 		}
 		arena_dispose(&arena);
 	}
