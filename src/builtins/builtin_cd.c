@@ -6,7 +6,7 @@
 /*   By: pleander <pleander@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 13:28:45 by pleander          #+#    #+#             */
-/*   Updated: 2024/11/06 11:37:50 by copireyr         ###   ########.fr       */
+/*   Updated: 2024/11/07 15:42:19 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,8 +120,8 @@ int	cd(char **args, t_list **env)
 	else
 		ret = handle_path(args[1]);
 	if (ret == 0)
-		ret = set_env("OLDPWD", old_dir, env) < 0
-			| set_working_dir("PWD", env) < 0;
+		ret = (int)(set_env("OLDPWD", old_dir, env) < 0)
+			| (int)(set_working_dir("PWD", env) < 0);
 	free(old_dir);
 	if (argc > 2)
 		return (!!ft_dprintf(2, "%s: cd: too many arguments\n", NAME));
