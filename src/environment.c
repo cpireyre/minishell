@@ -6,7 +6,7 @@
 /*   By: pleander <pleander@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/03 13:10:23 by pleander          #+#    #+#             */
-/*   Updated: 2024/11/06 11:12:15 by copireyr         ###   ########.fr       */
+/*   Updated: 2024/11/08 09:25:00 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,30 +109,32 @@ int	set_env(char *var, char *val, t_list **env)
  * @param envp Array of environmental variables, passed to main as third argument
  * @return pointer to list of environmental variables, otherwise NULL
  */
-t_list	**init_env(char **envp)
+t_list	*init_env(char **envp)
 {
-	t_list	**env;
+	t_list	*head;
 	t_list	*new;
 	char	*envstr;
 
 	if (!envp || !*envp)
 		return (NULL);
-	env = malloc(sizeof(t_list *));
-	if (!env)
-		return (NULL);
-	ft_bzero(env, sizeof(env));
+	head = NULL;
 	while (*envp)
 	{
-		envstr = ft_strdup(*envp);
+		envstr = ft_strdup(*envp++);
 		if (!envstr)
-			return (NULL); //Free allocated stuff first
+		{
+			ft_lstclear(&head, &free);
+			return (NULL);
+		}
 		new = ft_lstnew(envstr);
 		if (!new)
-			return (NULL); //Free allocated stuff first
-		ft_lstadd_back(env, new);
-		envp++;
+		{
+			ft_lstclear(&head, &free);
+			return (NULL);
+		}
+		ft_lstadd_back(&head, new);
 	}
-	return (env);
+	return (head);
 }
 
 char	**make_raw_env_array(t_list *env, t_arena arena)

@@ -6,7 +6,7 @@
 /*   By: copireyr <copireyr@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/27 12:29:36 by copireyr          #+#    #+#             */
-/*   Updated: 2024/11/07 10:16:03 by copireyr         ###   ########.fr       */
+/*   Updated: 2024/11/08 09:25:51 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ typedef struct s_fds
 	int		*heredoc_pipe;
 }	t_fds;
 
-t_list	**init_env(char **envp);
+t_list	*init_env(char **envp);
 int		export(char *export_str, t_list **env);
 int		printenv(t_list **env);
 char	*get_env(char *var, t_list **env);

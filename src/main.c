@@ -6,7 +6,7 @@
 /*   By: copireyr <copireyr@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/27 12:08:02 by copireyr          #+#    #+#             */
-/*   Updated: 2024/11/07 14:38:39 by pleander         ###   ########.fr       */
+/*   Updated: 2024/11/08 09:25:40 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void		print_ast(t_ast_node *root, size_t level);
 
 int	main(int argc, char **argv, char **envp)
 {
-	t_list		**env;
+	t_list		*env;
 	int			exit_code;
 
 	if (argc > 1)
@@ -36,9 +36,8 @@ int	main(int argc, char **argv, char **envp)
 		ft_dprintf(2, "%s: Couldn't allocate memory", argv[0]);
 		return (ENOMEM);
 	}
-	exit_code = minishell(*env);
-	ft_lstclear(env, &free);
-	free(env);
+	exit_code = minishell(env);
+	ft_lstclear(&env, &free);
 	return (exit_code);
 }
 
