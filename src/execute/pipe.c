@@ -20,7 +20,7 @@ int	**make_pipes(int n_pipes, t_arena arena)
 	int	**pipes;
 	int	i;
 
-	pipes = arena_alloc(arena, sizeof(int *));
+	pipes = arena_alloc(arena, sizeof(int *) * n_pipes);
 	if (!pipes)
 		return (NULL);
 	i = 0;
