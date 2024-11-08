@@ -6,7 +6,7 @@
 /*   By: copireyr <copireyr@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/27 12:08:02 by copireyr          #+#    #+#             */
-/*   Updated: 2024/11/07 14:38:39 by pleander         ###   ########.fr       */
+/*   Updated: 2024/11/08 09:31:11 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void		print_ast(t_ast_node *root, size_t level);
 
 int	main(int argc, char **argv, char **envp)
 {
-	t_list		**env;
+	t_list		*env;
 	int			exit_code;
 
 	if (argc > 1)
@@ -36,9 +36,8 @@ int	main(int argc, char **argv, char **envp)
 		ft_dprintf(2, "%s: Couldn't allocate memory", argv[0]);
 		return (ENOMEM);
 	}
-	exit_code = minishell(*env);
-	ft_lstclear(env, &free);
-	free(env);
+	exit_code = minishell(env);
+	ft_lstclear(&env, &free);
 	return (exit_code);
 }
 
@@ -85,4 +84,38 @@ static char	*arena_readline(t_arena arena, const char *prompt)
 		ft_memcpy(result, line, length_line);
 	free(line);
 	return (result);
+}
+
+/**
+ * @brief Initializes a new list of environmental variables
+ *
+ * @param envp Array of environmental variables, passed to main as third argument
+ * @return pointer to list of environmental variables, otherwise NULL
+ */
+t_list	*init_env(char **envp)
+{
+	t_list	*head;
+	t_list	*new;
+	char	*envstr;
+
+	if (!envp || !*envp)
+		return (NULL);
+	head = NULL;
+	while (*envp)
+	{
+		envstr = ft_strdup(*envp++);
+		if (!envstr)
+		{
+			ft_lstclear(&head, &free);
+			return (NULL);
+		}
+		new = ft_lstnew(envstr);
+		if (!new)
+		{
+			ft_lstclear(&head, &free);
+			return (NULL);
+		}
+		ft_lstadd_back(&head, new);
+	}
+	return (head);
 }

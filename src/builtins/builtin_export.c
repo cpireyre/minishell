@@ -6,7 +6,7 @@
 /*   By: pleander <pleander@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/24 11:15:09 by pleander          #+#    #+#             */
-/*   Updated: 2024/11/03 10:20:55 by copireyr         ###   ########.fr       */
+/*   Updated: 2024/11/08 09:32:07 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ int	export(char *export_str, t_list **env)
 	}
 	eq = ft_strchr(export_str, '=');
 	if (!eq)
-		return (0);
+		return (set_env(export_str, "", env));
 	var = ft_substr(export_str, 0, eq - export_str);
 	if (!var)
 		return (1);
@@ -78,4 +78,24 @@ int	export(char *export_str, t_list **env)
 	free(val);
 	free(var);
 	return (ret);
+}
+
+int	list_exports(t_list *tmp)
+{
+	char	*val;
+	char	*key;
+
+	while (tmp && tmp->content)
+	{
+		key = (char *)tmp->content;
+		printf("declare -x ");
+		val = ft_strchr(key, '=');
+		if (val && *(val + 1))
+			printf("%.*s=\"%s\"", (int)(val - key), key, val + 1);
+		else
+			printf("%.*s", (int)(val - key), key);
+		printf("\n");
+		tmp = tmp->next;
+	}
+	return (0);
 }
