@@ -6,7 +6,7 @@
 /*   By: pleander <pleander@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/28 10:14:24 by pleander          #+#    #+#             */
-/*   Updated: 2024/11/05 22:14:31 by copireyr         ###   ########.fr       */
+/*   Updated: 2024/11/07 15:51:53 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,12 +29,15 @@ static int	run_builtin_env(t_list **env)
 	return (ret);
 }
 
-/* Should we check that there's only one argument? */
+int	list_exports(t_list *env);
 static int	run_builtin_export(char **args, t_list **env)
 {
 	int	ret;
 
-	ret = export(args[1], env);
+	if (args[1])
+		ret = export(args[1], env);
+	else
+		ret = list_exports(*env);
 	return (ret);
 }
 
