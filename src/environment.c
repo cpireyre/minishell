@@ -6,7 +6,7 @@
 /*   By: pleander <pleander@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/03 13:10:23 by pleander          #+#    #+#             */
-/*   Updated: 2024/11/08 09:25:00 by copireyr         ###   ########.fr       */
+/*   Updated: 2024/11/08 09:31:11 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,40 +101,6 @@ int	set_env(char *var, char *val, t_list **env)
 		loc->content = env_str;
 	}
 	return (0);
-}
-
-/**
- * @brief Initializes a new list of environmental variables
- *
- * @param envp Array of environmental variables, passed to main as third argument
- * @return pointer to list of environmental variables, otherwise NULL
- */
-t_list	*init_env(char **envp)
-{
-	t_list	*head;
-	t_list	*new;
-	char	*envstr;
-
-	if (!envp || !*envp)
-		return (NULL);
-	head = NULL;
-	while (*envp)
-	{
-		envstr = ft_strdup(*envp++);
-		if (!envstr)
-		{
-			ft_lstclear(&head, &free);
-			return (NULL);
-		}
-		new = ft_lstnew(envstr);
-		if (!new)
-		{
-			ft_lstclear(&head, &free);
-			return (NULL);
-		}
-		ft_lstadd_back(&head, new);
-	}
-	return (head);
 }
 
 char	**make_raw_env_array(t_list *env, t_arena arena)

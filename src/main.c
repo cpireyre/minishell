@@ -6,7 +6,7 @@
 /*   By: copireyr <copireyr@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/27 12:08:02 by copireyr          #+#    #+#             */
-/*   Updated: 2024/11/08 09:25:40 by copireyr         ###   ########.fr       */
+/*   Updated: 2024/11/08 09:31:11 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,4 +84,38 @@ static char	*arena_readline(t_arena arena, const char *prompt)
 		ft_memcpy(result, line, length_line);
 	free(line);
 	return (result);
+}
+
+/**
+ * @brief Initializes a new list of environmental variables
+ *
+ * @param envp Array of environmental variables, passed to main as third argument
+ * @return pointer to list of environmental variables, otherwise NULL
+ */
+t_list	*init_env(char **envp)
+{
+	t_list	*head;
+	t_list	*new;
+	char	*envstr;
+
+	if (!envp || !*envp)
+		return (NULL);
+	head = NULL;
+	while (*envp)
+	{
+		envstr = ft_strdup(*envp++);
+		if (!envstr)
+		{
+			ft_lstclear(&head, &free);
+			return (NULL);
+		}
+		new = ft_lstnew(envstr);
+		if (!new)
+		{
+			ft_lstclear(&head, &free);
+			return (NULL);
+		}
+		ft_lstadd_back(&head, new);
+	}
+	return (head);
 }
