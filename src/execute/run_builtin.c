@@ -6,7 +6,7 @@
 /*   By: pleander <pleander@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/28 10:14:24 by pleander          #+#    #+#             */
-/*   Updated: 2024/11/07 15:51:53 by copireyr         ###   ########.fr       */
+/*   Updated: 2024/11/08 09:30:01 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,6 @@ static int	run_builtin_env(t_list **env)
 	return (ret);
 }
 
-int	list_exports(t_list *env);
 static int	run_builtin_export(char **args, t_list **env)
 {
 	int	ret;
