@@ -40,6 +40,8 @@ t_ast_node	*parse(t_arena arena, char *user_input_line,
 		glob(arena, ast);
 		split_words(arena, ast);
 		remove_quotes(arena, ast);
+		if (DEBUG)
+		print_ast(ast, 0);
 	}
 	return (ast);
 }
