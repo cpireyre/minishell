@@ -6,7 +6,7 @@
 /*   By: pleander <pleander@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/24 11:15:09 by pleander          #+#    #+#             */
-/*   Updated: 2024/11/07 16:35:34 by copireyr         ###   ########.fr       */
+/*   Updated: 2024/11/08 09:32:07 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ int	export(char *export_str, t_list **env)
 	if (check_identifier(export_str) < 0)
 	{
 		ft_dprintf(2, "%s: export: '%s': not a valid identifier\n",
-				NAME, export_str);
+			NAME, export_str);
 		return (1);
 	}
 	eq = ft_strchr(export_str, '=');
