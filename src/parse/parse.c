@@ -6,7 +6,7 @@
 /*   By: copireyr <copireyr@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 11:57:35 by copireyr          #+#    #+#             */
-/*   Updated: 2024/11/01 09:56:14 by copireyr         ###   ########.fr       */
+/*   Updated: 2024/11/08 12:15:58 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 #include "expand.h"
 #include "minishell.h"
 
+static bool	parse_validate_string(const char *str);
 static char	*get_ast_type(enum e_ast_type t);
 void		split_words(t_arena arena, t_ast_node *ast);
 void		remove_quotes(t_arena arena, t_ast_node *ast);
@@ -26,7 +27,13 @@ t_ast_node	*parse(t_arena arena, char *user_input_line,
 	t_token		*xs;
 	t_ast_node	*ast;
 	size_t		range[2];
+	const bool	parse_ok = parse_validate_string(user_input_line);
 
+	if (!parse_ok)
+	{
+		ft_dprintf(2, NAME ": syntax error\n");
+		return (NULL);
+	}
 	ast = NULL;
 	xs = tokenize(arena, user_input_line);
 	if (xs)
@@ -77,4 +84,28 @@ static char	*get_ast_type(enum e_ast_type t)
 	else if (t == AST_REDIR)
 		return ("AST_REDIR");
 	return (NULL);
+}
+
+static bool	parse_validate_string(const char *str)
+{
+	int		paren_count;
+	bool	in_single_quotes;
+	bool	in_double_quotes;
+
+	paren_count = 0;
+	in_single_quotes = false;
+	in_double_quotes = false;
+	while (*str)
+	{
+		if (!in_double_quotes && *str == '\'')
+			in_single_quotes = !in_single_quotes;
+		if (!in_single_quotes && *str == '"')
+			in_double_quotes = !in_double_quotes;
+		if (!in_double_quotes && !in_single_quotes)
+			paren_count += (*str == '(') - (*str == ')');
+		if (paren_count < 0)
+			return (false);
+		str++;
+	}
+	return (!paren_count && !in_single_quotes && !in_double_quotes);
 }
