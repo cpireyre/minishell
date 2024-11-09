@@ -6,7 +6,7 @@
 /*   By: copireyr <copireyr@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 20:02:19 by copireyr          #+#    #+#             */
-/*   Updated: 2024/11/06 11:43:47 by copireyr         ###   ########.fr       */
+/*   Updated: 2024/11/09 10:39:28 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,9 +107,9 @@ static bool	match(const t_quote *pattern, const char *candidate)
 {
 	if (!*pattern)
 		return (!*candidate);
-	if ((*pattern & CHAR_MASK) == '*' && !(*pattern & QUOTED_BIT))
+	if ((*pattern & CHAR_MASK) == '*' && !is_quoted(*pattern))
 	{
-		while ((*pattern & CHAR_MASK) == '*' && !(*pattern & QUOTED_BIT))
+		while ((*pattern & CHAR_MASK) == '*' && !is_quoted(*pattern))
 			pattern++;
 		if (!*pattern)
 			return (true);

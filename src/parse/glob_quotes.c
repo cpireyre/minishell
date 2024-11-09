@@ -6,13 +6,11 @@
 /*   By: copireyr <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/31 13:53:50 by copireyr          #+#    #+#             */
-/*   Updated: 2024/10/31 13:56:45 by copireyr         ###   ########.fr       */
+/*   Updated: 2024/11/09 10:10:13 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "glob.h"
-
-static bool	should_toggle_quote(char c, char current_quote);
 
 t_quote	*quotes_lift(t_arena arena, const char *str)
 {
@@ -29,10 +27,11 @@ t_quote	*quotes_lift(t_arena arena, const char *str)
 	current_quote = 0;
 	while (*str)
 	{
-		if (should_toggle_quote(*str, current_quote))
-			current_quote = !current_quote * *str;
+		if ((*str == '\'' || *str == '\"')
+			&& (!current_quote || *str == current_quote))
+			current_quote = !!!current_quote * *str;
 		else
-			result[j++] = *str | (!!current_quote * QUOTED_BIT);
+			result[j++] = *str | (current_quote << QUOTED_SHIFT);
 		str++;
 	}
 	result[j] = '\0';
@@ -54,8 +53,7 @@ char	*quotes_lower(t_arena arena, const t_quote *str)
 	return (result - len);
 }
 
-static bool	should_toggle_quote(char c, char current_quote)
+char	is_quoted(t_quote q)
 {
-	return ((c == '\'' || c == '\"')
-		&& (current_quote == 0 || c == current_quote));
+	return ((q & QUOTE_MASK) >> QUOTED_SHIFT);
 }
