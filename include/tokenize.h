@@ -6,7 +6,7 @@
 /*   By: copireyr <copireyr@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/26 14:29:23 by copireyr          #+#    #+#             */
-/*   Updated: 2024/10/14 13:14:01 by copireyr         ###   ########.fr       */
+/*   Updated: 2024/11/09 09:33:48 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 
 # include "libft.h"
 # include "arena.h"
-# include "tokenize.h"
+# include "quotes.h"
 # include <limits.h>
 
 enum e_tok_type
@@ -50,6 +50,7 @@ typedef struct s_token
 {
 	enum e_tok_type	type;
 	const char		*value;
+	t_quote			*q_value;
 	size_t			size;
 	bool			is_globbed;
 }	t_token;

@@ -6,7 +6,7 @@
 /*   By: copireyr <copireyr@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/26 14:51:54 by copireyr          #+#    #+#             */
-/*   Updated: 2024/10/14 10:27:41 by copireyr         ###   ########.fr       */
+/*   Updated: 2024/11/09 09:44:06 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,28 +62,24 @@ static bool	token_vec_grow(t_arena arena, t_token_vec *vec)
 static t_token	token_next(t_arena arena, const char *str)
 {
 	t_token	result;
+	char	quote_char;
 
-	result = (t_token){token_get_type(*str), str, 0, false};
+	result = (t_token){token_get_type(*str), str, 0, 0, false};
 	while (result.type != TOK_END && token_get_type(*str) == result.type)
 	{
-		if (result.type == TOK_WORD && *str == '"')
+		if (result.type == TOK_WORD && (*str == '"' || *str == '\''))
 		{
-			str = ft_strchrnul(str + 1, '"');
-			if (*str != '"')
-				result.type = TOK_ERROR;
-		}
-		if (result.type == TOK_WORD && *str == '\'')
-		{
-			str = ft_strchrnul(str + 1, '\'');
-			if (*str != '\'')
-				result.type = TOK_ERROR;
+			quote_char = *str;
+			while (*++str != quote_char)
+				;
 		}
 		if (result.type != TOK_ERROR)
 			str++;
 	}
 	result.size = str - result.value;
 	result.value = ft_arena_strndup(arena, result.value, result.size);
-	if (!result.value)
+	result.q_value = quotes_lift(arena, result.value);
+	if (!result.value || !result.q_value)
 		result.type = TOK_ERROR;
 	return (result);
 }
