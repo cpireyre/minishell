@@ -6,7 +6,7 @@
 /*   By: copireyr <copireyr@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 20:02:19 by copireyr          #+#    #+#             */
-/*   Updated: 2024/11/09 10:39:28 by copireyr         ###   ########.fr       */
+/*   Updated: 2024/11/10 10:44:23 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,9 +21,8 @@ static bool			match(const t_quote *pattern, const char *candidate);
 static const char	**get_cwd_entries(t_arena arena);
 
 static const char	**glob_pattern(t_arena arena,
-		const char **entries, const char *str)
+		const char **entries, const t_quote *glob_pattern)
 {
-	const t_quote	*glob_pattern = quotes_lift(arena, str);
 	const char		**matches;
 	size_t			count;
 	const char		**curr = entries - 1;
@@ -32,10 +31,9 @@ static const char	**glob_pattern(t_arena arena,
 		return (NULL);
 	count = 0;
 	while (*++curr)
-	{
-		if ((str[0] == '.' || **curr != '.') && match(glob_pattern, *curr))
+		if (((*glob_pattern & CHAR_MASK) == '.' || **curr != '.')
+			&& match(glob_pattern, *curr))
 			count++;
-	}
 	matches = arena_calloc(arena, count + !count + 1, sizeof(char *));
 	if (!matches)
 		return (NULL);
@@ -43,7 +41,8 @@ static const char	**glob_pattern(t_arena arena,
 		matches[0] = quotes_lower(arena, glob_pattern);
 	while (*entries && count)
 	{
-		if ((*str == '.' || **entries != '.') && match(glob_pattern, *entries))
+		if (((*glob_pattern & CHAR_MASK) == '.' || **entries != '.')
+			&& match(glob_pattern, *entries))
 			*matches++ = *entries;
 		entries++;
 	}
@@ -56,7 +55,7 @@ static bool	expand_glob_node(t_arena arena, const char **entries,
 	const char	**result;
 	t_ast_node	*new_node;
 
-	result = glob_pattern(arena, entries, node->token.value);
+	result = glob_pattern(arena, entries, node->token.q_value);
 	while (*result)
 	{
 		new_node = arena_calloc(arena, 1, sizeof(*new_node));
