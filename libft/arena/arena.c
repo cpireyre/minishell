@@ -6,7 +6,7 @@
 /*   By: copireyr <copireyr@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 10:04:44 by copireyr          #+#    #+#             */
-/*   Updated: 2024/11/08 11:33:39 by copireyr         ###   ########.fr       */
+/*   Updated: 2024/11/10 13:38:54 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,14 +63,14 @@ void	*arena_calloc(t_arena arena, size_t count, size_t nbytes)
 	return (ptr);
 }
 
-void	arena_dispose(t_arena *ap)
+void	arena_free(t_arena arena)
 {
 	t_arena_node	*current;
 	t_arena_node	*next;
 
-	if (!ap || !*ap)
+	if (!arena)
 		return ;
-	current = **ap;
+	current = *arena;
 	while (current)
 	{
 		next = current->next;
@@ -78,6 +78,14 @@ void	arena_dispose(t_arena *ap)
 		free(current);
 		current = next;
 	}
+	*arena = NULL;
+}
+
+void	arena_dispose(t_arena *ap)
+{
+	if (!ap || !*ap)
+		return ;
+	arena_free(*ap);
 	free(*ap);
 	*ap = NULL;
 }
