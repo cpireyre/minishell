@@ -6,7 +6,7 @@
 /*   By: copireyr <copireyr@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/27 12:08:02 by copireyr          #+#    #+#             */
-/*   Updated: 2024/11/10 13:40:53 by copireyr         ###   ########.fr       */
+/*   Updated: 2024/11/10 13:47:08 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,42 +15,42 @@
 #include "minishell.h"
 #include "execute.h"
 
-static int	minishell(t_list *env);
+static int	minishell(t_arena arena, t_list *env);
 static char	*arena_readline(t_arena arena, const char *prompt);
 void		print_ast(t_ast_node *root, size_t level);
 
 int	main(int argc, char **argv, char **envp)
 {
-	t_list		*env;
-	int			exit_code;
+	t_arena	arena;
+	t_list	*env;
+	int		exit_code;
 
 	if (argc > 1)
-	{
-		ft_dprintf(2, "Usage: %s", argv[0]);
-		return (EX_USAGE);
-	}
-	set_signal_handler();
+		return (EX_USAGE + !ft_dprintf(2, "Usage: %s", argv[0]));
 	env = init_env(envp);
-	if (!env)
+	arena = arena_new();
+	if (!env || !arena)
 	{
+		if (env)
+			ft_lstclear(&env, &free);
+		arena_dispose(&arena);
 		ft_dprintf(2, "%s: Couldn't allocate memory", argv[0]);
 		return (ENOMEM);
 	}
-	exit_code = minishell(env);
+	set_signal_handler();
+	exit_code = minishell(arena, env);
+	rl_clear_history();
 	ft_lstclear(&env, &free);
+	arena_dispose(&arena);
 	return (exit_code);
 }
 
-static int	minishell(t_list *env)
+static int	minishell(t_arena arena, t_list *env)
 {
 	char			*user_input_line;
 	t_shell_status	status;
 	t_ast_node		*ast;
-	t_arena			arena;
 
-	arena = arena_new();
-	if (!arena)
-		return (EXIT_FAILURE);
 	ft_bzero(&status, sizeof(status));
 	set_status(&status);
 	while (!status.should_exit)
@@ -68,8 +68,6 @@ static int	minishell(t_list *env)
 		}
 		arena_free(arena);
 	}
-	arena_dispose(&arena);
-	rl_clear_history();
 	return (status.exit_code);
 }
 
