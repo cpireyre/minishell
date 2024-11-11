@@ -6,7 +6,7 @@
 /*   By: copireyr <copireyr@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/26 14:29:23 by copireyr          #+#    #+#             */
-/*   Updated: 2024/11/09 09:33:48 by copireyr         ###   ########.fr       */
+/*   Updated: 2024/11/11 07:13:27 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,14 +38,6 @@ enum e_tok_type
 	TOK_NUM_TYPES,
 };
 
-/* typedef struct s_ast */
-/* { */
-/* 	enum e_tok_type		type; */
-/* 	char				*value; */
-/* 	struct s_ast		**children; */
-/* 	size_t				n_children; */
-/* }	t_ast; */
-
 typedef struct s_token
 {
 	enum e_tok_type	type;
@@ -53,6 +45,7 @@ typedef struct s_token
 	t_quote			*q_value;
 	size_t			size;
 	bool			is_globbed;
+	int				num_expandables;
 }	t_token;
 
 typedef struct s_token_vector

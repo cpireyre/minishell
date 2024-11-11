@@ -6,7 +6,7 @@
 /*   By: copireyr <copireyr@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/26 14:51:54 by copireyr          #+#    #+#             */
-/*   Updated: 2024/11/09 09:47:06 by copireyr         ###   ########.fr       */
+/*   Updated: 2024/11/11 07:13:45 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ static t_token	token_next(t_arena arena, const char *str)
 	t_token	result;
 	char	quote_char;
 
-	result = (t_token){token_get_type(*str), str, 0, 0, false};
+	result = (t_token){token_get_type(*str), str, 0, 0, false, 0};
 	while (result.type != TOK_END && token_get_type(*str) == result.type)
 	{
 		if (result.type == TOK_WORD && (*str == '"' || *str == '\''))

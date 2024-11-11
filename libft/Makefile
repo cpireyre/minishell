@@ -6,7 +6,7 @@
 #    By: copireyr <copireyr@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/05/23 15:14:47 by copireyr          #+#    #+#              #
-#    Updated: 2024/11/01 09:10:40 by copireyr         ###   ########.fr        #
+#    Updated: 2024/11/10 22:00:48 by copireyr         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -47,7 +47,7 @@ src := ./ctype/ft_atoi.c    ./str/ft_split.c \
 		./lst/ft_lstadd_back.c ./lst/ft_lstadd_front.c ./lst/ft_lstclear.c ./lst/ft_lstdelone.c \
 		./lst/ft_lstiter.c ./lst/ft_lstlast.c ./lst/ft_lstmap.c ./lst/ft_lstnew.c ./lst/ft_lstsize.c \
 		./str/ft_strchrnul.c ./ctype/ft_isalnum.c ./str/ft_arena_strndup.c ./str/ft_arena_strjoin.c \
-		./ctype/ft_itoa.c
+		./ctype/ft_itoa.c ./ctype/ft_isalpha.c
 
 obj_dir := ./obj
 $(obj_dir)/%.o: %.c

@@ -6,132 +6,141 @@
 /*   By: copireyr <copireyr@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 10:00:45 by copireyr          #+#    #+#             */
-/*   Updated: 2024/11/01 09:53:37 by copireyr         ###   ########.fr       */
+/*   Updated: 2024/11/11 08:40:00 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "expand.h"
 #include "libft.h"
+#include "quotes.h"
 
-static char	*expand_str(t_arena arena, t_list *env,
-				const char *end, const char *exit_code);
-static int	find_next_expandable(const char *str);
-static char	*val(t_list *env, const char *key, size_t length_key,
-				const char *exit_code_str);
+char	*get_env(char *var, t_list **env);
 
-/*TODO: Check return values for ENOMEM*/
-void	expand(t_ast_node *ast, t_arena arena, t_list *env, int exit_code)
+/* We start max_var_len at 11 so we can print any integer exit code */
+size_t	get_max_env_var_len(t_list *env)
 {
-	size_t		i;
-	const char	*exit_code_str = ft_arena_itoa(arena, exit_code);
+	size_t	max_var_len;
+	size_t	curr_var_len;
 
-	if (!ast || !exit_code_str)
-		return ;
-	i = 0;
-	while (i < ast->n_children)
+	max_var_len = 11;
+	while (env)
 	{
-		if (ast->children[i]->type == AST_WORD)
-		{
-			ast->children[i]->token.value = expand_str(
-					arena, env, ast->children[i]->token.value, exit_code_str);
-			ast->children[i]->token.size = ft_strlen(
-					ast->children[i]->token.value);
-		}
-		expand(ast->children[i], arena, env, exit_code);
-		i++;
-	}
-}
-
-static char	*expand_str(t_arena arena, t_list *env,
-		const char *end, const char *exit_code)
-{
-	t_string_vector	vec;
-	const char		*start;
-
-	ft_bzero(&vec, sizeof(vec));
-	while (*end)
-	{
-		vec = realloc_maybe(arena, vec);
-		if (!vec.strings)
-			return (NULL);
-		start = end;
-		end += find_next_expandable(end);
-		vec.strings[vec.count++] = ft_arena_strndup(arena, start, end - start);
-		if (!vec.strings[vec.count - 1])
-			return (NULL);
-		if (*end == '$')
-		{
-			start = ++end;
-			if (*start == '?')
-				end++;
-			while (*start != '?' && (ft_isalnum(*end) || *end == '_'))
-				end++;
-			vec.strings[vec.count++] = val(env, start, end - start, exit_code);
-		}
-	}
-	return (ft_arena_strjoin(arena, vec.strings, vec.count));
-}
-
-t_string_vector	realloc_maybe(t_arena arena, t_string_vector vec)
-{
-	char	**tmp;
-
-	if (vec.count < vec.capacity)
-		return (vec);
-	if (!vec.capacity)
-		vec.capacity = 8;
-	vec.capacity = 2 * vec.capacity;
-	tmp = arena_calloc(arena, vec.capacity, sizeof(char *));
-	if (tmp)
-		ft_memcpy(tmp, vec.strings, sizeof(char *) * vec.count);
-	vec.strings = tmp;
-	return (vec);
-}
-
-/*
- * static variable is dangerous here, because the state will NOT
- * be wiped clean when we parse the next command. However we know
- * from the tokenizer that double quotes only occur in pairs, so
- * expand_anyway should always be false when we are done expanding.
- */
-
-static int	find_next_expandable(const char *str)
-{
-	static bool	expand_anyway = false;
-	int			i;
-
-	i = 0;
-	while (str[i] && str[i] != '$')
-	{
-		if (str[i] == '"')
-			expand_anyway = !expand_anyway;
-		if (str[i] == '\'' && !expand_anyway)
-			while (str[++i] != '\'')
-				;
-		i++;
-	}
-	return (i);
-}
-
-static char	*val(t_list *env, const char *key, size_t length_key,
-			const char *exit_code_str)
-{
-	char	*curr;
-	size_t	i;
-
-	if (*key == '?' && length_key == 1)
-		return ((char *)exit_code_str);
-	if (!length_key)
-		return ("$");
-	while (env && length_key)
-	{
-		i = 0;
-		curr = env->content;
-		while (curr[i] != '=')
-			i++;
-		if (i == length_key && !ft_memcmp(key, curr, length_key))
-			return (curr + i + 1);
+		curr_var_len = ft_strlen(env->content);
+		if (curr_var_len > max_var_len)
+			max_var_len = curr_var_len;
 		env = env->next;
 	}
-	return ("");
+	return (max_var_len);
+}
+
+size_t	calculate_scratch_space(t_token *xs, t_list *env)
+{
+	const size_t	max_var_len = get_max_env_var_len(env);
+	t_quote			*str;
+	size_t			expansion_size;
+	size_t			max_expansion_size;
+
+	max_expansion_size = 0;
+	while (xs->type != TOK_END)
+	{
+		str = xs->q_value;
+		xs->size = 0;
+		while (str[xs->size])
+		{
+			if ((str[xs->size] & CHAR_MASK) == '$'
+				&& is_quoted(str[xs->size]) != '\'')
+				xs->num_expandables++;
+			xs->size++;
+		}
+		expansion_size = (xs->size - xs->num_expandables)
+			+ (xs->num_expandables * max_var_len);
+		if (expansion_size > max_expansion_size)
+			max_expansion_size = expansion_size;
+		xs++;
+	}
+	return (max_expansion_size + 1);
+}
+
+const char	*get_expansion(t_quote *str, t_list *env, const char *exit_code)
+{
+	char	*entry;
+	int		i;
+
+	if (!str[0])
+		return ("$");
+	if ((str[0] & CHAR_MASK) == '?')
+		return (exit_code);
+	if (ft_isalpha(str[0] & CHAR_MASK) || (str[0] & CHAR_MASK) == '_')
+	{
+		while (env)
+		{
+			entry = env->content;
+			i = 0;
+			while (entry[i] && entry[i] != '=' && ft_isword(str[i] & CHAR_MASK)
+				&& (str[i] & CHAR_MASK) == entry[i])
+				i++;
+			if (entry[i] == '=' && (!str[i] || !ft_isword(str[i] & CHAR_MASK)))
+				return (entry + i + 1);
+			env = env->next;
+		}
+		return ("");
+	}
+	return ("$");
+}
+
+size_t	expand_token(t_quote *dst, t_quote *src, t_list *env, const char *code)
+{
+	size_t		j;
+	char		quote;
+	const char	*expansion;
+
+	j = 0;
+	while (*src)
+	{
+		if ((*src & CHAR_MASK) == '$' && is_quoted(*src) != '\'')
+		{
+			quote = *src++ & QUOTE_MASK;
+			expansion = get_expansion(src, env, code);
+			while (*expansion)
+				dst[j++] = *expansion++ | quote;
+			if ((*src & CHAR_MASK) == '?')
+				src++;
+			else
+				while (*src && ft_isword(*src & CHAR_MASK))
+					src++;
+		}
+		else
+			dst[j++] = *src++;
+	}
+	dst[j] = 0;
+	return (j + 1);
+}
+
+t_token	*expand(t_arena arena, t_token *xs, t_list *env, int exit_code)
+{
+	const size_t	scratch_size = calculate_scratch_space(xs, env);
+	t_quote			*scratch;
+	char			exit_buf[12];
+	int				expanded_size;
+
+	scratch = arena_alloc(arena, scratch_size);
+	if (!scratch)
+		return (NULL);
+	ft_snprintf(exit_buf, sizeof(exit_buf), "%d", exit_code);
+	while (xs->type != TOK_END)
+	{
+		if (xs->num_expandables)
+		{
+			ft_bzero(scratch, scratch_size);
+			expanded_size = expand_token(scratch, xs->q_value, env, exit_buf);
+			xs->q_value = arena_calloc(arena, expanded_size, sizeof(t_quote));
+			if (!xs->q_value)
+				return (NULL);
+			ft_memcpy(xs->q_value, scratch, expanded_size * sizeof(t_quote));
+		}
+		if (DEBUG)
+			ft_printf("Expanded: %s\n", quotes_lower(arena, xs->q_value));
+		xs++;
+	}
+	return (xs);
 }
