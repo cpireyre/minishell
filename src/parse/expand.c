@@ -6,15 +6,13 @@
 /*   By: copireyr <copireyr@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 10:00:45 by copireyr          #+#    #+#             */
-/*   Updated: 2024/11/11 08:40:00 by copireyr         ###   ########.fr       */
+/*   Updated: 2024/11/11 08:45:15 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "expand.h"
 #include "libft.h"
 #include "quotes.h"
-
-char	*get_env(char *var, t_list **env);
 
 /* We start max_var_len at 11 so we can print any integer exit code */
 size_t	get_max_env_var_len(t_list *env)
