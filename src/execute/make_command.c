@@ -134,7 +134,7 @@ int handle_redir(t_command *cmd, t_ast_node *ast)
 
 	else if (ast->token.type == TOK_REDIRECT_OUT)
 	{
-		close_fd_if_open(&cmd->infile_fd);
+		close_fd_if_open(&cmd->outfile_fd);
 		cmd->outfile = (char *)ast->children[0]->token.value;
 		cmd->outfile_fd = open(ast->children[0]->token.value, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 		if (cmd->outfile_fd < 0)
@@ -200,8 +200,8 @@ int	make_command(t_command *cmd, t_ast_node *ast, t_list *env, t_arena arena)
 		ft_dprintf(2, "Error: Wrong AST type\n");
 		return (-1);
 	}
-	cmd->infile_fd = -1;
-	cmd->outfile_fd = -1;
+	// cmd->infile_fd = -1;
+	// cmd->outfile_fd = -1;
 	cmd->path = NULL;
 	cmd->infile = NULL;
 	cmd->outfile = NULL;

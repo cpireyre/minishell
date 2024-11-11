@@ -142,16 +142,18 @@ static int	execute_cmd(t_command_context *con, t_arena arena, int prev_exit)
 {
 	t_command	cmd;	
 	
-	if (make_command(&cmd, con->ast, con->env, arena) < 0)
-	{
-		if (DEBUG)
-			ft_dprintf(2, "Error making command\n");
-		return (1);
-	}
+	cmd.infile_fd = -1; //TODO: Remove duplication between execute_cmd and execute_builtin_cmd
+	cmd.outfile_fd = -1;
 	if (con->pipes && con->cur_child > 0)
 		cmd.infile_fd = con->pipes[con->cur_child - 1][0];
 	if (con->pipes && con->cur_child != con->n_children - 1)
 		cmd.outfile_fd = con->pipes[con->cur_child][1];
+	if (make_command(&cmd, con->ast, con->env, arena) < 0)
+	{
+		if (DEBUG)
+			ft_dprintf(2, "Error making command\n");
+		exit (1);
+	}
 	if (cmd.infile_fd > -1)
 		dup2(cmd.infile_fd, STDIN_FILENO);
 	if (cmd.outfile_fd > -1)
@@ -177,16 +179,18 @@ static t_shell_status	execute_builtin_cmd(
 	
 	orig_fds[0] = -1;
 	orig_fds[1] = -1;
+	cmd.infile_fd = -1;
+	cmd.outfile_fd = -1;
+	if (con->pipes && con->cur_child > 0)
+		cmd.infile_fd = con->pipes[con->cur_child - 1][0];
+	if (con->pipes && con->cur_child != con->n_children - 1)
+		cmd.outfile_fd = con->pipes[con->cur_child][1];
 	if (make_command(&cmd, con->ast, con->env, arena) < 0)
 	{
 		if (DEBUG)
 			ft_dprintf(2, "Error making command\n");
 		return ((t_shell_status){.exit_code = 1});
 	}
-	if (con->pipes && con->cur_child > 0)
-		cmd.infile_fd = con->pipes[con->cur_child - 1][0];
-	if (con->pipes && con->cur_child != con->n_children - 1)
-		cmd.outfile_fd = con->pipes[con->cur_child][1];
 	if (cmd.infile_fd > -1)
 	{
 		orig_fds[0] = dup(STDIN_FILENO);
