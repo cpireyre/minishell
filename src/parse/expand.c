@@ -6,7 +6,7 @@
 /*   By: copireyr <copireyr@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 10:00:45 by copireyr          #+#    #+#             */
-/*   Updated: 2024/11/11 08:45:15 by copireyr         ###   ########.fr       */
+/*   Updated: 2024/11/11 09:05:51 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ size_t	calculate_scratch_space(t_token *xs, t_list *env)
 			max_expansion_size = expansion_size;
 		xs++;
 	}
-	return (max_expansion_size + 1);
+	return (sizeof(t_quote) * (max_expansion_size + 1));
 }
 
 const char	*get_expansion(t_quote *str, t_list *env, const char *exit_code)
@@ -121,7 +121,7 @@ t_token	*expand(t_arena arena, t_token *xs, t_list *env, int exit_code)
 	char			exit_buf[12];
 	int				expanded_size;
 
-	scratch = arena_alloc(arena, scratch_size);
+	scratch = malloc(scratch_size);
 	if (!scratch)
 		return (NULL);
 	ft_snprintf(exit_buf, sizeof(exit_buf), "%d", exit_code);
