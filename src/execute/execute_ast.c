@@ -42,7 +42,7 @@ t_shell_status	execute_ast(t_ast_node *ast, t_list	*env, t_arena arena, int prev
 
 	status.exit_code = 0;
 	status.should_exit = false;
-	if (ast->type == AST_COMMAND)
+	if (ast->type == AST_COMMAND && ast->n_children > 0)
 		status = execute_single_command(ast, env, arena, prev_exit);
 	else if (ast->type == AST_PIPELINE)
 		status = execute_pipeline(ast, env, arena, prev_exit);
@@ -50,12 +50,6 @@ t_shell_status	execute_ast(t_ast_node *ast, t_list	*env, t_arena arena, int prev
 		status = execute_logicals(ast, env, arena, prev_exit);
 	else if (ast->type == AST_PAREN)
 		status = execute_ast(ast->children[0], env, arena, prev_exit);
-	else
-	{
-		status.exit_code = 1;
-		if (DEBUG)
-			ft_printf("We should not be here..\n");
-	}
 	return (status);
 }
 
