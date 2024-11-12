@@ -6,7 +6,7 @@
 /*   By: copireyr <copireyr@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/17 09:48:17 by copireyr          #+#    #+#             */
-/*   Updated: 2024/10/31 13:53:03 by copireyr         ###   ########.fr       */
+/*   Updated: 2024/11/12 09:41:28 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ char	*remove_quotes_from_str(t_arena arena, const char *str)
 void	remove_quotes(t_arena arena, t_ast_node *ast)
 {
 	size_t		i;
-	const char	*str;
+	char	*str;
 
 	if (!ast)
 		return ;

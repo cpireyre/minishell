@@ -6,7 +6,7 @@
 /*   By: copireyr <copireyr@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/26 14:51:54 by copireyr          #+#    #+#             */
-/*   Updated: 2024/11/11 07:13:45 by copireyr         ###   ########.fr       */
+/*   Updated: 2024/11/12 09:42:38 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,10 @@
 
 static bool				get_operators(
 							t_arena arena, t_token input, t_token_vec *vec);
-static t_token			token_next(t_arena arena, const char *str);
+static t_token			token_next(t_arena arena, char *str);
 static bool				token_vec_grow(t_arena arena, t_token_vec *vec);
 
-t_token	*tokenize(t_arena arena, const char *str)
+t_token	*tokenize(t_arena arena, char *str)
 {
 	t_token_vec		vec;
 	t_token			next;
@@ -59,7 +59,36 @@ static bool	token_vec_grow(t_arena arena, t_token_vec *vec)
 	return (true);
 }
 
-static t_token	token_next(t_arena arena, const char *str)
+t_char_meta	*token_get_meta(t_arena arena, char *str, size_t size)
+{
+	t_char_meta	*ret;
+	bool		in_single_quotes;
+	bool		in_double_quotes;
+
+	if (!str)
+		return (NULL);
+	ret = arena_calloc(arena, 1, size + 1);
+	if (!ret)
+		return (NULL);
+	in_single_quotes = false;
+	in_double_quotes = false;
+	while (*str)
+	{
+		if (!in_double_quotes && *str == '\'')
+			in_single_quotes = !in_single_quotes;
+		if (!in_single_quotes && *str == '"')
+			in_double_quotes = !in_double_quotes;
+		if (in_single_quotes)
+			ret->quote_type = SINGLE_QUOTED;
+		else if (in_double_quotes)
+			ret->quote_type = DOUBLE_QUOTED;
+		str++;
+		ret++;
+	}
+	return (ret - size);
+}
+
+static t_token	token_next(t_arena arena, char *str)
 {
 	t_token	result;
 	char	quote_char;
@@ -77,8 +106,8 @@ static t_token	token_next(t_arena arena, const char *str)
 	}
 	result.size = str - result.value;
 	result.value = ft_arena_strndup(arena, result.value, result.size);
-	result.q_value = quotes_lift(arena, result.value);
-	if (!result.value || !result.q_value)
+	result.meta = token_get_meta(arena, result.value, result.size);
+	if (!result.value || !result.meta)
 		result.type = TOK_ERROR;
 	return (result);
 }

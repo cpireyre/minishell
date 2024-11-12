@@ -6,7 +6,7 @@
 /*   By: copireyr <copireyr@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/26 14:29:23 by copireyr          #+#    #+#             */
-/*   Updated: 2024/11/11 07:13:27 by copireyr         ###   ########.fr       */
+/*   Updated: 2024/11/12 09:44:19 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 
 # include "libft.h"
 # include "arena.h"
-# include "quotes.h"
 # include <limits.h>
 
 enum e_tok_type
@@ -38,11 +37,29 @@ enum e_tok_type
 	TOK_NUM_TYPES,
 };
 
+# define UNQUOTED 0
+# define DOUBLE_QUOTED 1
+# define SINGLE_QUOTED 2
+
+typedef struct s_char_meta
+{
+	uint8_t	quote_type : 2;
+	uint8_t	from_expansion : 1;
+	uint8_t	from_glob : 1;
+	uint8_t	unused : 4;
+}	t_char_meta;
+
+typedef struct s_meta_string
+{
+	char		*str;
+	t_char_meta	*meta;
+}	t_meta_string;
+
 typedef struct s_token
 {
 	enum e_tok_type	type;
-	const char		*value;
-	t_quote			*q_value;
+	char			*value;
+	t_char_meta		*meta;
 	size_t			size;
 	bool			is_globbed;
 	int				num_expandables;
@@ -57,12 +74,12 @@ typedef struct s_token_vector
 
 struct s_operator
 {
-	const char         *str;
-	size_t            len;
-	enum e_tok_type   type;
+	const char			*str;
+	size_t				len;
+	enum e_tok_type		type;
 };
 
-extern t_token		*tokenize(t_arena arena, const char *str);
+extern t_token		*tokenize(t_arena arena, char *str);
 void				tokenize_show(t_token token);
 void				tokenize_show_tokens(t_token *xs);
 size_t				count_toks(t_token *xs);

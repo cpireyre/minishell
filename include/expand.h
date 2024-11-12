@@ -6,7 +6,7 @@
 /*   By: copireyr <copireyr@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/11 10:03:17 by copireyr          #+#    #+#             */
-/*   Updated: 2024/11/10 21:57:45 by copireyr         ###   ########.fr       */
+/*   Updated: 2024/11/12 09:31:03 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,12 +15,6 @@
 
 # include "libft.h"
 # include "ast.h"
-
-typedef struct {
-    t_quote *data;
-    size_t len;
-    size_t cap;
-} t_quote_vec;
 
 typedef struct s_ast_vec
 {
