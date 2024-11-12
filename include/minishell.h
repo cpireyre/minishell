@@ -30,6 +30,8 @@
 # define TRUE 1
 # define FALSE 0
 # define ANSI_RESET "\x1B[0m"
+# define EX_NOTFOUND 127
+# define EX_NOEXEC 126
 
 #include <signal.h>
 

@@ -12,6 +12,8 @@
 
 #include <unistd.h>
 #include <sys/wait.h>
+#include <errno.h>
+#include <sys/stat.h>
 #include "arena.h"
 #include "libft.h"
 #include "ast.h"
@@ -138,6 +140,57 @@ static void	print_command(t_command *cmd)
 	ft_dprintf(2, "\n");
 }
 
+static int	file_isdir(char *path)
+{
+	struct stat statbuf;
+
+	stat(path, &statbuf);
+	if ((statbuf.st_mode & S_IFMT) == S_IFDIR)
+		return (1);
+	return (0);
+}
+
+static int	executable_file(char *path)
+{
+	struct stat statbuf;
+
+	stat(path, &statbuf);
+	if ((statbuf.st_mode & S_IFMT) == S_IFREG)
+		return (1);
+	return (0);
+}
+
+static int	minishell_execve(char *command, char **args, char **env)
+{
+	int	i;
+	int	last_command_exit_value;
+
+	execve(command, args, env);
+	last_command_exit_value = 0;
+	i = errno;
+	if (i != ENOEXEC)
+	{
+		if (i == ENOENT)
+			last_command_exit_value = EX_NOTFOUND;
+		else
+			last_command_exit_value = EX_NOEXEC;
+	}
+	if (file_isdir(command))
+		dprintf(STDERR_FILENO, "%s: %s: %s\n", NAME, command, strerror(EISDIR));
+	else if (executable_file(command))
+		dprintf(STDERR_FILENO, "%s: %s: %s\n", NAME, command, strerror(i));
+	else
+		dprintf(STDERR_FILENO, "%s: %s: %s\n", NAME, command, strerror(i));
+	return (last_command_exit_value);
+}
+
+static int is_path(char	*command)
+{
+	if (command && ft_strchr("./", command[0]))
+		return (1);
+	return (0);
+}
+
 static int	execute_cmd(t_command_context *con, t_arena arena, int prev_exit)
 {
 	t_command	cmd;	
@@ -164,10 +217,13 @@ static int	execute_cmd(t_command_context *con, t_arena arena, int prev_exit)
 		print_command(&cmd);
 	if (is_builtin(cmd.path))
 		exit(run_builtin(cmd.path, cmd.args, &con->env, prev_exit).exit_code);
+	if (!is_path(cmd.path))
+	{
+		dprintf(STDERR_FILENO, "%s: %s\n", cmd.path, "command not found");
+		exit(EX_NOTFOUND);
+	}
 	char **env_array = make_raw_env_array(con->env, arena);
-	execve(cmd.path, (char **)cmd.args, env_array);
-	perror(NAME);
-	exit(1);
+	exit (minishell_execve(cmd.path, (char **)cmd.args, env_array));
 }
 
 static t_shell_status	execute_builtin_cmd(
