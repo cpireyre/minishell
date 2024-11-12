@@ -30,6 +30,5 @@ int	printenv(t_list **env)
 			ft_printf("%s\n", val);
 		tmp = tmp->next;
 	}
-	ft_printf("%s", ANSI_RESET);
 	return (0);
 }
