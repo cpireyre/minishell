@@ -6,7 +6,7 @@
 /*   By: pleander <pleander@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 11:03:23 by pleander          #+#    #+#             */
-/*   Updated: 2024/11/13 09:59:43 by copireyr         ###   ########.fr       */
+/*   Updated: 2024/11/13 18:32:43 by pleander         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,5 +53,8 @@ t_shell_status	run_builtin(char *builtin, char **args,
 t_shell_status	builtin_exit(char **args, int prev_exit);
 t_shell_status	execute_logicals(t_ast_node *ast, t_list *env,
 					t_arena arena, int prev_exit);
+int				minishell_execve(char *command, char **args, char **env);
+int				is_path(char	*command);
+void			print_command(t_command *cmd);
 
 #endif
