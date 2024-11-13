@@ -6,7 +6,7 @@
 /*   By: copireyr <copireyr@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 11:57:35 by copireyr          #+#    #+#             */
-/*   Updated: 2024/11/08 12:15:58 by copireyr         ###   ########.fr       */
+/*   Updated: 2024/11/13 11:52:18 by pleander         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ t_ast_node	*parse(t_arena arena, char *user_input_line,
 			tokenize_show_tokens(xs);
 		ft_bzero(range, sizeof(range));
 		range[1] = count_toks(xs) - 1;
-		ast = create_ast(xs, ast, range, arena);
+		ast = create_ast(xs, range, arena);
 		expand(ast, arena, env, exit_code);
 		glob(arena, ast);
 		split_words(arena, ast);
