@@ -6,7 +6,7 @@
 /*   By: copireyr <copireyr@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/26 14:51:54 by copireyr          #+#    #+#             */
-/*   Updated: 2024/10/14 10:27:41 by copireyr         ###   ########.fr       */
+/*   Updated: 2024/11/13 13:23:49 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,6 +82,7 @@ static t_token	token_next(t_arena arena, const char *str)
 			str++;
 	}
 	result.size = str - result.value;
+	/* result.value = NULL; */
 	result.value = ft_arena_strndup(arena, result.value, result.size);
 	if (!result.value)
 		result.type = TOK_ERROR;
