@@ -6,7 +6,7 @@
 /*   By: copireyr <copireyr@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 10:00:45 by copireyr          #+#    #+#             */
-/*   Updated: 2024/11/01 09:53:37 by copireyr         ###   ########.fr       */
+/*   Updated: 2024/11/13 10:17:50 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,11 +23,12 @@ static char	*val(t_list *env, const char *key, size_t length_key,
 void	expand(t_ast_node *ast, t_arena arena, t_list *env, int exit_code)
 {
 	size_t		i;
-	const char	*exit_code_str = ft_arena_itoa(arena, exit_code);
+	char		exit_code_str[12];
 
-	if (!ast || !exit_code_str)
+	if (!ast)
 		return ;
 	i = 0;
+	ft_snprintf(exit_code_str, 12, "%d", exit_code);
 	while (i < ast->n_children)
 	{
 		if (ast->children[i]->type == AST_WORD)
