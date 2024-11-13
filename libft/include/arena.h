@@ -6,14 +6,14 @@
 /*   By: copireyr <copireyr@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 10:04:53 by copireyr          #+#    #+#             */
-/*   Updated: 2024/11/13 09:37:27 by copireyr         ###   ########.fr       */
+/*   Updated: 2024/11/13 09:54:42 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef ARENA_H
 # define ARENA_H
 
-#include <stddef.h>
+# include <stddef.h>
 
 typedef struct s_arena_node
 {

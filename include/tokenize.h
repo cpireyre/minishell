@@ -6,7 +6,7 @@
 /*   By: copireyr <copireyr@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/26 14:29:23 by copireyr          #+#    #+#             */
-/*   Updated: 2024/10/14 13:14:01 by copireyr         ###   ########.fr       */
+/*   Updated: 2024/11/13 09:56:51 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,9 +63,9 @@ typedef struct s_token_vector
 
 struct s_operator
 {
-	const char         *str;
-	size_t            len;
-	enum e_tok_type   type;
+	const char		*str;
+	size_t			len;
+	enum e_tok_type	type;
 };
 
 extern t_token		*tokenize(t_arena arena, const char *str);
@@ -73,6 +73,6 @@ void				tokenize_show(t_token token);
 void				tokenize_show_tokens(t_token *xs);
 size_t				count_toks(t_token *xs);
 const char			*ast_show_type(enum e_tok_type type);
-enum 				e_tok_type	token_get_type(char c);
+enum e_tok_type		token_get_type(char c);
 
 #endif /* TOKENIZE_H */
