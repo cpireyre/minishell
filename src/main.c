@@ -6,7 +6,7 @@
 /*   By: copireyr <copireyr@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/27 12:08:02 by copireyr          #+#    #+#             */
-/*   Updated: 2024/11/13 09:36:35 by copireyr         ###   ########.fr       */
+/*   Updated: 2024/11/13 09:39:49 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 static int	minishell(t_arena arena, t_list *env);
 static char	*arena_readline(t_arena arena, const char *prompt);
 void		print_ast(t_ast_node *root, size_t level);
+static int	add_to_envlist(t_list **head, const char *str);
 
 int	main(int argc, char **argv, char **envp)
 {
@@ -88,24 +89,6 @@ static char	*arena_readline(t_arena arena, const char *prompt)
 	return (result);
 }
 
-static int	add_to_envlist(t_list **head, const char *str)
-{
-	char	*envstr;
-	t_list	*new;
-
-	envstr = ft_strdup(str);
-	if (!envstr)
-		return (0);
-	new = ft_lstnew(envstr);
-	if (!new)
-	{
-		free(envstr);
-		return (0);
-	}
-	ft_lstadd_back(head, new);
-	return (1);
-}
-
 /**
  * @brief Initializes a new list of environmental variables
  *
@@ -139,4 +122,22 @@ t_list	*init_env(char **envp)
 		if (!add_to_envlist(&head, *envp++))
 			ft_lstclear(&head, &free);
 	return (head);
+}
+
+static int	add_to_envlist(t_list **head, const char *str)
+{
+	char	*envstr;
+	t_list	*new;
+
+	envstr = ft_strdup(str);
+	if (!envstr)
+		return (0);
+	new = ft_lstnew(envstr);
+	if (!new)
+	{
+		free(envstr);
+		return (0);
+	}
+	ft_lstadd_back(head, new);
+	return (1);
 }
