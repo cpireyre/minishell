@@ -6,7 +6,7 @@
 /*   By: copireyr <copireyr@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 10:00:45 by copireyr          #+#    #+#             */
-/*   Updated: 2024/11/13 10:17:50 by copireyr         ###   ########.fr       */
+/*   Updated: 2024/11/13 10:28:37 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,28 +19,31 @@ static int	find_next_expandable(const char *str);
 static char	*val(t_list *env, const char *key, size_t length_key,
 				const char *exit_code_str);
 
-/*TODO: Check return values for ENOMEM*/
-void	expand(t_ast_node *ast, t_arena arena, t_list *env, int exit_code)
+bool	expand(t_ast_node *ast, t_arena arena, t_list *env, int exit_code)
 {
-	size_t		i;
-	char		exit_code_str[12];
+	size_t	i;
+	char	exit_code_str[12];
 
 	if (!ast)
-		return ;
-	i = 0;
+		return (true);
 	ft_snprintf(exit_code_str, 12, "%d", exit_code);
+	i = 0;
 	while (i < ast->n_children)
 	{
 		if (ast->children[i]->type == AST_WORD)
 		{
 			ast->children[i]->token.value = expand_str(
 					arena, env, ast->children[i]->token.value, exit_code_str);
+			if (!ast->children[i]->token.value)
+				return (false);
 			ast->children[i]->token.size = ft_strlen(
 					ast->children[i]->token.value);
 		}
-		expand(ast->children[i], arena, env, exit_code);
+		if (!expand(ast->children[i], arena, env, exit_code))
+			return (false);
 		i++;
 	}
+	return (true);
 }
 
 static char	*expand_str(t_arena arena, t_list *env,
