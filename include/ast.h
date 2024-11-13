@@ -45,5 +45,8 @@ void			show_token_range(t_token *xs, size_t range[2]);
 enum e_ast_type	get_highest_ast_type(t_token *xs, size_t range[2]);
 t_ast_node		*syntax_error(char *msg);
 t_ast_node		*create_command_node(t_token *xs, size_t range[2], t_arena arena);
+t_ast_node		*parse(t_arena arena, char *user_input_line,
+				t_list *env, int exit_code);
+void			print_ast(t_ast_node *root, size_t level);
 
 #endif

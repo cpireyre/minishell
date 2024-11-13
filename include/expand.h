@@ -6,7 +6,7 @@
 /*   By: copireyr <copireyr@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/11 10:03:17 by copireyr          #+#    #+#             */
-/*   Updated: 2024/10/31 12:58:44 by copireyr         ###   ########.fr       */
+/*   Updated: 2024/11/13 09:57:42 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,10 @@ typedef struct s_ast_vec
 	size_t		capacity;
 }	t_ast_vec;
 
-void	expand(t_ast_node *ast, t_arena arena, t_list *env, int exit_code);
+void					expand(t_ast_node *ast, t_arena arena,
+							t_list *env, int exit_code);
 extern t_string_vector	realloc_maybe(t_arena arena, t_string_vector vec);
-t_ast_vec	*ast_push(t_arena arena, t_ast_vec *vec, t_ast_node *node);
+t_ast_vec				*ast_push(t_arena arena,
+							t_ast_vec *vec, t_ast_node *node);
 
 #endif /* EXPAND_H */
