@@ -112,8 +112,6 @@ static t_ast_node	*create_ast_pipe(t_token *xs, size_t range[2],
 t_ast_node	*create_ast(t_token *xs, size_t range[2], t_arena arena)
 {
 	enum e_ast_type	max_type;
-	int				ltoken;
-	size_t			new_range[2];
 	t_ast_node		*node;
 
 	max_type = get_highest_ast_type(xs, range);
