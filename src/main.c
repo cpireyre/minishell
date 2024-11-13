@@ -6,7 +6,7 @@
 /*   By: copireyr <copireyr@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/27 12:08:02 by copireyr          #+#    #+#             */
-/*   Updated: 2024/11/08 12:25:23 by copireyr         ###   ########.fr       */
+/*   Updated: 2024/11/13 09:39:49 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,46 +15,47 @@
 #include "minishell.h"
 #include "execute.h"
 
-static int	minishell(t_list *env);
+static int	minishell(t_arena arena, t_list *env);
 static char	*arena_readline(t_arena arena, const char *prompt);
 void		print_ast(t_ast_node *root, size_t level);
+static int	add_to_envlist(t_list **head, const char *str);
 
 int	main(int argc, char **argv, char **envp)
 {
-	t_list		*env;
-	int			exit_code;
+	t_arena	arena;
+	t_list	*env;
+	int		exit_code;
 
 	if (argc > 1)
-	{
-		ft_dprintf(2, "Usage: %s", argv[0]);
-		return (EX_USAGE);
-	}
-	set_signal_handler();
+		return (EX_USAGE + !ft_dprintf(2, "Usage: %s", argv[0]));
 	env = init_env(envp);
-	if (!env)
+	arena = arena_new();
+	if (!env || !arena)
 	{
+		if (env)
+			ft_lstclear(&env, &free);
+		arena_dispose(&arena);
 		ft_dprintf(2, "%s: Couldn't allocate memory", argv[0]);
 		return (ENOMEM);
 	}
-	exit_code = minishell(env);
+	set_signal_handler();
+	exit_code = minishell(arena, env);
+	rl_clear_history();
 	ft_lstclear(&env, &free);
+	arena_dispose(&arena);
 	return (exit_code);
 }
 
-static int	minishell(t_list *env)
+static int	minishell(t_arena arena, t_list *env)
 {
 	char			*user_input_line;
 	t_shell_status	status;
 	t_ast_node		*ast;
-	t_arena			arena;
 
 	ft_bzero(&status, sizeof(status));
 	set_status(&status);
 	while (!status.should_exit)
 	{
-		arena = arena_new();
-		if (!arena)
-			break ;
 		user_input_line = arena_readline(arena, MINISHELL_PROMPT);
 		status.should_exit = !user_input_line;
 		if (!status.should_exit && *user_input_line)
@@ -66,9 +67,8 @@ static int	minishell(t_list *env)
 			else
 				status.exit_code = 258;
 		}
-		arena_dispose(&arena);
+		arena_free(arena);
 	}
-	rl_clear_history();
 	return (status.exit_code);
 }
 
@@ -98,27 +98,46 @@ static char	*arena_readline(t_arena arena, const char *prompt)
 t_list	*init_env(char **envp)
 {
 	t_list	*head;
-	t_list	*new;
-	char	*envstr;
+	char	*pwd;
+	char	*pwd_var;
 
-	if (!envp || !*envp)
-		return (NULL);
 	head = NULL;
-	while (*envp)
+	if (!envp || !*envp)
 	{
-		envstr = ft_strdup(*envp++);
-		if (!envstr)
+		pwd = getcwd(NULL, 0);
+		if (!pwd)
+			return (NULL);
+		pwd_var = ft_strjoin("PWD=", pwd);
+		free(pwd);
+		if (!pwd_var)
+			return (NULL);
+		if (!add_to_envlist(&head, pwd_var))
 		{
-			ft_lstclear(&head, &free);
+			free(pwd_var);
 			return (NULL);
 		}
-		new = ft_lstnew(envstr);
-		if (!new)
-		{
-			ft_lstclear(&head, &free);
-			return (NULL);
-		}
-		ft_lstadd_back(&head, new);
+		free(pwd_var);
 	}
+	while (*envp)
+		if (!add_to_envlist(&head, *envp++))
+			ft_lstclear(&head, &free);
 	return (head);
+}
+
+static int	add_to_envlist(t_list **head, const char *str)
+{
+	char	*envstr;
+	t_list	*new;
+
+	envstr = ft_strdup(str);
+	if (!envstr)
+		return (0);
+	new = ft_lstnew(envstr);
+	if (!new)
+	{
+		free(envstr);
+		return (0);
+	}
+	ft_lstadd_back(head, new);
+	return (1);
 }
