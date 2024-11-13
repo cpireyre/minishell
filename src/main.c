@@ -6,7 +6,7 @@
 /*   By: copireyr <copireyr@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/27 12:08:02 by copireyr          #+#    #+#             */
-/*   Updated: 2024/11/08 12:25:23 by copireyr         ###   ########.fr       */
+/*   Updated: 2024/11/13 08:42:14 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ int	main(int argc, char **argv, char **envp)
 	}
 	set_signal_handler();
 	env = init_env(envp);
-	if (!env)
+	if (envp && *envp && !env)
 	{
 		ft_dprintf(2, "%s: Couldn't allocate memory", argv[0]);
 		return (ENOMEM);
@@ -101,9 +101,14 @@ t_list	*init_env(char **envp)
 	t_list	*new;
 	char	*envstr;
 
-	if (!envp || !*envp)
-		return (NULL);
 	head = NULL;
+	if (!envp || !*envp)
+	{
+		envstr = getcwd(NULL, 0);
+		new = ft_lstnew(envstr);
+		ft_lstadd_back(&head, new);
+		return (head);
+	}
 	while (*envp)
 	{
 		envstr = ft_strdup(*envp++);
