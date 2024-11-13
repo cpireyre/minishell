@@ -6,7 +6,7 @@
 /*   By: copireyr <copireyr@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/27 12:08:02 by copireyr          #+#    #+#             */
-/*   Updated: 2024/11/13 08:42:14 by copireyr         ###   ########.fr       */
+/*   Updated: 2024/11/13 09:34:06 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,6 +89,24 @@ static char	*arena_readline(t_arena arena, const char *prompt)
 	return (result);
 }
 
+static int	add_to_envlist(t_list **head, const char *str)
+{
+	char	*envstr;
+	t_list	*new;
+
+	envstr = ft_strdup(str);
+	if (!envstr)
+		return (0);
+	new = ft_lstnew(envstr);
+	if (!new)
+	{
+		free(envstr);
+		return (0);
+	}
+	ft_lstadd_back(head, new);
+	return (1);
+}
+
 /**
  * @brief Initializes a new list of environmental variables
  *
@@ -98,32 +116,28 @@ static char	*arena_readline(t_arena arena, const char *prompt)
 t_list	*init_env(char **envp)
 {
 	t_list	*head;
-	t_list	*new;
-	char	*envstr;
+	char	*pwd;
+	char	*pwd_var;
 
 	head = NULL;
 	if (!envp || !*envp)
 	{
-		envstr = getcwd(NULL, 0);
-		new = ft_lstnew(envstr);
-		ft_lstadd_back(&head, new);
-		return (head);
+		pwd = getcwd(NULL, 0);
+		if (!pwd)
+			return (NULL);
+		pwd_var = ft_strjoin("PWD=", pwd);
+		free(pwd);
+		if (!pwd_var)
+			return (NULL);
+		if (!add_to_envlist(&head, pwd_var))
+		{
+			free(pwd_var);
+			return (NULL);
+		}
+		free(pwd_var);
 	}
 	while (*envp)
-	{
-		envstr = ft_strdup(*envp++);
-		if (!envstr)
-		{
+		if (!add_to_envlist(&head, *envp++))
 			ft_lstclear(&head, &free);
-			return (NULL);
-		}
-		new = ft_lstnew(envstr);
-		if (!new)
-		{
-			ft_lstclear(&head, &free);
-			return (NULL);
-		}
-		ft_lstadd_back(&head, new);
-	}
 	return (head);
 }
