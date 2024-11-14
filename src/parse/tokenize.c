@@ -6,11 +6,12 @@
 /*   By: copireyr <copireyr@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/26 14:51:54 by copireyr          #+#    #+#             */
-/*   Updated: 2024/11/13 13:23:49 by copireyr         ###   ########.fr       */
+/*   Updated: 2024/11/14 09:42:32 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "tokenize.h"
+#include <errno.h>
 
 static bool				get_operators(
 							t_arena arena, t_token input, t_token_vec *vec);
@@ -32,7 +33,8 @@ t_token	*tokenize(t_arena arena, const char *str)
 			get_operators(arena, next, &vec);
 		else
 		{
-			if (!token_vec_grow(arena, &vec))
+			if (!token_vec_grow(arena, &vec)
+				|| (next.type == TOK_ERROR && errno == ENOMEM))
 				return (NULL);
 			vec.data[vec.len++] = next;
 		}
@@ -82,7 +84,6 @@ static t_token	token_next(t_arena arena, const char *str)
 			str++;
 	}
 	result.size = str - result.value;
-	/* result.value = NULL; */
 	result.value = ft_arena_strndup(arena, result.value, result.size);
 	if (!result.value)
 		result.type = TOK_ERROR;
