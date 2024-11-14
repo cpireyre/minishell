@@ -6,7 +6,7 @@
 /*   By: copireyr <copireyr@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/17 09:48:17 by copireyr          #+#    #+#             */
-/*   Updated: 2024/10/31 13:53:03 by copireyr         ###   ########.fr       */
+/*   Updated: 2024/11/13 13:14:41 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ char	*remove_quotes_from_str(t_arena arena, const char *str)
 		return ((char *)str);
 	result = arena_alloc(arena, ft_strlen(str) + 1);
 	if (!result)
-		return (NULL);
+		return ((char *)str);
 	save = result;
 	while (*str)
 	{
