@@ -6,7 +6,7 @@
 /*   By: pleander <pleander@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 11:03:23 by pleander          #+#    #+#             */
-/*   Updated: 2024/11/13 18:32:43 by pleander         ###   ########.fr       */
+/*   Updated: 2024/11/14 13:24:46 by pleander         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,5 +56,16 @@ t_shell_status	execute_logicals(t_ast_node *ast, t_list *env,
 int				minishell_execve(char *command, char **args, char **env);
 int				is_path(char	*command);
 void			print_command(t_command *cmd);
+int				execute_cmd(t_command_context *con, t_arena arena,
+					int prev_exit);
+int				wait_for_children(int *pid, size_t n_forks);
+t_shell_status	execute_single_command(
+					t_ast_node *ast, t_list *env, t_arena arena, int prev_exit);
+t_shell_status	execute_pipeline(
+					t_ast_node *ast, t_list *env, t_arena arena, int prev_exit);
+void			close_fd_if_open(int *fd);
+int				count_cmd_args(t_ast_node *ast);
+char			*find_path(const char *command, t_list *env, t_arena arena);
+int				handle_redir(t_command *cmd, t_ast_node *ast);
 
 #endif
