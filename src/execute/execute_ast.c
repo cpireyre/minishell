@@ -6,14 +6,12 @@
 /*   By: pleander <pleander@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/08 20:51:52 by pleander          #+#    #+#             */
-/*   Updated: 2024/11/07 14:38:03 by pleander         ###   ########.fr       */
+/*   Updated: 2024/11/13 18:30:05 by pleander         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <unistd.h>
 #include <sys/wait.h>
-#include <errno.h>
-#include <sys/stat.h>
 #include "arena.h"
 #include "libft.h"
 #include "ast.h"
@@ -116,74 +114,6 @@ static	t_shell_status	execute_single_command(
 	return (status);
 }
 
-static void	print_command(t_command *cmd)
-{
-	int	i;
-
-	ft_dprintf(2, "[%s]:", cmd->path);
-	i = 0;
-	while (cmd->args && cmd->args[i])
-	{
-		ft_dprintf(2, " (%d: %s)", i, cmd->args[i]);
-		i++;
-	}
-	if (cmd->infile)
-		ft_dprintf(2, " (< %s)", cmd->infile);
-	if (cmd->outfile)
-		ft_dprintf(2, " (> %s)", cmd->outfile);
-	ft_dprintf(2, "\n");
-}
-
-static int	file_isdir(char *path)
-{
-	struct stat statbuf;
-
-	stat(path, &statbuf);
-	if ((statbuf.st_mode & S_IFMT) == S_IFDIR)
-		return (1);
-	return (0);
-}
-
-static int	executable_file(char *path)
-{
-	struct stat statbuf;
-
-	stat(path, &statbuf);
-	if ((statbuf.st_mode & S_IFMT) == S_IFREG)
-		return (1);
-	return (0);
-}
-
-static int	minishell_execve(char *command, char **args, char **env)
-{
-	int	i;
-	int	last_command_exit_value;
-
-	execve(command, args, env);
-	last_command_exit_value = 0;
-	i = errno;
-	if (i != ENOEXEC)
-	{
-		if (i == ENOENT)
-			last_command_exit_value = EX_NOTFOUND;
-		else
-			last_command_exit_value = EX_NOEXEC;
-	}
-	if (file_isdir(command))
-		dprintf(STDERR_FILENO, "%s: %s: %s\n", NAME, command, strerror(EISDIR));
-	else if (executable_file(command))
-		dprintf(STDERR_FILENO, "%s: %s: %s\n", NAME, command, strerror(i));
-	else
-		dprintf(STDERR_FILENO, "%s: %s: %s\n", NAME, command, strerror(i));
-	return (last_command_exit_value);
-}
-
-static int is_path(char	*command)
-{
-	if (command && ft_strchr("./", command[0]))
-		return (1);
-	return (0);
-}
 
 static int	execute_cmd(t_command_context *con, t_arena arena, int prev_exit)
 {
