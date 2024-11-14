@@ -6,7 +6,7 @@
 /*   By: copireyr <copireyr@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 20:02:19 by copireyr          #+#    #+#             */
-/*   Updated: 2024/11/06 11:43:47 by copireyr         ###   ########.fr       */
+/*   Updated: 2024/11/13 13:17:30 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ static bool	expand_glob_node(t_arena arena, const char **entries,
 	t_ast_node	*new_node;
 
 	result = glob_pattern(arena, entries, node->token.value);
-	while (*result)
+	while (result && *result)
 	{
 		new_node = arena_calloc(arena, 1, sizeof(*new_node));
 		if (!new_node)

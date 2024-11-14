@@ -6,7 +6,7 @@
 /*   By: copireyr <copireyr@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 12:54:15 by copireyr          #+#    #+#             */
-/*   Updated: 2024/10/31 14:03:08 by copireyr         ###   ########.fr       */
+/*   Updated: 2024/11/13 13:10:04 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,7 @@ t_ast_vec	*expand_children(
 	t_ast_node	*new_child;
 
 	split = split_str(arena, str);
-	while (*split)
+	while (split && *split)
 	{
 		new_child = arena_calloc(arena, 1, sizeof(*new_child));
 		if (!new_child)
@@ -105,7 +105,6 @@ t_ast_vec	*expand_children(
 	return (new_children);
 }
 
-/* TODO: Check return val for ENOMEM */
 void	split_words(t_arena arena, t_ast_node *ast)
 {
 	t_ast_vec	new_children;
