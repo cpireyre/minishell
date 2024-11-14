@@ -6,10 +6,11 @@
 /*   By: copireyr <copireyr@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/26 14:51:54 by copireyr          #+#    #+#             */
-/*   Updated: 2024/11/14 09:42:32 by copireyr         ###   ########.fr       */
+/*   Updated: 2024/11/14 13:34:35 by pleander         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "minishell.h"
 #include "tokenize.h"
 #include <errno.h>
 
@@ -42,6 +43,8 @@ t_token	*tokenize(t_arena arena, const char *str)
 			break ;
 		str += next.size;
 	}
+	if (DEBUG)
+		tokenize_show_tokens(vec.data);
 	return (vec.data);
 }
 
