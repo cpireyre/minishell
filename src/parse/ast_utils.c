@@ -6,12 +6,13 @@
 /*   By: pleander <pleander@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 10:02:53 by pleander          #+#    #+#             */
-/*   Updated: 2024/11/13 10:56:54 by pleander         ###   ########.fr       */
+/*   Updated: 2024/11/14 14:48:01 by pleander         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ast.h"
 #include "tokenize.h"
+#include "minishell.h"
 
 /**
  * @brief Checks if the token x is a parenthesis
@@ -90,8 +91,7 @@ void	show_token_range(t_token *xs, size_t range[2])
 	ft_printf("\n");
 }
 
-t_ast_node	*syntax_error(char *msg)
+void	syntax_error(void)
 {
-	ft_dprintf(2, "Syntax error while %s\n", msg);
-	return (NULL);
+	ft_dprintf(2, "%s: syntax error\n", NAME);
 }

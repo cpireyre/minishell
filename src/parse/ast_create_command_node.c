@@ -6,7 +6,7 @@
 /*   By: pleander <pleander@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 10:55:50 by pleander          #+#    #+#             */
-/*   Updated: 2024/11/13 12:32:22 by pleander         ###   ########.fr       */
+/*   Updated: 2024/11/14 14:29:20 by pleander         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,10 @@ static t_ast_node	*init_cmd_node(t_token *xs, size_t range[2], t_arena arena)
 		return (NULL);
 	word_count = count_tokens(xs, TOK_WORD, range);
 	if (word_count < count_redirs(xs, range))
-		return (syntax_error("creating command node"));
+	{
+		syntax_error();
+		return (NULL);
+	}
 	cmd_node->type = AST_COMMAND;
 	cmd_node->token.value = concat_token_values(xs, range, arena);
 	cmd_node->token.size = ft_strlen(cmd_node->token.value);
@@ -79,7 +82,10 @@ static t_ast_node	*create_redir_node(t_ast_node *redir_node, t_token *xs,
 {
 	redir_node->type = AST_REDIR;
 	if (xs[range[0] + 1].type != TOK_WORD)
-		return (syntax_error("creating command node"));
+	{
+		syntax_error();
+		return (NULL);
+	}
 	if (range[0] + 1 < range[1] && xs[range[0]].type != TOK_END)
 	{
 		redir_node->children = arena_calloc(arena, 1, sizeof(t_ast_node *));
@@ -93,7 +99,10 @@ static t_ast_node	*create_redir_node(t_ast_node *redir_node, t_token *xs,
 		range[0]++;
 	}
 	else
-		return (syntax_error("creating command node"));
+	{
+		syntax_error();
+		return (NULL);
+	}
 	return (redir_node);
 }
 

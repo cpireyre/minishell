@@ -6,7 +6,7 @@
 /*   By: pleander <pleander@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/01 14:07:01 by pleander          #+#    #+#             */
-/*   Updated: 2024/11/13 11:51:15 by pleander         ###   ########.fr       */
+/*   Updated: 2024/11/14 14:46:27 by pleander         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,10 +53,15 @@ static t_ast_node	*create_ast_logical(t_token *xs, size_t range[2],
 	new_range[0] = range[0];
 	new_range[1] = (size_t)ltoken;
 	range[0] = (size_t)ltoken + 1;
+	if (range[1] - range[0] < 1 || new_range[1] - new_range[0] < 1)
+	{
+		syntax_error();
+		return (NULL);
+	}
 	if (add_node_to_parent(node, create_ast(xs, new_range, arena), arena) < 0)
-		return (syntax_error("parsing logical node"));
+		return (NULL);
 	if (add_node_to_parent(node, create_ast(xs, range, arena), arena) < 0)
-		return (syntax_error("parsing logical node"));
+		return (NULL);
 	return (node);
 }
 
@@ -82,7 +87,7 @@ static t_ast_node	*create_ast_paren(t_token *xs, size_t range[2],
 	range[0]++;
 	range[1]--;
 	if (add_node_to_parent(node, create_ast(xs, range, arena), arena) < 0)
-		return (syntax_error("parsing parenthesis node"));
+		return (NULL);
 	return (node);
 }
 
@@ -103,9 +108,9 @@ static t_ast_node	*create_ast_pipe(t_token *xs, size_t range[2],
 	new_range[1] = (size_t)ltoken;
 	range[0] = (size_t)ltoken + 1;
 	if (add_node_to_parent(node, create_ast(xs, new_range, arena), arena) < 0)
-		return (syntax_error("while parsping pipeline"));
+		return (NULL);
 	if (add_node_to_parent(node, create_ast(xs, range, arena), arena) < 0)
-		return (syntax_error("while parsing pipeline"));
+		return (NULL);
 	return (node);
 }
 

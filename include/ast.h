@@ -6,7 +6,7 @@
 /*   By: pleander <pleander@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/01 12:58:29 by pleander          #+#    #+#             */
-/*   Updated: 2024/11/14 13:25:30 by pleander         ###   ########.fr       */
+/*   Updated: 2024/11/14 14:47:43 by pleander         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ size_t			count_tokens(t_token *xs, enum e_tok_type type,
 					size_t range[2]);
 void			show_token_range(t_token *xs, size_t range[2]);
 enum e_ast_type	get_highest_ast_type(t_token *xs, size_t range[2]);
-t_ast_node		*syntax_error(char *msg);
+void			syntax_error(void);
 t_ast_node		*create_command_node(t_token *xs, size_t range[2],
 					t_arena arena);
 t_ast_node		*parse(t_arena arena, char *user_input_line,
