@@ -6,7 +6,7 @@
 /*   By: copireyr <copireyr@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 22:04:13 by copireyr          #+#    #+#             */
-/*   Updated: 2024/11/15 10:13:25 by copireyr         ###   ########.fr       */
+/*   Updated: 2024/11/15 11:02:07 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,8 @@ t_shell_status	builtin_exit(char **args, int prev_exit)
 	}
 	if (!ok)
 	{
-		ft_dprintf(2, NAME ": %s: %s: numeric argument required\n", builtin_name, argument);
+		ft_dprintf(2, NAME ": %s: %s: numeric argument required\n",
+			builtin_name, argument);
 		return ((t_shell_status){.exit_code = 2, .should_exit = true});
 	}
 	if (DEBUG)
