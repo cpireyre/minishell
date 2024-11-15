@@ -6,7 +6,7 @@
 /*   By: pleander <pleander@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 12:48:25 by pleander          #+#    #+#             */
-/*   Updated: 2024/11/15 10:17:29 by copireyr         ###   ########.fr       */
+/*   Updated: 2024/11/15 10:37:14 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ static int	handle_redir_out(t_command *cmd, t_ast_node *ast)
 	if (cmd->outfile_fd < 0)
 	{
 		ft_dprintf(2, "%s: ", NAME);
-		perror(cmd->infile);
+		perror(cmd->outfile);
 		return (-1);
 	}
 	return (0);
@@ -79,7 +79,7 @@ static int	handle_redir_append(t_command *cmd, t_ast_node *ast)
 	if (cmd->outfile_fd < 0)
 	{
 		ft_dprintf(2, "%s: ", NAME);
-		perror(cmd->infile);
+		perror(ast->children[0]->token.value);
 		return (-1);
 	}
 	return (0);
