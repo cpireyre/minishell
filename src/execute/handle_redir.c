@@ -6,7 +6,7 @@
 /*   By: pleander <pleander@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 12:48:25 by pleander          #+#    #+#             */
-/*   Updated: 2024/11/14 13:23:34 by pleander         ###   ########.fr       */
+/*   Updated: 2024/11/15 10:47:05 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,8 @@ static int	handle_redir_in(t_command *cmd, t_ast_node *ast)
 	cmd->infile_fd = open(ast->children[0]->token.value, O_RDONLY);
 	if (cmd->infile_fd < 0)
 	{
-		perror(NAME);
+		ft_dprintf(2, "%s: ", NAME);
+		perror(cmd->infile);
 		return (-1);
 	}
 	return (0);
@@ -35,7 +36,8 @@ static int	handle_redir_heredoc(t_command *cmd, t_ast_node *ast)
 	cmd->infile = (char *)ast->children[0]->token.value;
 	if (pipe(hdoc_pipe) < 0)
 	{
-		perror(NAME);
+		ft_dprintf(2, "%s: ", NAME);
+		perror(cmd->infile);
 		return (-1);
 	}
 	line = get_next_line(STDIN_FILENO);
@@ -62,7 +64,8 @@ static int	handle_redir_out(t_command *cmd, t_ast_node *ast)
 			ast->children[0]->token.value, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (cmd->outfile_fd < 0)
 	{
-		perror(NAME);
+		ft_dprintf(2, "%s: ", NAME);
+		perror(cmd->outfile);
 		return (-1);
 	}
 	return (0);
@@ -75,7 +78,8 @@ static int	handle_redir_append(t_command *cmd, t_ast_node *ast)
 			ast->children[0]->token.value, O_WRONLY | O_CREAT, 0644);
 	if (cmd->outfile_fd < 0)
 	{
-		perror(NAME);
+		ft_dprintf(2, "%s: ", NAME);
+		perror(ast->children[0]->token.value);
 		return (-1);
 	}
 	return (0);
@@ -83,6 +87,11 @@ static int	handle_redir_append(t_command *cmd, t_ast_node *ast)
 
 int	handle_redir(t_command *cmd, t_ast_node *ast)
 {
+	if (!ast->children)
+	{
+		ft_dprintf(2, "%s: ambiguous redirect\n", NAME);
+		return (-1);
+	}
 	if (ast->type != AST_REDIR || ast->children[0]->type != AST_WORD)
 		return (-1);
 	if (ast->token.type == TOK_REDIRECT_IN)
