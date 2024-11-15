@@ -6,7 +6,7 @@
 /*   By: pleander <pleander@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 12:48:25 by pleander          #+#    #+#             */
-/*   Updated: 2024/11/14 13:23:34 by pleander         ###   ########.fr       */
+/*   Updated: 2024/11/15 10:09:11 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,8 @@ static int	handle_redir_append(t_command *cmd, t_ast_node *ast)
 
 int	handle_redir(t_command *cmd, t_ast_node *ast)
 {
-	if (ast->type != AST_REDIR || ast->children[0]->type != AST_WORD)
+	if (!ast->children || ast->type != AST_REDIR
+		|| ast->children[0]->type != AST_WORD)
 		return (-1);
 	if (ast->token.type == TOK_REDIRECT_IN)
 		return (handle_redir_in(cmd, ast));
