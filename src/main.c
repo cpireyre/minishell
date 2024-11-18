@@ -6,13 +6,14 @@
 /*   By: copireyr <copireyr@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/27 12:08:02 by copireyr          #+#    #+#             */
-/*   Updated: 2024/11/13 09:39:49 by copireyr         ###   ########.fr       */
+/*   Updated: 2024/11/18 11:46:19 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <sysexits.h>
 #include <errno.h>
 #include "minishell.h"
+#include "signals.h"
 #include "execute.h"
 
 static int	minishell(t_arena arena, t_list *env);
@@ -56,7 +57,9 @@ static int	minishell(t_arena arena, t_list *env)
 	set_status(&status);
 	while (!status.should_exit)
 	{
+		set_signal_handler();
 		user_input_line = arena_readline(arena, MINISHELL_PROMPT);
+		set_nop_handler();
 		status.should_exit = !user_input_line;
 		if (!status.should_exit && *user_input_line)
 		{

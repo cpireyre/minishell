@@ -6,7 +6,7 @@
 /*   By: copireyr <copireyr@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 09:41:44 by copireyr          #+#    #+#             */
-/*   Updated: 2024/11/07 10:22:24 by copireyr         ###   ########.fr       */
+/*   Updated: 2024/11/18 11:36:26 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 #include <readline/readline.h>
 #include "minishell.h"
 
-void	catch_signal(int sig)
+void	redisplay_prompt(int sig)
 {
 	if (sig == SIGINT)
 	{
@@ -24,6 +24,13 @@ void	catch_signal(int sig)
 		rl_redisplay();
 		set_status(NULL);
 	}
+}
+
+void	nop(int sig)
+{
+	(void)sig;
+	write(1, "\n", 1);
+	set_status(NULL);
 }
 
 void	set_status(t_shell_status *status)
@@ -43,7 +50,19 @@ int	set_signal_handler(void)
 	sa = (struct sigaction){0};
 	sa.sa_handler = SIG_IGN;
 	sigaction(SIGQUIT, &sa, 0);
-	sa.sa_handler = &catch_signal;
+	sa.sa_handler = &redisplay_prompt;
+	sigaction(SIGINT, &sa, 0);
+	return (0);
+}
+
+int	set_nop_handler(void)
+{
+	struct sigaction	sa;
+
+	sa = (struct sigaction){0};
+	sa.sa_handler = SIG_IGN;
+	sigaction(SIGQUIT, &sa, 0);
+	sa.sa_handler = &nop;
 	sigaction(SIGINT, &sa, 0);
 	return (0);
 }
