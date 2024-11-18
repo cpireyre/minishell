@@ -68,6 +68,7 @@ static int	minishell(t_arena arena, t_list *env)
 				status.exit_code = 258;
 		}
 		arena_free(arena);
+		ft_printf(ANSI_RESET);
 	}
 	return (status.exit_code);
 }
