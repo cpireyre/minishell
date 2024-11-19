@@ -6,7 +6,7 @@
 /*   By: pleander <pleander@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/08 20:51:52 by pleander          #+#    #+#             */
-/*   Updated: 2024/11/14 10:25:54 by pleander         ###   ########.fr       */
+/*   Updated: 2024/11/19 16:08:06 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,16 +54,21 @@ int	wait_for_children(int *pid, size_t n_forks)
 	int		wstatus;
 	int		e_status;
 	size_t	i;
+	bool	printed_newline;
 
 	wstatus = 0;
 	e_status = 0;
 	i = 0;
+	printed_newline = false;
 	while (i < n_forks)
 	{
 		wstatus = 0;
 		if (pid[i] > 0)
 		{
 			waitpid(pid[i], &wstatus, 0);
+			if (!printed_newline && WIFSIGNALED(wstatus)
+			&& (WTERMSIG(wstatus) == SIGQUIT || WTERMSIG(wstatus) == SIGINT))
+					printed_newline = (bool)write(1, "\n", 1);
 			if (WIFEXITED(wstatus))
 				e_status = WEXITSTATUS(wstatus);
 		}

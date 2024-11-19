@@ -6,7 +6,7 @@
 /*   By: copireyr <copireyr@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 09:41:44 by copireyr          #+#    #+#             */
-/*   Updated: 2024/11/19 12:39:49 by copireyr         ###   ########.fr       */
+/*   Updated: 2024/11/19 15:54:29 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,6 @@ void	redisplay_prompt(int sig)
 void	handler_print_newline(int sig)
 {
 	(void)sig;
-	g_signal_received = SIGINT;
 	write(1, "\n", 1);
 	set_status(NULL);
 }
@@ -51,10 +50,7 @@ void	set_signal_handlers(void (*sigquit_handler_fn)(int), void (*sigint_handler_
 	sa = (struct sigaction){0};
 	sa.sa_handler = sigquit_handler_fn;
 	sigaction(SIGQUIT, &sa, 0);
-	if (sigint_handler_fn)
-		sa.sa_handler = sigint_handler_fn;
-	else
-		sa.sa_handler = SIG_DFL;
+	sa.sa_handler = sigint_handler_fn;
 	sigaction(SIGINT, &sa, 0);
 }
 
