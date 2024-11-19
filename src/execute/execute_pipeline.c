@@ -6,11 +6,12 @@
 /*   By: pleander <pleander@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 10:22:05 by pleander          #+#    #+#             */
-/*   Updated: 2024/11/14 10:24:39 by pleander         ###   ########.fr       */
+/*   Updated: 2024/11/19 16:07:11 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "execute.h"
+#include "signals.h"
 
 static void	init_pipeline(t_command_context *con, t_list *env, t_ast_node *ast,
 		t_arena arena)
@@ -27,7 +28,10 @@ static pid_t	do_forking(t_command_context *con, int prev_exit, t_arena arena)
 
 	pid = fork();
 	if (pid == 0)
+	{
+		set_signal_handlers(SIG_DFL, SIG_DFL);
 		execute_cmd(con, arena, prev_exit);
+	}
 	return (pid);
 }
 
@@ -46,6 +50,7 @@ t_shell_status	execute_pipeline(
 	pid_t				*child_pids;
 	t_shell_status		status;
 
+	set_signal_handlers(SIG_IGN, SIG_IGN);
 	init_pipeline(&con, env, ast, arena);
 	child_pids = arena_alloc(arena, (con.n_children) * sizeof(pid_t));
 	if (!child_pids || !con.pipes)

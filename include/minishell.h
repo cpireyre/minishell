@@ -6,7 +6,7 @@
 /*   By: copireyr <copireyr@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/27 12:29:36 by copireyr          #+#    #+#             */
-/*   Updated: 2024/11/13 09:55:31 by copireyr         ###   ########.fr       */
+/*   Updated: 2024/11/19 16:29:09 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,8 +34,6 @@
 # define EX_NOEXEC 126
 
 # include <signal.h>
-
-void	set_status(t_shell_status *status);
 
 typedef uint8_t	t_bool;
 
@@ -70,5 +68,6 @@ size_t	is_builtin(const char *name);
 int		cd(char **args, t_list **env);
 int		echo(char **args);
 int		set_signal_handler(void);
+void	set_status(t_shell_status *status);
 
 #endif /* MINISHELL_H */

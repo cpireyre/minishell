@@ -6,13 +6,14 @@
 /*   By: pleander <pleander@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 08:35:59 by pleander          #+#    #+#             */
-/*   Updated: 2024/11/14 09:13:52 by pleander         ###   ########.fr       */
+/*   Updated: 2024/11/19 16:19:10 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "execute.h"
 #include "libft.h"
 #include "minishell.h"
+#include "signals.h"
 
 static void	restore_fds(int orig_fds[2])
 {
@@ -74,11 +75,7 @@ t_shell_status	execute_single_command(
 	t_shell_status		status;
 	pid_t				*child_pids;
 
-	con.ast = ast;
-	con.env = env;
-	con.pipes = NULL;
-	con.cur_child = 0;
-	con.n_children = 1;
+	con = (t_command_context){ast, env, NULL, 0, 1};
 	if (is_builtin(con.ast->children[0]->token.value))
 		return (execute_builtin_cmd(&con, arena, prev_exit));
 	child_pids = arena_alloc(arena, (con.n_children) * sizeof(pid_t));
@@ -86,9 +83,13 @@ t_shell_status	execute_single_command(
 		return ((t_shell_status){.exit_code = -1});
 	child_pids[0] = fork();
 	if (child_pids[0] == 0)
+	{
+		set_signal_handlers(SIG_DFL, SIG_DFL);
 		execute_cmd(&con, arena, prev_exit);
+	}
 	else if (child_pids[0] < 0)
 		return ((t_shell_status){.exit_code = -1});
+	set_signal_handlers(SIG_IGN, SIG_IGN);
 	status.exit_code = wait_for_children(child_pids, con.n_children);
 	status.should_exit = false;
 	return (status);
