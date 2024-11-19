@@ -10,6 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <errno.h>
 #include "minishell.h"
 #include "libft.h"
 
@@ -36,8 +37,7 @@ static int	handle_redir_heredoc(t_command *cmd, t_ast_node *ast)
 	cmd->infile = (char *)ast->children[0]->token.value;
 	if (pipe(hdoc_pipe) < 0)
 	{
-		ft_dprintf(2, "%s: ", NAME);
-		perror(cmd->infile);
+		ft_dprintf(2, "%s: %s: %s", NAME, cmd->infile, strerror(errno));
 		return (-1);
 	}
 	line = get_next_line(STDIN_FILENO);
@@ -51,6 +51,7 @@ static int	handle_redir_heredoc(t_command *cmd, t_ast_node *ast)
 		if (!line)
 			return (0);
 	}
+	free(line);
 	close(hdoc_pipe[1]);
 	cmd->infile_fd = hdoc_pipe[0];
 	return (0);
