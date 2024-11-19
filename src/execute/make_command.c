@@ -29,7 +29,7 @@ static int	parse_children(t_command *cmd, t_ast_node *ast, t_list *env,
 				cmd->path = find_path(ast->children[i]->token.value, env, a);
 				if (!cmd->path)
 					return (-1);
-				cmd->args[arg_i] = cmd->path;
+				cmd->args[arg_i] = (char *)ast->children[i]->token.value;
 			}
 			else
 				cmd->args[arg_i] = (char *)ast->children[i]->token.value;
