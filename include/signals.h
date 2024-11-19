@@ -6,7 +6,7 @@
 /*   By: copireyr <copireyr@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 12:46:57 by copireyr          #+#    #+#             */
-/*   Updated: 2024/11/19 12:39:33 by copireyr         ###   ########.fr       */
+/*   Updated: 2024/11/19 16:28:41 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 
 int		*exit_code(void);
 int		set_signal_handler(void);
-void	set_signal_handlers(void (*sigquit_handler_fn)(int), void (*sigint_handler_fn)(int));
+void	set_signal_handlers(void (*sigquit_fn)(int), void (*sigint_fn)(int));
 void	redisplay_prompt(int sig);
 void	handler_print_newline(int sig);
 
