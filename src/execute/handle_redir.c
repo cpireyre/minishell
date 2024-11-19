@@ -42,7 +42,7 @@ static int	handle_redir_heredoc(t_command *cmd, t_ast_node *ast)
 	}
 	line = get_next_line(STDIN_FILENO);
 	if (!line)
-		return (-1);
+		return (0);
 	while (ft_strncmp(line, cmd->infile, ft_strlen(line) - 1))
 	{
 		ft_dprintf(hdoc_pipe[1], line);

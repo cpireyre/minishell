@@ -14,6 +14,8 @@
 
 size_t	is_builtin(const char *name)
 {
+	if (!name)
+		return (1);
 	if (ft_streq(name, "env") || ft_streq(name, "export")
 		|| ft_streq(name, "unset") || ft_streq(name, "pwd")
 		|| ft_streq(name, "cd") || ft_streq(name, "echo")

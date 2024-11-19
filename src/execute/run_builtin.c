@@ -59,6 +59,8 @@ t_shell_status	run_builtin(
 {
 	if (DEBUG)
 		ft_printf("Running builtin %s\n", builtin);
+	if (!builtin)
+		return ((t_shell_status){.exit_code = 0});
 	if (ft_streq(builtin, "env"))
 		return ((t_shell_status){.exit_code = run_builtin_env(env)});
 	if (ft_streq(builtin, "export"))
