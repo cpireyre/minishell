@@ -49,7 +49,7 @@ static int	handle_redir_heredoc(t_command *cmd, t_ast_node *ast)
 		free(line);
 		line = get_next_line(STDIN_FILENO);
 		if (!line)
-			return (-1);
+			return (0);
 	}
 	close(hdoc_pipe[1]);
 	cmd->infile_fd = hdoc_pipe[0];
