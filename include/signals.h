@@ -6,7 +6,7 @@
 /*   By: copireyr <copireyr@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 12:46:57 by copireyr          #+#    #+#             */
-/*   Updated: 2024/11/19 16:32:39 by copireyr         ###   ########.fr       */
+/*   Updated: 2024/11/19 16:33:54 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define SIGNALS_H
 
 # include <signal.h>
+
 int		*exit_code(void);
 int		set_signal_handler(void);
 void	set_signal_handlers(void (*sigquit_fn)(int), void (*sigint_fn)(int));
