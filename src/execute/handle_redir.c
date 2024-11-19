@@ -6,7 +6,7 @@
 /*   By: pleander <pleander@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 12:48:25 by pleander          #+#    #+#             */
-/*   Updated: 2024/11/19 12:35:29 by copireyr         ###   ########.fr       */
+/*   Updated: 2024/11/19 16:17:22 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,10 +38,8 @@ static int	handle_redir_heredoc(t_command *cmd, t_ast_node *ast)
 	close_fd_if_open(&cmd->infile_fd);
 	cmd->infile = (char *)ast->children[0]->token.value;
 	if (pipe(hdoc_pipe) < 0)
-	{
-		ft_dprintf(2, "%s: %s: %s", NAME, cmd->infile, strerror(errno));
-		return (-1);
-	}
+		return (-1 + 0 * ft_dprintf(
+				2, "%s: %s: %s", NAME, cmd->infile, strerror(errno)));
 	line = readline("> ");
 	if (!line)
 		return (0);

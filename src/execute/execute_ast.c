@@ -6,7 +6,7 @@
 /*   By: pleander <pleander@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/08 20:51:52 by pleander          #+#    #+#             */
-/*   Updated: 2024/11/19 16:08:06 by copireyr         ###   ########.fr       */
+/*   Updated: 2024/11/19 16:25:09 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,8 @@
 #include "libft.h"
 #include "ast.h"
 #include "execute.h"
+
+static bool	print_signal_newline(int wstatus);
 
 /**
  * @brief Executes the AST and returns the exit code
@@ -66,9 +68,8 @@ int	wait_for_children(int *pid, size_t n_forks)
 		if (pid[i] > 0)
 		{
 			waitpid(pid[i], &wstatus, 0);
-			if (!printed_newline && WIFSIGNALED(wstatus)
-			&& (WTERMSIG(wstatus) == SIGQUIT || WTERMSIG(wstatus) == SIGINT))
-					printed_newline = (bool)write(1, "\n", 1);
+			if (!printed_newline)
+				printed_newline = print_signal_newline(wstatus);
 			if (WIFEXITED(wstatus))
 				e_status = WEXITSTATUS(wstatus);
 		}
@@ -77,4 +78,11 @@ int	wait_for_children(int *pid, size_t n_forks)
 		i++;
 	}
 	return (e_status);
+}
+
+static bool	print_signal_newline(int wstatus)
+{
+	return (WIFSIGNALED(wstatus)
+		&& (WTERMSIG(wstatus) == SIGQUIT || WTERMSIG(wstatus) == SIGINT)
+		&& write(1, "\n", 1));
 }

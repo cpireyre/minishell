@@ -6,7 +6,7 @@
 /*   By: copireyr <copireyr@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 09:41:44 by copireyr          #+#    #+#             */
-/*   Updated: 2024/11/19 15:54:29 by copireyr         ###   ########.fr       */
+/*   Updated: 2024/11/19 16:15:39 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,14 +43,14 @@ void	set_status(t_shell_status *status)
 		status_pointer = status;
 }
 
-void	set_signal_handlers(void (*sigquit_handler_fn)(int), void (*sigint_handler_fn)(int))
+void	set_signal_handlers(void (*sigquit_fn)(int), void (*sigint_fn)(int))
 {
 	struct sigaction	sa;
 
 	sa = (struct sigaction){0};
-	sa.sa_handler = sigquit_handler_fn;
+	sa.sa_handler = sigquit_fn;
 	sigaction(SIGQUIT, &sa, 0);
-	sa.sa_handler = sigint_handler_fn;
+	sa.sa_handler = sigint_fn;
 	sigaction(SIGINT, &sa, 0);
 }
 

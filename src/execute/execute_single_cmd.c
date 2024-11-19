@@ -6,7 +6,7 @@
 /*   By: pleander <pleander@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 08:35:59 by pleander          #+#    #+#             */
-/*   Updated: 2024/11/19 16:00:08 by copireyr         ###   ########.fr       */
+/*   Updated: 2024/11/19 16:19:10 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,11 +75,7 @@ t_shell_status	execute_single_command(
 	t_shell_status		status;
 	pid_t				*child_pids;
 
-	con.ast = ast;
-	con.env = env;
-	con.pipes = NULL;
-	con.cur_child = 0;
-	con.n_children = 1;
+	con = (t_command_context){ast, env, NULL, 0, 1};
 	if (is_builtin(con.ast->children[0]->token.value))
 		return (execute_builtin_cmd(&con, arena, prev_exit));
 	child_pids = arena_alloc(arena, (con.n_children) * sizeof(pid_t));
