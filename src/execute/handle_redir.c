@@ -6,12 +6,13 @@
 /*   By: pleander <pleander@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 12:48:25 by pleander          #+#    #+#             */
-/*   Updated: 2024/11/15 10:47:05 by copireyr         ###   ########.fr       */
+/*   Updated: 2024/11/19 12:35:29 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <errno.h>
 #include "minishell.h"
+#include "signals.h"
 #include "libft.h"
 
 static int	handle_redir_in(t_command *cmd, t_ast_node *ast)
@@ -33,6 +34,7 @@ static int	handle_redir_heredoc(t_command *cmd, t_ast_node *ast)
 	int		hdoc_pipe[2];
 	char	*line;
 
+	set_signal_handlers(SIG_IGN, SIG_DFL);
 	close_fd_if_open(&cmd->infile_fd);
 	cmd->infile = (char *)ast->children[0]->token.value;
 	if (pipe(hdoc_pipe) < 0)
@@ -40,14 +42,14 @@ static int	handle_redir_heredoc(t_command *cmd, t_ast_node *ast)
 		ft_dprintf(2, "%s: %s: %s", NAME, cmd->infile, strerror(errno));
 		return (-1);
 	}
-	line = get_next_line(STDIN_FILENO);
+	line = readline("> ");
 	if (!line)
 		return (0);
 	while (ft_strncmp(line, cmd->infile, ft_strlen(line) - 1))
 	{
 		ft_dprintf(hdoc_pipe[1], line);
 		free(line);
-		line = get_next_line(STDIN_FILENO);
+		line = readline("> ");
 		if (!line)
 			return (0);
 	}

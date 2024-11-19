@@ -6,7 +6,7 @@
 /*   By: copireyr <copireyr@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/27 12:08:02 by copireyr          #+#    #+#             */
-/*   Updated: 2024/11/18 11:46:19 by copireyr         ###   ########.fr       */
+/*   Updated: 2024/11/19 12:37:43 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ int	main(int argc, char **argv, char **envp)
 		ft_dprintf(2, "%s: Couldn't allocate memory", argv[0]);
 		return (ENOMEM);
 	}
-	set_signal_handler();
+	set_signal_handlers(SIG_IGN, redisplay_prompt);
 	exit_code = minishell(arena, env);
 	rl_clear_history();
 	ft_lstclear(&env, &free);
@@ -57,9 +57,8 @@ static int	minishell(t_arena arena, t_list *env)
 	set_status(&status);
 	while (!status.should_exit)
 	{
-		set_signal_handler();
+		set_signal_handlers(SIG_IGN, redisplay_prompt);
 		user_input_line = arena_readline(arena, MINISHELL_PROMPT);
-		set_nop_handler();
 		status.should_exit = !user_input_line;
 		if (!status.should_exit && *user_input_line)
 		{

@@ -6,7 +6,7 @@
 /*   By: copireyr <copireyr@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/27 12:29:36 by copireyr          #+#    #+#             */
-/*   Updated: 2024/11/13 09:55:31 by copireyr         ###   ########.fr       */
+/*   Updated: 2024/11/19 12:03:12 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,8 @@
 
 # include <signal.h>
 
-void	set_status(t_shell_status *status);
+void		set_status(t_shell_status *status);
+static int	g_signal_received;
 
 typedef uint8_t	t_bool;
 

@@ -6,7 +6,7 @@
 /*   By: copireyr <copireyr@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 09:41:44 by copireyr          #+#    #+#             */
-/*   Updated: 2024/11/18 11:36:26 by copireyr         ###   ########.fr       */
+/*   Updated: 2024/11/19 12:39:49 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,9 +26,10 @@ void	redisplay_prompt(int sig)
 	}
 }
 
-void	nop(int sig)
+void	handler_print_newline(int sig)
 {
 	(void)sig;
+	g_signal_received = SIGINT;
 	write(1, "\n", 1);
 	set_status(NULL);
 }
@@ -43,26 +44,28 @@ void	set_status(t_shell_status *status)
 		status_pointer = status;
 }
 
-int	set_signal_handler(void)
+void	set_signal_handlers(void (*sigquit_handler_fn)(int), void (*sigint_handler_fn)(int))
 {
 	struct sigaction	sa;
 
 	sa = (struct sigaction){0};
-	sa.sa_handler = SIG_IGN;
+	sa.sa_handler = sigquit_handler_fn;
 	sigaction(SIGQUIT, &sa, 0);
-	sa.sa_handler = &redisplay_prompt;
+	if (sigint_handler_fn)
+		sa.sa_handler = sigint_handler_fn;
+	else
+		sa.sa_handler = SIG_DFL;
 	sigaction(SIGINT, &sa, 0);
-	return (0);
 }
 
-int	set_nop_handler(void)
+int	set_handler_print_newline(void)
 {
 	struct sigaction	sa;
 
 	sa = (struct sigaction){0};
 	sa.sa_handler = SIG_IGN;
 	sigaction(SIGQUIT, &sa, 0);
-	sa.sa_handler = &nop;
+	sa.sa_handler = &handler_print_newline;
 	sigaction(SIGINT, &sa, 0);
 	return (0);
 }
