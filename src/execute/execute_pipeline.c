@@ -24,13 +24,26 @@ static void	init_pipeline(t_command_context *con, t_list *env, t_ast_node *ast,
 
 static pid_t	do_forking(t_command_context *con, int prev_exit, t_arena arena)
 {
-	pid_t	pid;
+	pid_t		pid;
+	t_command	cmd;	
+	int			fork_error_exit;
 
+	fork_error_exit = 0;
+	cmd.infile_fd = -1;
+	cmd.outfile_fd = -1;
+	if (con->pipes && con->cur_child > 0)
+		cmd.infile_fd = con->pipes[con->cur_child - 1][0];
+	if (con->pipes && con->cur_child != con->n_children - 1)
+		cmd.outfile_fd = con->pipes[con->cur_child][1];
+	if (make_command(&cmd, con->ast, con->env, arena) < 0)
+		fork_error_exit = 1;
 	pid = fork();
 	if (pid == 0)
 	{
+		if (fork_error_exit)
+			exit(1);
 		set_signal_handlers(SIG_DFL, SIG_DFL);
-		execute_cmd(con, arena, prev_exit);
+		execute_cmd(&cmd, con, arena, prev_exit);
 	}
 	return (pid);
 }
