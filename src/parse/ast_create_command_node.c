@@ -6,7 +6,7 @@
 /*   By: pleander <pleander@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 10:55:50 by pleander          #+#    #+#             */
-/*   Updated: 2024/11/14 14:29:20 by pleander         ###   ########.fr       */
+/*   Updated: 2024/11/20 10:25:04 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ static t_ast_node	*init_cmd_node(t_token *xs, size_t range[2], t_arena arena)
 	cmd_node->token.size = ft_strlen(cmd_node->token.value);
 	cmd_node->token.type = TOK_COMMAND;
 	cmd_node->n_children = word_count;
-	cmd_node->children = arena_calloc(arena, cmd_node->n_children,
+	cmd_node->children = arena_calloc(arena, cmd_node->n_children + 1,
 			sizeof(t_ast_node *));
 	if (!cmd_node->children)
 		return (NULL);

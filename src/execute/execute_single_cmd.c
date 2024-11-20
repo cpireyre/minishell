@@ -6,7 +6,7 @@
 /*   By: pleander <pleander@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 08:35:59 by pleander          #+#    #+#             */
-/*   Updated: 2024/11/19 16:19:10 by copireyr         ###   ########.fr       */
+/*   Updated: 2024/11/20 10:32:54 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,8 @@ t_shell_status	execute_single_command(
 	t_command_context	con;
 	t_shell_status		status;
 	pid_t				*child_pids;
-	t_command	cmd;	
+	t_command			cmd;	
+	int					child_error_exit;
 
 	con = (t_command_context){ast, env, NULL, 0, 1};
 	if (is_builtin(con.ast->children[0]->token.value))
@@ -82,7 +83,7 @@ t_shell_status	execute_single_command(
 	child_pids = arena_alloc(arena, (con.n_children) * sizeof(pid_t));
 	if (!child_pids)
 		return ((t_shell_status){.exit_code = -1});
-	int child_error_exit = 0;
+	child_error_exit = 0;
 	cmd.infile_fd = -1;
 	cmd.outfile_fd = -1;
 	if (con.pipes && con.cur_child > 0)
