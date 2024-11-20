@@ -6,14 +6,15 @@
 /*   By: pleander <pleander@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 08:31:14 by pleander          #+#    #+#             */
-/*   Updated: 2024/11/14 09:27:08 by pleander         ###   ########.fr       */
+/*   Updated: 2024/11/20 10:32:08 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "execute.h"
 #include "minishell.h"
 
-int	execute_cmd(t_command *cmd, t_command_context *con, t_arena arena, int prev_exit)
+int	execute_cmd(
+		t_command *cmd, t_command_context *con, t_arena arena, int prev_exit)
 {
 	if (cmd->infile_fd > -1)
 		dup2(cmd->infile_fd, STDIN_FILENO);
