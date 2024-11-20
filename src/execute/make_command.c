@@ -6,11 +6,17 @@
 /*   By: pleander <pleander@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 11:09:05 by pleander          #+#    #+#             */
-/*   Updated: 2024/11/20 13:57:40 by copireyr         ###   ########.fr       */
+/*   Updated: 2024/11/20 14:26:40 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "execute.h"
+
+static void	set_ints(size_t	*i, size_t *arg_i)
+{
+	*i = -1;
+	*arg_i = 0;
+}
 
 static int	parse_children(t_command *cmd, t_ast_node *ast, t_list *env,
 		t_arena a)
@@ -19,22 +25,18 @@ static int	parse_children(t_command *cmd, t_ast_node *ast, t_list *env,
 	size_t	arg_i;
 	int		handle_err;
 
-	i = -1;
-	arg_i = 0;
+	set_ints(&i, &arg_i);
 	while (++i < ast->n_children)
 	{
 		if (ast->children[i]->type == AST_WORD)
 		{
+			cmd->args[arg_i++] = (char *)ast->children[i]->token.value;
 			if (cmd->path == NULL)
 			{
 				cmd->path = find_path(ast->children[i]->token.value, env, a);
 				if (!cmd->path)
 					return (-1);
-				cmd->args[arg_i] = (char *)ast->children[i]->token.value;
 			}
-			else
-				cmd->args[arg_i] = (char *)ast->children[i]->token.value;
-			arg_i++;
 		}
 		else if (ast->children[i]->type == AST_REDIR)
 		{
