@@ -6,7 +6,7 @@
 /*   By: pleander <pleander@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 08:35:59 by pleander          #+#    #+#             */
-/*   Updated: 2024/11/20 10:32:54 by copireyr         ###   ########.fr       */
+/*   Updated: 2024/11/20 13:46:48 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,7 @@ t_shell_status	execute_single_command(
 	pid_t				*child_pids;
 
 	con = (t_command_context){{NULL, NULL, NULL, NULL, -1, -1},
-		ast, env, NULL, 0, 1, 0};
+		ast, env, NULL, 0, 1, 0, false};
 	if (is_builtin(con.ast->children[0]->token.value))
 		return (execute_builtin_cmd(&con, arena, prev_exit));
 	child_pids = arena_alloc(arena, (con.n_children) * sizeof(pid_t));

@@ -6,7 +6,7 @@
 /*   By: copireyr <copireyr@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/27 12:29:36 by copireyr          #+#    #+#             */
-/*   Updated: 2024/11/19 16:29:09 by copireyr         ###   ########.fr       */
+/*   Updated: 2024/11/20 13:56:08 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@
 # define ANSI_RESET "\x1B[0m"
 # define EX_NOTFOUND 127
 # define EX_NOEXEC 126
+# define INTERRUPTED_HEREDOC -42
 
 # include <signal.h>
 

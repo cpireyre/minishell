@@ -6,11 +6,12 @@
 /*   By: pleander <pleander@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 12:48:25 by pleander          #+#    #+#             */
-/*   Updated: 2024/11/19 16:17:22 by copireyr         ###   ########.fr       */
+/*   Updated: 2024/11/20 13:35:50 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <errno.h>
+#include <sys/wait.h>
 #include "minishell.h"
 #include "signals.h"
 #include "libft.h"
@@ -29,33 +30,7 @@ static int	handle_redir_in(t_command *cmd, t_ast_node *ast)
 	return (0);
 }
 
-static int	handle_redir_heredoc(t_command *cmd, t_ast_node *ast)
-{
-	int		hdoc_pipe[2];
-	char	*line;
-
-	set_signal_handlers(SIG_IGN, SIG_DFL);
-	close_fd_if_open(&cmd->infile_fd);
-	cmd->infile = (char *)ast->children[0]->token.value;
-	if (pipe(hdoc_pipe) < 0)
-		return (-1 + 0 * ft_dprintf(
-				2, "%s: %s: %s", NAME, cmd->infile, strerror(errno)));
-	line = readline("> ");
-	if (!line)
-		return (0);
-	while (ft_strncmp(line, cmd->infile, ft_strlen(line) - 1))
-	{
-		ft_dprintf(hdoc_pipe[1], line);
-		free(line);
-		line = readline("> ");
-		if (!line)
-			return (0);
-	}
-	free(line);
-	close(hdoc_pipe[1]);
-	cmd->infile_fd = hdoc_pipe[0];
-	return (0);
-}
+int	handle_redir_heredoc(t_command *cmd, t_ast_node *ast);
 
 static int	handle_redir_out(t_command *cmd, t_ast_node *ast)
 {

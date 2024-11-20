@@ -6,7 +6,7 @@
 /*   By: pleander <pleander@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 11:09:05 by pleander          #+#    #+#             */
-/*   Updated: 2024/11/14 13:15:54 by pleander         ###   ########.fr       */
+/*   Updated: 2024/11/20 13:57:40 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@ static int	parse_children(t_command *cmd, t_ast_node *ast, t_list *env,
 {
 	size_t	i;
 	size_t	arg_i;
+	int		handle_err;
 
 	i = -1;
 	arg_i = 0;
@@ -36,14 +37,19 @@ static int	parse_children(t_command *cmd, t_ast_node *ast, t_list *env,
 			arg_i++;
 		}
 		else if (ast->children[i]->type == AST_REDIR)
-			if (handle_redir(cmd, ast->children[i]) < 0)
-				return (-1);
+		{
+			handle_err = handle_redir(cmd, ast->children[i]);
+			if (handle_err < 0)
+				return (handle_err);
+		}
 	}
 	return (0);
 }
 
 int	make_command(t_command *cmd, t_ast_node *ast, t_list *env, t_arena arena)
 {
+	int	err;
+
 	if (ast->type != AST_COMMAND)
 	{
 		ft_dprintf(2, "Error: Wrong AST type\n");
@@ -55,7 +61,8 @@ int	make_command(t_command *cmd, t_ast_node *ast, t_list *env, t_arena arena)
 	cmd->args = arena_calloc(arena, count_cmd_args(ast) + 1, sizeof(char *));
 	if (!cmd->args)
 		return (-1);
-	if (parse_children(cmd, ast, env, arena) < 0)
-		return (-1);
+	err = parse_children(cmd, ast, env, arena);
+	if (err < 0)
+		return (err);
 	return (0);
 }

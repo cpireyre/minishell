@@ -6,7 +6,7 @@
 /*   By: pleander <pleander@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 11:03:23 by pleander          #+#    #+#             */
-/*   Updated: 2024/11/20 10:31:47 by copireyr         ###   ########.fr       */
+/*   Updated: 2024/11/20 13:46:17 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ typedef struct s_command_context
 	size_t		cur_child;
 	size_t		n_children;
 	int			child_should_exit;
+	bool		should_quit_pipeline;
 }	t_command_context;
 
 typedef struct s_shell_status

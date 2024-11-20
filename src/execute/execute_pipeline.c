@@ -6,10 +6,11 @@
 /*   By: pleander <pleander@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 10:22:05 by pleander          #+#    #+#             */
-/*   Updated: 2024/11/19 16:07:11 by copireyr         ###   ########.fr       */
+/*   Updated: 2024/11/20 13:58:10 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "minishell.h"
 #include "execute.h"
 #include "signals.h"
 
@@ -27,6 +28,7 @@ static pid_t	do_forking(t_command_context *con, int prev_exit, t_arena arena)
 {
 	pid_t		pid;
 	t_command	cmd;
+	int			err;
 
 	cmd = (t_command){NULL, NULL, NULL, NULL, -1, -1};
 	con->child_should_exit = 0;
@@ -34,8 +36,13 @@ static pid_t	do_forking(t_command_context *con, int prev_exit, t_arena arena)
 		cmd.infile_fd = con->pipes[con->cur_child - 1][0];
 	if (con->pipes && con->cur_child != con->n_children - 1)
 		cmd.outfile_fd = con->pipes[con->cur_child][1];
-	if (make_command(&cmd, con->ast, con->env, arena) < 0)
+	err = make_command(&cmd, con->ast, con->env, arena);
+	if (err < 0)
+	{
 		con->child_should_exit = 1;
+		if (err == INTERRUPTED_HEREDOC)
+			con->should_quit_pipeline = true;
+	}
 	pid = fork();
 	if (pid == 0)
 		execute_cmd(&cmd, con, arena, prev_exit);
@@ -65,6 +72,7 @@ t_shell_status	execute_pipeline(
 	pid_t				*child_pids;
 	t_shell_status		status;
 
+	con.should_quit_pipeline = false;
 	set_signal_handlers(SIG_IGN, SIG_IGN);
 	init_pipeline(&con, env, ast, arena);
 	child_pids = arena_alloc(arena, (con.n_children) * sizeof(pid_t));
@@ -74,6 +82,8 @@ t_shell_status	execute_pipeline(
 	{
 		set_next_child(ast, &con);
 		child_pids[con.cur_child] = do_forking(&con, prev_exit, arena);
+		if (con.should_quit_pipeline)
+			break ;
 		if (child_pids[con.cur_child] == -1)
 			return ((t_shell_status){.exit_code = -1, .should_exit = true});
 		if (ast->type == AST_COMMAND)
