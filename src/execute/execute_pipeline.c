@@ -16,6 +16,7 @@
 static void	init_pipeline(t_command_context *con, t_list *env, t_ast_node *ast,
 		t_arena arena)
 {
+	con->child_should_exit = 0;
 	con->env = env;
 	con->n_children = calculate_n_pipes(ast) + 1;
 	con->pipes = make_pipes(con->n_children - 1, arena);
@@ -25,26 +26,19 @@ static void	init_pipeline(t_command_context *con, t_list *env, t_ast_node *ast,
 static pid_t	do_forking(t_command_context *con, int prev_exit, t_arena arena)
 {
 	pid_t		pid;
-	t_command	cmd;	
-	int			fork_error_exit;
+	t_command	cmd;
 
-	fork_error_exit = 0;
-	cmd.infile_fd = -1;
-	cmd.outfile_fd = -1;
+	cmd = (t_command){NULL, NULL, NULL, NULL, -1, -1};
+	con->child_should_exit = 0;
 	if (con->pipes && con->cur_child > 0)
 		cmd.infile_fd = con->pipes[con->cur_child - 1][0];
 	if (con->pipes && con->cur_child != con->n_children - 1)
 		cmd.outfile_fd = con->pipes[con->cur_child][1];
 	if (make_command(&cmd, con->ast, con->env, arena) < 0)
-		fork_error_exit = 1;
+		con->child_should_exit = 1;
 	pid = fork();
 	if (pid == 0)
-	{
-		if (fork_error_exit)
-			exit(1);
-		set_signal_handlers(SIG_DFL, SIG_DFL);
 		execute_cmd(&cmd, con, arena, prev_exit);
-	}
 	return (pid);
 }
 
@@ -54,6 +48,14 @@ static void	cleanup_pipeline(t_command_context *con, pid_t *child_pids,
 	close_pipes(con->pipes, con->n_children - 1);
 	status->exit_code = wait_for_children(child_pids, con->n_children);
 	status->should_exit = false;
+}
+
+void static	set_next_child(t_ast_node *ast, t_command_context *con)
+{
+	if (ast->type == AST_PIPELINE)
+		con->ast = ast->children[0];
+	else if (ast->type == AST_COMMAND)
+		con->ast = ast;
 }
 
 t_shell_status	execute_pipeline(
@@ -70,10 +72,7 @@ t_shell_status	execute_pipeline(
 		return ((t_shell_status){.exit_code = -1});
 	while (ast->type == AST_PIPELINE || ast->type == AST_COMMAND)
 	{
-		if (ast->type == AST_PIPELINE)
-			con.ast = ast->children[0];
-		else if (ast->type == AST_COMMAND)
-			con.ast = ast;
+		set_next_child(ast, &con);
 		child_pids[con.cur_child] = do_forking(&con, prev_exit, arena);
 		if (child_pids[con.cur_child] == -1)
 			return ((t_shell_status){.exit_code = -1, .should_exit = true});

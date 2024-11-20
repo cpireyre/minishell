@@ -68,38 +68,34 @@ static t_shell_status	execute_builtin_cmd(
 	return (status);
 }
 
+static void	init_cmd_files(t_command_context *con)
+{
+	if (con->pipes && con->cur_child > 0)
+		con->cmd.infile_fd = con->pipes[con->cur_child - 1][0];
+	if (con->pipes && con->cur_child != con->n_children - 1)
+		con->cmd.outfile_fd = con->pipes[con->cur_child][1];
+}
+
 t_shell_status	execute_single_command(
 		t_ast_node *ast, t_list *env, t_arena arena, int prev_exit)
 {
 	t_command_context	con;
 	t_shell_status		status;
 	pid_t				*child_pids;
-	t_command			cmd;	
-	int					child_error_exit;
 
-	con = (t_command_context){ast, env, NULL, 0, 1};
+	con = (t_command_context){{NULL, NULL, NULL, NULL, -1, -1},
+		ast, env, NULL, 0, 1, 0};
 	if (is_builtin(con.ast->children[0]->token.value))
 		return (execute_builtin_cmd(&con, arena, prev_exit));
 	child_pids = arena_alloc(arena, (con.n_children) * sizeof(pid_t));
 	if (!child_pids)
 		return ((t_shell_status){.exit_code = -1});
-	child_error_exit = 0;
-	cmd.infile_fd = -1;
-	cmd.outfile_fd = -1;
-	if (con.pipes && con.cur_child > 0)
-		cmd.infile_fd = con.pipes[con.cur_child - 1][0];
-	if (con.pipes && con.cur_child != con.n_children - 1)
-		cmd.outfile_fd = con.pipes[con.cur_child][1];
-	if (make_command(&cmd, con.ast, con.env, arena) < 0)
-		child_error_exit = 1;
+	init_cmd_files(&con);
+	if (make_command(&con.cmd, con.ast, con.env, arena) < 0)
+		con.child_should_exit = 1;
 	child_pids[0] = fork();
 	if (child_pids[0] == 0)
-	{
-		if (child_error_exit)
-			exit(1);
-		set_signal_handlers(SIG_DFL, SIG_DFL);
-		execute_cmd(&cmd, &con, arena, prev_exit);
-	}
+		execute_cmd(&con.cmd, &con, arena, prev_exit);
 	else if (child_pids[0] < 0)
 		return ((t_shell_status){.exit_code = -1});
 	set_signal_handlers(SIG_IGN, SIG_IGN);

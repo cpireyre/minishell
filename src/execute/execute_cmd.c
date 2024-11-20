@@ -12,10 +12,14 @@
 
 #include "execute.h"
 #include "minishell.h"
+#include "signals.h"
 
 int	execute_cmd(
 		t_command *cmd, t_command_context *con, t_arena arena, int prev_exit)
 {
+	set_signal_handlers(SIG_DFL, SIG_DFL);
+	if (con->child_should_exit)
+		exit(1);
 	if (cmd->infile_fd > -1)
 		dup2(cmd->infile_fd, STDIN_FILENO);
 	if (cmd->outfile_fd > -1)
