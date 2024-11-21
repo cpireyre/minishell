@@ -57,7 +57,7 @@ static void	cleanup_pipeline(t_command_context *con, pid_t *child_pids,
 	status->should_exit = false;
 }
 
-void static	set_next_child(t_ast_node *ast, t_command_context *con)
+static void	set_next_child(t_ast_node *ast, t_command_context *con)
 {
 	if (ast->type == AST_PIPELINE)
 		con->ast = ast->children[0];
