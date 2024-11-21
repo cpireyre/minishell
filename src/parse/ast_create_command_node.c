@@ -60,7 +60,7 @@ static t_ast_node	*init_cmd_node(t_token *xs, size_t range[2], t_arena arena)
 	if (!cmd_node)
 		return (NULL);
 	word_count = count_tokens(xs, TOK_WORD, range);
-	if (word_count < count_redirs(xs, range))
+	if (word_count == 0 || word_count < count_redirs(xs, range))
 	{
 		syntax_error();
 		return (NULL);

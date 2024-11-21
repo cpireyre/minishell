@@ -82,7 +82,9 @@ static t_ast_node	*create_ast_paren(t_token *xs, size_t range[2],
 	node = arena_calloc(arena, 1, sizeof(t_ast_node));
 	if (!node)
 		return (NULL);
-	if (!is_logical_token(xs[range[0] - 1]))
+	if (!is_logical_token(xs[range[0] - 1])
+		|| (is_logical_token(xs[range[1] + 1])
+			|| xs[range[1] + 1].type == TOK_END))
 	{
 		syntax_error();
 		return (NULL);
@@ -133,6 +135,11 @@ t_ast_node	*create_ast(t_token *xs, size_t range[2], t_arena arena)
 		node = create_ast_pipe(xs, range, arena);
 	else if (max_type == AST_COMMAND)
 		node = create_command_node(xs, range, arena);
+	else if (max_type == AST_NONE)
+	{
+		syntax_error();
+		return (NULL);
+	}
 	else
 		return (NULL);
 	return (node);
