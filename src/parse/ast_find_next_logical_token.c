@@ -19,7 +19,7 @@
  * @param x token to check
  * @return 1 if token is a logical token, 0 otherwise
  */
-static int	is_logical_token(t_token x)
+int	is_logical_token(t_token x)
 {
 	if (x.type == TOK_LOGICAL_OR || x.type == TOK_LOGICAL_AND)
 		return (1);

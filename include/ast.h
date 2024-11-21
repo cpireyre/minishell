@@ -52,5 +52,6 @@ t_ast_node		*create_command_node(t_token *xs, size_t range[2],
 t_ast_node		*parse(t_arena arena, char *user_input_line,
 					t_list *env, int exit_code);
 void			print_ast(t_ast_node *root, size_t level);
+int				is_logical_token(t_token x);
 
 #endif

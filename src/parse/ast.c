@@ -82,6 +82,11 @@ static t_ast_node	*create_ast_paren(t_token *xs, size_t range[2],
 	node = arena_calloc(arena, 1, sizeof(t_ast_node));
 	if (!node)
 		return (NULL);
+	if (!is_logical_token(xs[range[0] - 1]))
+	{
+		syntax_error();
+		return (NULL);
+	}
 	node->token = xs[range[0]];
 	node->type = AST_PAREN;
 	range[0]++;
