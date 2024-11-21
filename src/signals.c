@@ -6,7 +6,7 @@
 /*   By: copireyr <copireyr@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 09:41:44 by copireyr          #+#    #+#             */
-/*   Updated: 2024/11/20 13:10:11 by copireyr         ###   ########.fr       */
+/*   Updated: 2024/11/21 16:24:54 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,11 +15,8 @@
 #include "minishell.h"
 #include "signals.h"
 
-int	g_signal_received;
-
 void	redisplay_prompt(int sig)
 {
-	g_signal_received = sig;
 	if (sig == SIGINT)
 	{
 		write(STDOUT_FILENO, "\n", 1);

@@ -6,7 +6,7 @@
 /*   By: copireyr <copireyr@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 12:46:57 by copireyr          #+#    #+#             */
-/*   Updated: 2024/11/20 13:10:11 by copireyr         ###   ########.fr       */
+/*   Updated: 2024/11/21 16:24:34 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,6 @@
 # define SIGNALS_H
 
 # include <signal.h>
-
-extern int	g_signal_received;
 
 int		*exit_code(void);
 int		set_signal_handler(void);
