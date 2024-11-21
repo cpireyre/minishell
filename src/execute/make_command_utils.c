@@ -10,6 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "arena.h"
+#include "libft.h"
 #include "minishell.h"
 
 int	count_cmd_args(t_ast_node *ast)
@@ -45,14 +47,29 @@ static char	*build_path(char *path, const char *command, t_arena arena)
 	return (cmd);
 }
 
+static char	*make_path_in_current_dir(char *command, t_arena arena)
+{
+	char	*new_command;
+
+	new_command = arena_calloc(arena, ft_strlen(command) + 3, sizeof(char));
+	new_command[0] = '.';
+	new_command[1] = '/';
+	ft_strlcpy(&new_command[2], command, sizeof(new_command) - 2);
+	return (new_command);
+}
+
 char	*find_path(const char *command, t_list *env, t_arena arena)
 {
 	char	*path;
 	char	*exec_path;
 
+	if (command[0] == '.')
+		return ((char *)command);
 	if (!is_builtin(command))
 	{
 		exec_path = get_env("PATH", &env);
+		if (!exec_path)
+			return (make_path_in_current_dir((char *)command, arena));
 		while (exec_path)
 		{
 			if (*exec_path == ':')
@@ -66,8 +83,6 @@ char	*find_path(const char *command, t_list *env, t_arena arena)
 		}
 	}
 	path = ft_arena_strndup(arena, command, ft_strlen(command) + 1);
-	if (!path)
-		return (NULL);
 	return (path);
 }
 
