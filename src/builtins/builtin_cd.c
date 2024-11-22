@@ -10,6 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <linux/limits.h>
 #include <unistd.h>
 #include "libft.h"
 #include "minishell.h"
@@ -35,15 +36,13 @@ static int	handle_tilde(char *path, t_list **env)
 		free(expanded_path);
 		return (1);
 	}
-	if (set_working_dir("OLDPWD", env) < 0)
-		return (1);
 	free(expanded_path);
 	return (0);
 }
 
 static int	handle_dash(t_list **env)
 {
-	char	*old_pwd;
+	const char	*old_pwd;
 
 	old_pwd = get_env("OLDPWD", env);
 	if (!old_pwd)
@@ -51,19 +50,12 @@ static int	handle_dash(t_list **env)
 		ft_dprintf(2, "%s: cd: OLDPWD not set\n", NAME);
 		return (1);
 	}
-	old_pwd = ft_strdup(old_pwd);
-	if (!old_pwd)
-		return (1);
 	if (chdir(old_pwd) < 0)
 	{
 		ft_dprintf(2, "%s: cd: ", NAME);
 		perror(old_pwd);
-		free(old_pwd);
 		return (1);
 	}
-	free(old_pwd);
-	if (set_working_dir("OLDPWD", env) < 0)
-		return (1);
 	return (0);
 }
 
@@ -83,8 +75,6 @@ static int	handle_no_args(t_list **env)
 		perror(home_path);
 		return (1);
 	}
-	if (set_working_dir("OLDPWD", env) < 0)
-		return (1);
 	return (0);
 }
 
@@ -105,9 +95,9 @@ int	cd(char **args, t_list **env)
 	char	*old_dir;
 	int		argc;
 
-	old_dir = get_working_dir();
+	old_dir = get_env("PWD", env);
 	if (!old_dir)
-		return (1);
+		return (-1);
 	argc = 0;
 	while (args[argc])
 		argc++;
@@ -122,7 +112,6 @@ int	cd(char **args, t_list **env)
 	if (ret == 0)
 		ret = (int)(set_env("OLDPWD", old_dir, env) < 0)
 			| (int)(set_working_dir("PWD", env) < 0);
-	free(old_dir);
 	if (argc > 2)
 		return (!!ft_dprintf(2, "%s: cd: too many arguments\n", NAME));
 	return (!!ret);

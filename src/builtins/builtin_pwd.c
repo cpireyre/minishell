@@ -10,45 +10,40 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <linux/limits.h>
 #include <unistd.h>
 #include "libft.h"
 #include "minishell.h"
 
 int	set_working_dir(char *var, t_list **env)
 {
-	char	*temp;
+	char	path[PATH_MAX];
 	int		ret;
 
-	temp = get_working_dir();
-	if (!temp)
+	if (!get_working_dir(path, SIZE_MAX, env))
 		return (-1);
-	ret = set_env(var, temp, env);
-	free(temp);
+	ret = set_env(var, path, env);
 	if (ret < 0)
 		return (-1);
 	return (0);
 }
 
-char	*get_working_dir(void)
+char	*get_working_dir(char *path, size_t path_size, t_list **env)
 {
-	size_t	buf_size;
-	char	*buf;
+	char	*tmp;
 
-	buf_size = 255;
-	buf = malloc(buf_size);
-	if (!buf)
-		return (NULL);
-	getcwd(buf, buf_size);
-	while (!buf)
+	if (getcwd(path, PATH_MAX) == NULL)
 	{
-		free(buf);
-		buf_size += 255;
-		buf = malloc(buf_size);
-		if (!buf)
+		ft_dprintf(2, "cd: error retrieving current directory\n");
+		tmp = get_env("PWD", env);
+		if (!tmp)
+		{
+			perror(NAME);
 			return (NULL);
-		getcwd(buf, buf_size);
+		}
+		ft_strlcpy(path, tmp, path_size);
 	}
-	return (buf);
+	return (path);
 }
 
 int	pwd(t_list **env)

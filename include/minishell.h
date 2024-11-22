@@ -63,7 +63,7 @@ void	delete_pipes(int **pipes);
 t_list	*get_env_list_location(char *var, t_list **env);
 void	unset(char *var, t_list **env);
 int		set_working_dir(char *var, t_list **env);
-char	*get_working_dir(void);
+char	*get_working_dir(char *path, size_t path_size, t_list **env);
 int		pwd(t_list **env);
 size_t	is_builtin(const char *name);
 int		cd(char **args, t_list **env);
