@@ -6,7 +6,7 @@
 /*   By: pleander <pleander@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/08 20:51:52 by pleander          #+#    #+#             */
-/*   Updated: 2024/11/19 16:25:09 by copireyr         ###   ########.fr       */
+/*   Updated: 2024/11/22 10:55:35 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 #include "execute.h"
 
 static bool	print_signal_newline(int wstatus);
+static int	get_exit_code(int wstatus);
 
 /**
  * @brief Executes the AST and returns the exit code
@@ -68,16 +69,27 @@ int	wait_for_children(int *pid, size_t n_forks)
 		if (pid[i] > 0)
 		{
 			waitpid(pid[i], &wstatus, 0);
+			e_status = get_exit_code(wstatus);
 			if (!printed_newline)
 				printed_newline = print_signal_newline(wstatus);
-			if (WIFEXITED(wstatus))
-				e_status = WEXITSTATUS(wstatus);
 		}
 		else
 			e_status = EXIT_FAILURE;
 		i++;
 	}
 	return (e_status);
+}
+
+static int	get_exit_code(int wstatus)
+{
+	int	ret;
+
+	ret = 0;
+	if (WIFEXITED(wstatus))
+		ret = WEXITSTATUS(wstatus);
+	else if (WIFSIGNALED(wstatus))
+		ret = 128 + WTERMSIG(wstatus);
+	return (ret);
 }
 
 static bool	print_signal_newline(int wstatus)
