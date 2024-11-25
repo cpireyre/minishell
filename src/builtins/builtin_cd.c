@@ -56,6 +56,7 @@ static int	handle_dash(t_list **env)
 		perror(old_pwd);
 		return (1);
 	}
+	printf("%s\n", old_pwd);
 	return (0);
 }
 
