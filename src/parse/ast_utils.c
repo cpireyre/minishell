@@ -83,7 +83,7 @@ void	show_token_range(t_token *xs, size_t range[2])
 	size_t	i;
 
 	i = range[0];
-	while (i < range[1])
+	while (i <= range[1])
 	{
 		tokenize_show(xs[i]);
 		i++;

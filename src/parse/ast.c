@@ -82,17 +82,22 @@ static t_ast_node	*create_ast_paren(t_token *xs, size_t range[2],
 	node = arena_calloc(arena, 1, sizeof(t_ast_node));
 	if (!node)
 		return (NULL);
-	if (!is_logical_token(xs[range[0] - 1])
-		|| (is_logical_token(xs[range[1] + 1])
-			|| xs[range[1] + 1].type == TOK_END))
+	if ((!(range[0] == 0 || is_logical_token(xs[range[0] - 1])
+				|| xs[range[0] - 1].type == TOK_OPEN_PAREN))
+		|| !(xs[range[1]].type == TOK_END || is_logical_token(xs[range[1]])
+			|| xs[range[1]].type == TOK_CLOSE_PAREN)
+		|| xs[range[1] - 1].type != TOK_CLOSE_PAREN)
 	{
 		syntax_error();
 		return (NULL);
 	}
 	node->token = xs[range[0]];
 	node->type = AST_PAREN;
-	range[0]++;
-	range[1]--;
+	if (++range[0] >= --range[1])
+	{
+		syntax_error();
+		return (NULL);
+	}
 	if (add_node_to_parent(node, create_ast(xs, range, arena), arena) < 0)
 		return (NULL);
 	return (node);

@@ -11,6 +11,8 @@
 /* ************************************************************************** */
 
 #include "ast.h"
+#include "libft.h"
+#include "tokenize.h"
 
 static size_t	count_redirs(t_token *xs, size_t range[2])
 {

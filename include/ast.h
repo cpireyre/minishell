@@ -18,8 +18,8 @@
 enum e_ast_type
 {
 	AST_LOGICAL = 0,
-	AST_PAREN = 1,
-	AST_PIPELINE = 2,
+	AST_PIPELINE = 1,
+	AST_PAREN = 2,
 	AST_COMMAND = 3,
 	AST_WORD = 4,
 	AST_REDIR = 5,

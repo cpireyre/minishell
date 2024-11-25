@@ -15,6 +15,7 @@
 const char	*ast_show_type(enum e_tok_type type)
 {
 	static const char	*types[TOK_NUM_TYPES] = {
+		"TOK_END",
 		"TOK_WORD",
 		"TOK_COMMAND",
 		"TOK_APPEND",
@@ -29,7 +30,6 @@ const char	*ast_show_type(enum e_tok_type type)
 		"TOK_ERROR",
 		"TOK_META",
 		"TOK_TOKENIZE_SPACE",
-		"TOK_END",
 	};
 
 	return (types[type]);

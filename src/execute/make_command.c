@@ -10,6 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "ast.h"
 #include "execute.h"
 
 static void	set_ints(size_t	*i, size_t *arg_i)

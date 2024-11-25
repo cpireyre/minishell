@@ -55,7 +55,7 @@ static bool	token_vec_grow(t_arena arena, t_token_vec *vec)
 	if (vec->len < vec->capacity)
 		return (true);
 	vec->capacity = 2 * vec->capacity + 1;
-	tmp = arena_alloc(arena, sizeof(t_token) * vec->capacity);
+	tmp = arena_calloc(arena, vec->capacity, sizeof(t_token));
 	if (!tmp)
 		return (false);
 	if (vec->data)

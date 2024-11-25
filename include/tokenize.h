@@ -20,6 +20,7 @@
 
 enum e_tok_type
 {
+	TOK_END,
 	TOK_WORD,
 	TOK_COMMAND,
 	TOK_APPEND,
@@ -34,7 +35,6 @@ enum e_tok_type
 	TOK_ERROR,
 	TOK_META,
 	TOK_TOKENIZE_SPACE,
-	TOK_END,
 	TOK_NUM_TYPES,
 };
 
