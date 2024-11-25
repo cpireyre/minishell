@@ -54,7 +54,7 @@ static char	*make_path_in_current_dir(char *command, t_arena arena)
 	new_command = arena_calloc(arena, ft_strlen(command) + 3, sizeof(char));
 	new_command[0] = '.';
 	new_command[1] = '/';
-	ft_strlcpy(&new_command[2], command, sizeof(new_command) - 2);
+	ft_strlcat(new_command, command, ft_strlen(command) + 3);
 	return (new_command);
 }
 
@@ -68,7 +68,7 @@ char	*find_path(const char *command, t_list *env, t_arena arena)
 	if (!is_builtin(command))
 	{
 		exec_path = get_env("PATH", &env);
-		if (!exec_path)
+		if (!exec_path || (ft_strchr(command, '/') && command[0] != '/'))
 			return (make_path_in_current_dir((char *)command, arena));
 		while (exec_path)
 		{
