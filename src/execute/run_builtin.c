@@ -32,11 +32,18 @@ static int	run_builtin_env(t_list **env)
 static int	run_builtin_export(char **args, t_list **env)
 {
 	int	ret;
+	int	i;
 
-	if (args[1])
-		ret = export(args[1], env);
-	else
-		ret = list_exports(*env);
+	i = 1;
+	if (!args[1])
+		return (list_exports(*env));
+	while (args[i])
+	{
+		ret = export(args[i], env);
+		if (ret != 0)
+			break ;
+		i++;
+	}
 	return (ret);
 }
 
