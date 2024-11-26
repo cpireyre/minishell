@@ -6,7 +6,7 @@
 /*   By: copireyr <copireyr@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 11:57:35 by copireyr          #+#    #+#             */
-/*   Updated: 2024/11/14 13:34:44 by pleander         ###   ########.fr       */
+/*   Updated: 2024/11/26 10:07:31 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ t_ast_node	*parse(t_arena arena, char *user_input_line,
 	}
 	ast = NULL;
 	xs = tokenize(arena, user_input_line);
-	if (xs)
+	if (xs && xs[0].type != TOK_END)
 	{
 		ft_bzero(range, sizeof(range));
 		range[1] = count_toks(xs) - 1;
