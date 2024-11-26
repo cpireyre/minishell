@@ -6,7 +6,7 @@
 /*   By: copireyr <copireyr@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/27 12:08:02 by copireyr          #+#    #+#             */
-/*   Updated: 2024/11/20 14:11:12 by copireyr         ###   ########.fr       */
+/*   Updated: 2024/11/26 10:15:26 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,7 @@ int	main(int argc, char **argv, char **envp)
 	rl_clear_history();
 	ft_lstclear(&env, &free);
 	arena_dispose(&arena);
+	ft_dprintf(2, "exit\n");
 	return (exit_code);
 }
 
