@@ -6,7 +6,7 @@
 /*   By: pleander <pleander@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/24 11:15:09 by pleander          #+#    #+#             */
-/*   Updated: 2024/11/15 10:42:46 by copireyr         ###   ########.fr       */
+/*   Updated: 2024/11/27 10:34:31 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,13 +27,6 @@ static int	is_numerical(char *id)
 	return (1);
 }
 
-static int	check_character_invalid(char c)
-{
-	if (ft_isalnum(c) || c == '_')
-		return (0);
-	return (1);
-}
-
 static int	check_identifier(char *id)
 {
 	int	i;
@@ -45,7 +38,7 @@ static int	check_identifier(char *id)
 	{
 		if ((i > 0 && id[i] == '='))
 			break ;
-		if (check_character_invalid(id[i]))
+		if (!(ft_isalnum(id[i]) || id[i] == '_'))
 			return (-1);
 		i++;
 	}
