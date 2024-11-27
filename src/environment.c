@@ -6,7 +6,7 @@
 /*   By: pleander <pleander@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/03 13:10:23 by pleander          #+#    #+#             */
-/*   Updated: 2024/11/08 09:31:11 by copireyr         ###   ########.fr       */
+/*   Updated: 2024/11/27 10:46:22 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,7 +95,7 @@ int	set_env(char *var, char *val, t_list **env)
 		}
 		ft_lstadd_back(env, new);
 	}
-	else
+	else if (*val)
 	{
 		free(loc->content);
 		loc->content = env_str;
