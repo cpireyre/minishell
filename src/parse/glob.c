@@ -6,7 +6,7 @@
 /*   By: copireyr <copireyr@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 20:02:19 by copireyr          #+#    #+#             */
-/*   Updated: 2024/11/13 13:17:30 by copireyr         ###   ########.fr       */
+/*   Updated: 2024/11/27 21:58:54 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ static const char	**glob_pattern(t_arena arena,
 }
 
 static bool	expand_glob_node(t_arena arena, const char **entries,
-	t_ast_node *node, t_ast_vec *new_children)
+		t_ast_node *node, t_ast_vec *new_children)
 {
 	const char	**result;
 	t_ast_node	*new_node;
@@ -79,7 +79,6 @@ void	glob(t_arena arena, t_ast_node *ast)
 	const char	**entries = get_cwd_entries(arena);
 	t_ast_vec	new_children;
 	int			i;
-	bool		has_glob;
 	t_ast_node	*node;
 
 	if (!ast || !entries)
@@ -89,11 +88,12 @@ void	glob(t_arena arena, t_ast_node *ast)
 	while (++i < (int)ast->n_children)
 	{
 		node = ast->children[i];
-		has_glob = ft_strchr(node->token.value, '*') != NULL;
-		if (has_glob && node->type == AST_WORD
-			&& !expand_glob_node(arena, entries, node, &new_children))
-			return ;
-		if (!has_glob && !ast_push(arena, &new_children, node))
+		if (node->type == AST_WORD && ft_strchr(node->token.value, '*'))
+		{
+			if (!expand_glob_node(arena, entries, node, &new_children))
+				return ;
+		}
+		else if (!ast_push(arena, &new_children, node))
 			return ;
 	}
 	ast->children = new_children.data;
