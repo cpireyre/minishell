@@ -63,7 +63,7 @@ int	wait_for_children(int *pid, size_t n_forks)
 	e_status = 0;
 	i = 0;
 	printed_newline = false;
-	while (i < n_forks)
+	while (i < n_forks && pid[i] != 0)
 	{
 		wstatus = 0;
 		if (pid[i] > 0)

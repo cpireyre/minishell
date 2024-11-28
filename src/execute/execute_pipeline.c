@@ -78,7 +78,7 @@ t_shell_status	execute_pipeline(
 	con.should_quit_pipeline = false;
 	set_signal_handlers(SIG_IGN, SIG_IGN);
 	init_pipeline(&con, env, ast, arena);
-	child_pids = arena_alloc(arena, (con.n_children) * sizeof(pid_t));
+	child_pids = arena_calloc(arena, con.n_children, sizeof(pid_t));
 	if (!child_pids || !con.pipes)
 		return ((t_shell_status){.exit_code = -1});
 	while (ast->type == AST_PIPELINE || ast->type == AST_COMMAND)
