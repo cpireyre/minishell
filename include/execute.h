@@ -41,6 +41,7 @@ typedef struct s_command_context
 typedef struct s_shell_status
 {
 	bool	should_exit;
+	bool	sigint_received;
 	int		exit_code;
 }	t_shell_status;
 
@@ -70,5 +71,6 @@ void			close_fd_if_open(int *fd);
 int				count_cmd_args(t_ast_node *ast);
 char			*find_path(const char *command, t_list *env, t_arena arena);
 int				handle_redir(t_command *cmd, t_ast_node *ast);
+int				get_exit_code(int wstatus);
 
 #endif
