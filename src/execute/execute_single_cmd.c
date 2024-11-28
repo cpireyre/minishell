@@ -80,7 +80,7 @@ t_shell_status	execute_single_command(
 		t_ast_node *ast, t_list *env, t_arena arena, int prev_exit)
 {
 	t_command_context	con;
-	t_shell_status		status;
+	int					code;
 	pid_t				*child_pids;
 
 	con = (t_command_context){{NULL, NULL, NULL, NULL, -1, -1},
@@ -91,7 +91,10 @@ t_shell_status	execute_single_command(
 	if (!child_pids)
 		return ((t_shell_status){.exit_code = -1});
 	init_cmd_files(&con);
-	if (make_command(&con.cmd, con.ast, con.env, arena) < 0)
+	code = make_command(&con.cmd, con.ast, con.env, arena);
+	if (code == -42)
+		return ((t_shell_status){false, true, 130});
+	if (code < 0)
 		con.child_should_exit = 1;
 	child_pids[0] = fork();
 	if (child_pids[0] == 0)
@@ -99,7 +102,6 @@ t_shell_status	execute_single_command(
 	else if (child_pids[0] < 0)
 		return ((t_shell_status){.exit_code = -1});
 	set_signal_handlers(SIG_IGN, SIG_IGN);
-	status.exit_code = wait_for_children(child_pids, con.n_children);
-	status.should_exit = false;
-	return (status);
+	return ((t_shell_status){.exit_code = wait_for_children(child_pids,
+			con.n_children), .should_exit = false, .sigint_received = false});
 }

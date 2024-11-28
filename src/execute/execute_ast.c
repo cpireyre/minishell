@@ -18,7 +18,6 @@
 #include "execute.h"
 
 static bool	print_signal_newline(int wstatus);
-static int	get_exit_code(int wstatus);
 
 /**
  * @brief Executes the AST and returns the exit code
@@ -33,6 +32,7 @@ t_shell_status	execute_ast(t_ast_node *ast, t_list	*env, t_arena arena,
 
 	status.exit_code = 0;
 	status.should_exit = false;
+	status.sigint_received = false;
 	if (ast->type == AST_COMMAND && ast->n_children > 0)
 		status = execute_single_command(ast, env, arena, prev_exit);
 	else if (ast->type == AST_PIPELINE)
@@ -80,7 +80,7 @@ int	wait_for_children(int *pid, size_t n_forks)
 	return (e_status);
 }
 
-static int	get_exit_code(int wstatus)
+int	get_exit_code(int wstatus)
 {
 	int	ret;
 

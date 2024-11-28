@@ -57,6 +57,7 @@ static void	cleanup_pipeline(t_command_context *con, pid_t *child_pids,
 	if (con->should_quit_pipeline)
 		status->exit_code = 128 + SIGINT;
 	status->should_exit = false;
+	status->sigint_received = false;
 }
 
 static void	set_next_child(t_ast_node *ast, t_command_context *con)
