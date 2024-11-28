@@ -10,6 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <unistd.h>
 #include "libft.h"
 #include "minishell.h"
 
@@ -82,5 +83,7 @@ t_shell_status	run_builtin(
 		return ((t_shell_status){.exit_code = echo(args)});
 	if (ft_streq(builtin, "exit"))
 		return (builtin_exit(args, prev_exit));
+	close(STDOUT_FILENO);
+	close(STDIN_FILENO);
 	return ((t_shell_status){.exit_code = 1});
 }

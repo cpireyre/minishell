@@ -10,10 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <errno.h>
 #include <sys/wait.h>
 #include "minishell.h"
-#include "signals.h"
 #include "libft.h"
 
 static int	handle_redir_in(t_command *cmd, t_ast_node *ast)
@@ -49,7 +47,7 @@ static int	handle_redir_out(t_command *cmd, t_ast_node *ast)
 
 static int	handle_redir_append(t_command *cmd, t_ast_node *ast)
 {
-	close_fd_if_open(&cmd->infile_fd);
+	close_fd_if_open(&cmd->outfile_fd);
 	cmd->outfile_fd = open(
 			ast->children[0]->token.value, O_WRONLY | O_CREAT, 0644);
 	if (cmd->outfile_fd < 0)

@@ -56,5 +56,8 @@ int	minishell_execve(char *command, char **args, char **env)
 		dprintf(STDERR_FILENO, "%s: %s: %s\n", NAME, command, strerror(i));
 	else
 		dprintf(STDERR_FILENO, "%s: %s: %s\n", NAME, command, strerror(i));
+	close(STDIN_FILENO);
+	close(STDOUT_FILENO);
+	close(STDERR_FILENO);
 	return (last_command_exit_value);
 }

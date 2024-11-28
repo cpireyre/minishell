@@ -46,6 +46,8 @@ static pid_t	do_forking(t_command_context *con, int prev_exit, t_arena arena)
 	pid = fork();
 	if (pid == 0)
 		execute_cmd(&cmd, con, arena, prev_exit);
+	close_fd_if_open(&cmd.infile_fd);
+	close_fd_if_open(&cmd.outfile_fd);
 	return (pid);
 }
 
