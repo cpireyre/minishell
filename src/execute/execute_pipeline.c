@@ -6,7 +6,7 @@
 /*   By: pleander <pleander@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 10:22:05 by pleander          #+#    #+#             */
-/*   Updated: 2024/11/20 13:58:10 by copireyr         ###   ########.fr       */
+/*   Updated: 2024/11/28 09:44:13 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,8 @@ static void	cleanup_pipeline(t_command_context *con, pid_t *child_pids,
 {
 	close_pipes(con->pipes, con->n_children - 1);
 	status->exit_code = wait_for_children(child_pids, con->n_children);
+	if (con->should_quit_pipeline)
+		status->exit_code = 128 + SIGINT;
 	status->should_exit = false;
 }
 
