@@ -6,7 +6,7 @@
 /*   By: copireyr <copireyr@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/20 13:35:35 by copireyr          #+#    #+#             */
-/*   Updated: 2024/11/29 10:14:27 by copireyr         ###   ########.fr       */
+/*   Updated: 2024/11/29 10:32:27 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,7 @@ static enum e_heredoc_state	take(int fd, const char *delimiter)
 	if (!line)
 		return (HEREDOC_QUIT);
 	found_delimiter = ft_streq(delimiter, line);
+	error = 0;
 	if (!found_delimiter)
 		error = ft_dprintf(fd, "%s\n", line);
 	free(line);
