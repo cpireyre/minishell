@@ -6,7 +6,7 @@
 /*   By: copireyr <copireyr@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/27 12:29:36 by copireyr          #+#    #+#             */
-/*   Updated: 2024/11/20 14:11:09 by copireyr         ###   ########.fr       */
+/*   Updated: 2024/11/29 10:05:08 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,23 @@ typedef struct s_fds
 	int		file_fds[2];	
 	int		*heredoc_pipe;
 }	t_fds;
+
+/* Heredoc stuff */
+
+enum	e_heredoc_state
+{
+	HEREDOC_CONTINUE,
+	HEREDOC_QUIT,
+	HEREDOC_SIGINT,
+};
+
+enum e_pipe_ends
+{
+	PIPE_READ,
+	PIPE_WRITE,
+};
+
+/* --- */
 
 t_list	*init_env(char **envp);
 int		export(char *export_str, t_list **env);
