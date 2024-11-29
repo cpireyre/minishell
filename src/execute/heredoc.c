@@ -32,6 +32,8 @@ int	handle_redir_heredoc(t_command *cmd, t_ast_node *ast)
 		ft_dprintf(2, "%s: %s: %s", NAME, cmd->infile, strerror(errno));
 		return (-1);
 	}
+	if (cmd->infile_fd > 0)
+		close(cmd->infile_fd);
 	cmd->infile_fd = hdoc_pipe[PIPE_READ];
 	rl_event_hook = quit;
 	set_signal_handlers(SIG_IGN, wake);
