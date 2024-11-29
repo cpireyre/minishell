@@ -49,7 +49,7 @@ static int	handle_redir_append(t_command *cmd, t_ast_node *ast)
 {
 	close_fd_if_open(&cmd->outfile_fd);
 	cmd->outfile_fd = open(
-			ast->children[0]->token.value, O_WRONLY | O_CREAT, 0644);
+			ast->children[0]->token.value, O_WRONLY | O_CREAT | O_APPEND, 0644);
 	if (cmd->outfile_fd < 0)
 	{
 		ft_dprintf(2, "%s: ", NAME);
