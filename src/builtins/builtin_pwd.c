@@ -6,11 +6,11 @@
 /*   By: pleander <pleander@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 12:31:14 by pleander          #+#    #+#             */
-/*   Updated: 2024/11/05 21:47:30 by copireyr         ###   ########.fr       */
+/*   Updated: 2024/11/29 07:26:12 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <linux/limits.h>
+#include <limits.h>
 #include <unistd.h>
 #include "libft.h"
 #include "minishell.h"
