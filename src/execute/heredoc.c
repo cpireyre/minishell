@@ -40,7 +40,10 @@ int	handle_redir_heredoc(t_command *cmd, t_ast_node *ast)
 		state = take(hdoc_pipe[PIPE_WRITE], delimiter);
 	close(hdoc_pipe[PIPE_WRITE]);
 	if (state == HEREDOC_SIGINT)
+	{
+		close(hdoc_pipe[0]);
 		return (INTERRUPTED_HEREDOC);
+	}
 	return (0);
 }
 

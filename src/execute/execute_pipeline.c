@@ -42,6 +42,8 @@ static pid_t	do_forking(t_command_context *con, int prev_exit, t_arena arena)
 		con->child_should_exit = 1;
 		if (err == INTERRUPTED_HEREDOC)
 			con->should_quit_pipeline = true;
+		if (err == INTERRUPTED_HEREDOC)
+			return ((pid_t) - 1);
 	}
 	pid = fork();
 	if (pid == 0)
