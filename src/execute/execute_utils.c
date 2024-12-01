@@ -33,6 +33,8 @@ void	print_command(t_command *cmd)
 
 int	is_path(char	*command)
 {
+	if (command[0] == '\0')
+		return (0);
 	if (command && ft_strchr("./", command[0]))
 		return (1);
 	return (0);
