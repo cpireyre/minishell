@@ -64,7 +64,7 @@ char	*find_path(const char *command, t_list *env, t_arena arena)
 	char	*path;
 	char	*exec_path;
 
-	if (command[0] == '.' || command[0] == '\0')
+	if (ft_strchr("./", command[0]) || command[0] == '\0')
 		return ((char *)command);
 	if (!is_builtin(command))
 	{
