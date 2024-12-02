@@ -81,7 +81,7 @@ static int	handle_no_args(t_list **env)
 
 static int	handle_path(char *path)
 {
-	if (chdir(path) < 0)
+	if (chdir(path) < 0 && *path != '\0')
 	{
 		ft_dprintf(2, "%s: cd: ", NAME);
 		perror(path);
