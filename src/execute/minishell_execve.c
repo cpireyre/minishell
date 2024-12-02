@@ -19,7 +19,8 @@ static int	file_isdir(char *path)
 {
 	struct stat	statbuf;
 
-	stat(path, &statbuf);
+	if (stat(path, &statbuf) < 0)
+		return (0);
 	if ((statbuf.st_mode & S_IFMT) == S_IFDIR)
 		return (1);
 	return (0);
@@ -29,7 +30,8 @@ static int	executable_file(char *path)
 {
 	struct stat	statbuf;
 
-	stat(path, &statbuf);
+	if (stat(path, &statbuf) < 0)
+		return (0);
 	if ((statbuf.st_mode & S_IFMT) == S_IFREG)
 		return (1);
 	return (0);
