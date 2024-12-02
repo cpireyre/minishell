@@ -6,7 +6,7 @@
 /*   By: copireyr <copireyr@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/27 12:08:02 by copireyr          #+#    #+#             */
-/*   Updated: 2024/11/26 10:18:50 by copireyr         ###   ########.fr       */
+/*   Updated: 2024/12/02 13:58:42 by copireyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ static int	minishell(t_arena arena, t_list *env)
 			if (ast)
 				status = execute_ast(ast, env, arena, status.exit_code);
 			else
-				status.exit_code = 258;
+				status.exit_code = 2;
 		}
 		arena_free(arena);
 		ft_printf(ANSI_RESET);
